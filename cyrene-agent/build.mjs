@@ -29,6 +29,18 @@ const DEFAULT_ROOT = fileURLToPath(new URL('.', import.meta.url));
 /** Placeholder text left in the template; a hit is a warning, never an error. */
 const PLACEHOLDERS = ['待你填写', '待填写', 'TODO'];
 
+/**
+ * 完整人格的四件套，每个预设都得有。
+ *
+ * 2026-10-13 定的。契机是发现跑了一周的 `preset-cyrene` 里根本没有 story ——
+ * 986 块原文躺在 dist 里，插件也在，就是没人挂它，于是「某句台词怎么写的」这类
+ * 问题只能答「材料里没写」。worldbook 给概括、story 给原文，**它们答的不是同一种
+ * 问题**；memory 和 corrections 管长期记忆与说话方式。
+ *
+ * 少一件在界面上完全看不出来 —— 只会觉得她有时候答不上话。所以写进构建里查。
+ */
+const CORE_PLUGINS = ['worldbook', 'story', 'memory', 'corrections'];
+
 /** How many example exchanges a persona needs before the voice really lands. */
 const RECOMMENDED_DIALOGUES = 8;
 
@@ -595,11 +607,11 @@ export function renderPatch(persona) {
     '          - id: worldbook',
     "            name: 'cyrene-agent/worldbook'",
     '          # Story retrieval. The worldbook carries 132 curated summaries; this',
-    '          # carries 983 raw passages out of the Amphoreus script. They answer',
+    '          # carries 986 raw passages out of the Amphoreus script. They answer',
     '          # different questions — "how does she see Castorice" is the worldbook,',
     '          # "what does the death-touch scene actually say" is this one.',
     '          # Gated: name hit, or similarity >= STORY_SCORE_FLOOR. Ungated it',
-    '          # retrieves a scene for "在吗" too, because 983 chunks always have a',
+    '          # retrieves a scene for "在吗" too, because 986 chunks always have a',
     '          # nearest one.',
     '          - id: story',
     "            name: 'cyrene-agent/story'",
@@ -647,6 +659,41 @@ export function renderPatch(persona) {
 }
 
 /**
+ * The second preset: 昔涟（研发）—— the fixture she is debugged against.
+ *
+ * It differs from the always-on form above in exactly the way that matters: the
+ * persona row is `complete: false`, so the harness identity and the whole
+ * toolset survive underneath her instead of being replaced by her. That is what
+ * makes it useful for debugging her and wrong as a first install.
+ *
+ * The rows live in their own file rather than in JavaScript because there are
+ * ~150 lines of them and this build has no opinion about any of it: the diff
+ * should read as YAML. The file is the source; `dist/cordis.patch.yml` is the
+ * product, carrying both presets, and the repo-root umbrella patch forwards
+ * them to npm users.
+ *
+ * @param {string} root - the project directory.
+ * @param {object} report - the collector.
+ * @returns {string} the patch-layer YAML, or '' when the file is unusable.
+ */
+export function readDevPatch(root, report) {
+  const file = join(root, 'preset-cyrene-dev.yml');
+  let text;
+  try {
+    text = readFileSync(file, 'utf8');
+  } catch (error) {
+    fail(report, 'preset-cyrene-dev.yml', `读不出来：${String(error.message)}`);
+    return '';
+  }
+  if (text.trim() === '') {
+    // An empty patch file is not skipped by the loader; it is fatal to boot.
+    fail(report, 'preset-cyrene-dev.yml', '是空文件 —— 补丁写成空文件会让 DSH 起不来');
+    return '';
+  }
+  return text.trimEnd();
+}
+
+/**
  * Render the universal-document form: `AGENTS.md`-style guidance appended to a
  * session, for a harness that reads such a file rather than a preset.
  *
@@ -668,16 +715,30 @@ export function renderAgentsDoc(persona, prompt) {
 }
 
 /**
+ * Parse a patch layer, treating `!!js` expressions as opaque scalars.
+ *
+ * The check is about the YAML shape, not about executing the expression, so the
+ * tag becomes a plain string. Exported because the umbrella generator asserts on
+ * the structure it built rather than on its text: a byte count cannot tell a
+ * right patch from a wrong one, and the presets are the part where being wrong
+ * stays invisible until somebody opens a new session and finds no 昔涟 to pick.
+ *
+ * @param {string} text - the patch YAML.
+ * @returns {any} the parsed document.
+ */
+export function parsePatch(text) {
+  const jsTag = new yaml.Type('tag:yaml.org,2002:js', { kind: 'scalar', construct: (data) => String(data) });
+  return yaml.load(text, { schema: yaml.DEFAULT_SCHEMA.extend([jsTag]) });
+}
+
+/**
  * Structural check for the emitted patch layer.
  *
  * The loader treats a malformed or empty patch file as fatal — it does not skip
  * it the way it skips a malformed bundle — so this is the one artifact worth
- * re-parsing before it is written. When `expected` is supplied the embedded
- * persona text must survive the YAML round trip byte-for-byte, which is what
- * catches an indentation or escaping mistake inside eight kilobytes of prose.
- *
- * `!!js` is declared as an opaque scalar because the check is about the YAML
- * shape, not about executing the expression.
+ * re-parsing before it is written. Both presets live in this file now, so every
+ * preset row is checked rather than only the first one: the second is the one
+ * nobody would notice going wrong.
  *
  * @param {string} text - the patch YAML.
  * @param {object} report - the collector.
@@ -685,12 +746,10 @@ export function renderAgentsDoc(persona, prompt) {
  */
 export function validatePatchYaml(text, report) {
   const before = report.problems.length;
-  const jsTag = new yaml.Type('tag:yaml.org,2002:js', { kind: 'scalar', construct: (data) => String(data) });
-  const schema = yaml.DEFAULT_SCHEMA.extend([jsTag]);
 
   let parsed;
   try {
-    parsed = yaml.load(text, { schema });
+    parsed = parsePatch(text);
   } catch (error) {
     const line = error.mark === undefined ? '' : ` (line ${error.mark.line + 1})`;
     fail(report, 'cordis.patch.yml', `${String(error.reason ?? error.message)}${line}`);
@@ -701,51 +760,79 @@ export function validatePatchYaml(text, report) {
     fail(report, 'cordis.patch.yml', 'expected a non-empty top-level list of patch entries');
     return false;
   }
-  const first = parsed[0];
-  if (first === null || typeof first !== 'object' || !Array.isArray(first.insert)) {
-    fail(report, 'cordis.patch.yml', 'expected the first entry to be an `insert:` list');
-    return false;
-  }
-  const row = first.insert[0];
-  if (row === null || typeof row !== 'object') {
-    fail(report, 'cordis.patch.yml', 'expected an inserted row');
-    return false;
-  }
-  if (row.name !== '@deepseek-ai/dsh-agent-preset') {
-    fail(report, 'cordis.patch.yml', `expected name '@deepseek-ai/dsh-agent-preset', got ${JSON.stringify(row.name)}`);
-  }
-  const plugins = row.config?.plugins;
-  if (!Array.isArray(plugins) || plugins.length === 0) {
-    fail(report, 'cordis.patch.yml', 'expected config.plugins to be a non-empty list');
-    return false;
-  }
-  const persona = plugins.find((entry) => entry?.name === '@deepseek-ai/dsh-persona');
-  if (persona === undefined) {
-    fail(report, 'cordis.patch.yml', 'expected a @deepseek-ai/dsh-persona row inside config.plugins');
-    return false;
-  }
-  const prefix = persona.config?.prefix;
-  if (typeof prefix !== 'string' || prefix.trim() === '') {
-    fail(report, 'cordis.patch.yml', 'expected a non-empty persona prefix');
-    return false;
-  }
 
-  // The body is NOT inlined any more. It reaches the model through a template
-  // variable, which `dsh-system-prompt` interpolates on every assembly, so the
-  // file it reads can be edited without touching this patch or restarting.
-  if (prefix.trim() !== PLACEHOLDER) {
-    fail(report, 'cordis.patch.yml', `expected the persona prefix to be exactly ${PLACEHOLDER}, got ${JSON.stringify(prefix.slice(0, 40))}`);
-    return false;
+  // Both presets ride in this one file, so every entry gets checked rather than
+  // only the first. Rows that are not preset declarations are skipped: this is
+  // not the place to audit the harness's own rows.
+  let presetRows = 0;
+  for (const [index, entry] of parsed.entries()) {
+    const at = `entry ${index + 1}`;
+    if (entry === null || typeof entry !== 'object' || !Array.isArray(entry.insert)) {
+      fail(report, 'cordis.patch.yml', `${at}: expected an \`insert:\` list`);
+      continue;
+    }
+    for (const row of entry.insert) {
+      if (row === null || typeof row !== 'object') {
+        fail(report, 'cordis.patch.yml', `${at}: expected an inserted row`);
+        continue;
+      }
+      if (row.name !== '@deepseek-ai/dsh-agent-preset') continue;
+      presetRows += 1;
+      const where = `${at} (${String(row.id)})`;
+      if (typeof row.config?.id !== 'string' || row.config.id.trim() === '') {
+        // config.id is the identity sessions save; the row id only addresses the
+        // entry. Getting this wrong silently binds sessions to the wrong preset.
+        fail(report, 'cordis.patch.yml', `${where}: expected a non-empty config.id`);
+      }
+      const plugins = row.config?.plugins;
+      if (!Array.isArray(plugins) || plugins.length === 0) {
+        fail(report, 'cordis.patch.yml', `${where}: expected config.plugins to be a non-empty list`);
+        continue;
+      }
+      const persona = plugins.find((plugin) => plugin?.name === '@deepseek-ai/dsh-persona');
+      if (persona === undefined) {
+        fail(report, 'cordis.patch.yml', `${where}: expected a @deepseek-ai/dsh-persona row inside config.plugins`);
+        continue;
+      }
+      const prefix = persona.config?.prefix;
+      if (typeof prefix !== 'string' || prefix.trim() === '') {
+        fail(report, 'cordis.patch.yml', `${where}: expected a non-empty persona prefix`);
+        continue;
+      }
+      // The body is NOT inlined any more. It reaches the model through a
+      // template variable, which `dsh-system-prompt` interpolates on every
+      // assembly, so the file it reads can be edited without touching this patch
+      // or restarting.
+      if (prefix.trim() !== PLACEHOLDER) {
+        fail(report, 'cordis.patch.yml', `${where}: expected the persona prefix to be exactly ${PLACEHOLDER}, got ${JSON.stringify(prefix.slice(0, 40))}`);
+        continue;
+      }
+      // Its provider must ship in the same preset: a referenced-but-unregistered
+      // variable makes dsh-system-prompt throw, which fails the whole assembly —
+      // not just this paragraph, but every turn of the preset.
+      // The provider row may be spelled either way: `cyrene-agent/persona` on a
+      // machine that links the package under its bare directory name, and
+      // `@lutisure/cyrene-agent/persona` for an npm install. Which spelling is
+      // right depends on the carrier, not on the shape being checked.
+      if (!plugins.some((plugin) => typeof plugin?.name === 'string' && plugin.name.endsWith('cyrene-agent/persona'))) {
+        fail(report, 'cordis.patch.yml', `${where}: ${PLACEHOLDER} has no provider: expected a cyrene-agent/persona row`);
+      }
+      // And the four that make it a complete persona rather than a likeness.
+      // Same reason the provider is checked here: a missing one is invisible in
+      // the UI. It just looks like she sometimes has nothing to say.
+      const missing = CORE_PLUGINS.filter((key) => !plugins.some((plugin) => typeof plugin?.name === 'string' && plugin.name.endsWith(`/${key}`)));
+      if (missing.length > 0) {
+        fail(report, 'cordis.patch.yml', `${where}: missing ${missing.join(', ')} — a preset needs all four of ${CORE_PLUGINS.join(', ')}`);
+      }
+    }
   }
-  // Its provider must ship in the same preset: a referenced-but-unregistered
-  // variable makes dsh-system-prompt throw, which fails the whole assembly — not
-  // just this paragraph, but every turn of the preset.
-  if (!plugins.some((entry) => entry?.name === 'cyrene-agent/persona')) {
-    fail(report, 'cordis.patch.yml', `${PLACEHOLDER} has no provider: expected a cyrene-agent/persona row`);
+  if (presetRows === 0) {
+    fail(report, 'cordis.patch.yml', 'expected at least one @deepseek-ai/dsh-agent-preset row');
   }
   // And a leak check in the other direction: prose inlined here would mean two
-  // sources of truth for her persona.
-  if (text.length > 6000) {
+  // sources of truth for her persona. The body is ~68.7 KB and the two presets
+  // together are ~14 KB, so this range still means it got copied in.
+  if (text.length > 20000) {
     fail(report, 'cordis.patch.yml', `the patch is ${text.length} bytes, which suggests the persona body got inlined again`);
   }
   return report.problems.length === before;
@@ -904,11 +991,13 @@ function main() {
   // one place the two are joined.
   const skill = renderSkill(persona, prompt, book, readCorrectionsForBuild(), readMemoryForBuild());
 
-  const patch = renderPatch(persona);
+  // The patch is the one artifact whose malformation is fatal to boot, and it
+  // now carries both presets: the always-on one is rendered from `persona`, the
+  // debugging one is read from its own file.
+  const patchReport = createReport();
+  const patch = `${renderPatch(persona)}\n${readDevPatch(root, patchReport)}\n`;
   const agentsDoc = renderAgentsDoc(persona, prompt);
 
-  // The patch is the one artifact whose malformation is fatal to boot.
-  const patchReport = createReport();
   const patchOk = validatePatchYaml(patch, patchReport);
   for (const problem of patchReport.problems) process.stdout.write(`  error    ${problem}\n`);
   if (!patchOk) {
@@ -963,7 +1052,7 @@ function main() {
   process.stdout.write('            system-prompt.md          通用系统提示词（Chat，完整人格）\n');
   process.stdout.write(`            characters/${slug}.md   ` + '角色卡（常驻人格读它）\n');
   process.stdout.write(
-    '            cordis.patch.yml          常驻人格补丁 —— **启动期**读，改完要重启；' +
+    '            cordis.patch.yml          两个预设的补丁 —— **启动期**读，改完要重启；' +
     '安装走仓库根的 sync-desktop-patch.mjs\n'
   );
   process.stdout.write(`            skills/${slug}/SKILL.md ` + '按需调用（安全）\n');

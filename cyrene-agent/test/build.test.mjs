@@ -364,6 +364,15 @@ test('malformed patches are caught before they can break boot', () => {
     ['wrong plugin', '- insert:\n    - id: p\n      name: nope\n      config:\n        plugins: []\n', 'dsh-agent-preset'],
     ['no plugins', "- insert:\n    - id: p\n      name: '@deepseek-ai/dsh-agent-preset'\n      config: {}\n", 'plugins'],
     ['no persona row', "- insert:\n    - id: p\n      name: '@deepseek-ai/dsh-agent-preset'\n      config:\n        plugins:\n          - id: x\n            name: 'y'\n", 'dsh-persona'],
+    // A preset that declares a persona but not the four plugins feeding it is a
+    // likeness rather than her, and nothing in the UI says so. The persona and
+    // its provider are already present in this fixture, so a complaint here can
+    // only come from the core-plugin check.
+    [
+      'missing core plugins',
+      "- insert:\n    - id: p\n      name: '@deepseek-ai/dsh-agent-preset'\n      config:\n        id: cyrene\n        plugins:\n          - id: persona\n            name: '@deepseek-ai/dsh-persona'\n            config:\n              prefix: '{{cyrene_persona}}'\n          - id: provider\n            name: 'cyrene-agent/persona'\n",
+      'worldbook'
+    ],
     ['unparsed yaml', '- insert: [\n', 'cordis.patch.yml']
   ];
   for (const [label, text, expected] of cases) {
