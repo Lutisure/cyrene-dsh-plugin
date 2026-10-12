@@ -846,7 +846,7 @@ node tools\sync-desktop-patch.mjs restore    # 换电脑，或补丁被改坏了
 
 > ⚠️ **是整份替换，不是追加。** 活文件里还有 `ui-theme`、`agent-default-model` 那几行
 > 本机界面偏好——「追加」会重复，「覆盖」会丢掉它们。快照是活文件的完整副本，
-> 所以不需要合并。见 [desktop-profile/README.md](../desktop-profile/README.md)。
+> 所以不需要合并。
 
 **人设正文不在补丁里，在文件里。**
 
