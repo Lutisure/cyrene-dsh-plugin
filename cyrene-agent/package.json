@@ -1,6 +1,6 @@
 {
   "name": "@lutisure/cyrene-agent",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": false,
   "type": "module",
   "description": "昔涟 · 对话 agent：132 条设定库加 1 条常驻锚点、长期记忆、一层说话方式修正，以及一套按需检索的剧情原文。作为 DSH 预设级插件挂载。",
