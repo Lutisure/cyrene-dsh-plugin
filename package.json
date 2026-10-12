@@ -1,0 +1,39 @@
+{
+  "name": "@<用户名>/cyrene-dsh-plugin",
+  "version": "0.1.0",
+  "description": "昔涟 · DSH 插件整合包：角色 agent、客户端主题、本地安全扫描，装这一个就有全部。",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://github.com/Lutisure/cyrene-dsh-plugin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lutisure/cyrene-dsh-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lutisure/cyrene-dsh-plugin/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "cyrene",
+    "agent",
+    "theme"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@<用户名>/cyrene-agent": "^0.10.0",
+    "@<用户名>/cyrene-guard": "^0.1.0",
+    "@<用户名>/dsh-theme-cyrene": "^0.17.0"
+  },
+  "files": [
+    "package.json",
+    "cordis.patch.yml",
+    "README.md",
+    "NOTICE.zh.md",
+    "LICENSE"
+  ]
+}

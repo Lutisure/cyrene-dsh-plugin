@@ -1,0 +1,52 @@
+# cyrene-dsh-plugin — 整合包的 bundle 补丁
+#
+# ## 这一份和三个子包各自那份的关系
+#
+# 三个子包各带一份 patch，各挂自己那一行：
+#
+#     cyrene-agent/cordis.patch.yml        insert: id cyrene-agent    name 'cyrene-agent'
+#     cyrene-guard/cordis.patch.yml        insert: id cyrene-guard    name 'cyrene-guard'
+#     dsh-theme-cyrene/cordis.patch.yml    insert: id ui-theme-cyrene name 'dsh-theme-cyrene'
+#
+# **这一份把三行写在一处。** 那就是这个包自己做的事 —— 插件市场对聚合包的规则是
+# 「收插件，不收聚合包」，而列出的三种够格行为里第一种就是**合成配置**：
+#
+#     内容只有一份依赖清单的包不单独收录。
+#     而如果它自己做事（合成配置、提供设置界面、在运行时协调各部分），
+#     那它就是个插件，按普通标准审。
+#
+# 装这一个 = 三行一起进 loader。**而三个子包各自那份仍然有效** —— 它们只在
+# 有人单独装那个子包时才被读到，所以留着不会冲突，只是「三条各自可装」那条路
+# 仍然在（市场里不再单独立条目，但包本身照旧装得上）。
+#
+# ## 三件事要说清
+#
+# 1. **保持纯 `insert(id/name)` 形式。** 这是可热挂载的。三个子包那份的注释里
+#    写着同一条，理由也相同。
+#
+# 2. **不要在这里写任何机器相关的路径。** patch 里的硬编码路径在别人机器上必然
+#    指向不存在的目录，插件会直接起不来。
+#
+# 3. **`name` 写的是包的 npm 名，而 `id` 是 loader 里的标识。**
+#    主题那一行的 id 是 `ui-theme-cyrene` 而不是 `dsh-theme-cyrene` ——
+#    那是 `dsh-theme-cyrene/cordis.patch.yml` 里定下的，这里照抄，不要改。
+#
+# ## 而这三行的顺序
+#
+# 按「谁先能跑起来」排：agent 提供 systemPrompt（guard 与主题都间接依赖它），
+# guard 挂在 fs/observed 上，主题最后（它是客户端那一侧，读 ui-theme 槽位）。
+#
+# ⚠️ 而 loader 对 insert 顺序**并不做依赖排序** —— 这个顺序只是为了日志好读，
+# 不是正确性所必需的。真正的依赖由每个包自己的 `inject` 声明决定。
+#
+# ⚠️ 2026-10-12：三个 `name` 都加了 `@<用户名>/` 作用域 —— 因为裸名 `cyrene-agent`
+# 在 npm 上已经被人占了，而 `name` 是**包的去处**，必须和 registry 上的一致。
+# 三个 `id` **都没动**：它们是 loader 里的标识，不是 npm 名。
+
+- insert:
+    - id: cyrene-agent
+      name: '@<用户名>/cyrene-agent'
+    - id: cyrene-guard
+      name: '@<用户名>/cyrene-guard'
+    - id: ui-theme-cyrene
+      name: '@<用户名>/dsh-theme-cyrene'
