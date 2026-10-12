@@ -1,5 +1,11 @@
 # cyrene-dsh-plugin — 整合包的 bundle 补丁
 #
+# ⚙️ 由 tools/build-umbrella.mjs 生成，两个预设那两段转发自
+# cyrene-agent/dist/cordis.patch.yml。改预设请改 cyrene-agent 那边的源，
+# 再跑一遍这个脚本；手改这里会在下次生成时丢掉。
+#   node tools/build-umbrella.mjs          重新生成
+#   node tools/build-umbrella.mjs --check  查这份是不是过期的
+#
 # ## 这一份和三个子包各自那份的关系
 #
 # 三个子包各带一份 patch，各挂自己那一行：
@@ -19,10 +25,11 @@
 # 有人单独装那个子包时才被读到，所以留着不会冲突，只是「三条各自可装」那条路
 # 仍然在（市场里不再单独立条目，但包本身照旧装得上）。
 #
-# ## 三件事要说清
+# ## 四件事要说清
 #
-# 1. **保持纯 `insert(id/name)` 形式。** 这是可热挂载的。三个子包那份的注释里
-#    写着同一条，理由也相同。
+# 1. **三行载入行保持纯 `insert(id/name)` 形式。** 这是可热挂载的。三个子包那份
+#    的注释里写着同一条，理由也相同。两个预设行带 `config:` —— 那个插件的
+#    config 就是它的全部内容，没有 config 的行等于没声明。
 #
 # 2. **不要在这里写任何机器相关的路径。** patch 里的硬编码路径在别人机器上必然
 #    指向不存在的目录，插件会直接起不来。
@@ -31,7 +38,13 @@
 #    主题那一行的 id 是 `ui-theme-cyrene` 而不是 `dsh-theme-cyrene` ——
 #    那是 `dsh-theme-cyrene/cordis.patch.yml` 里定下的，这里照抄，不要改。
 #
-# ## 而这三行的顺序
+# 4. **预设里那七行 `@lutisure/cyrene-agent/...` 不能写回裸名。**
+#    上游那份（`cyrene-agent/dist/cordis.patch.yml`）写的是 `cyrene-agent/worldbook`，
+#    在**作者的机器上**解析得到 —— 那里这个包是以裸目录名 link 进去的。
+#    npm 装的人没有那个目录，只有 `@lutisure/cyrene-agent`，裸名解析到空。
+#    这个脚本负责逐行改写，别再手写一遍。
+#
+# ## 而三行的顺序
 #
 # 按「谁先能跑起来」排：agent 提供 systemPrompt（guard 与主题都间接依赖它），
 # guard 挂在 fs/observed 上，主题最后（它是客户端那一侧，读 ui-theme 槽位）。
@@ -42,6 +55,35 @@
 # ⚠️ 2026-10-12：三个 `name` 都加了 `@lutisure/` 作用域 —— 因为裸名 `cyrene-agent`
 # 在 npm 上已经被人占了，而 `name` 是**包的去处**，必须和 registry 上的一致。
 # 三个 `id` **都没动**：它们是 loader 里的标识，不是 npm 名。
+#
+# ## 下面两段：预设声明
+#
+# 上面三行只是把插件挂起来。**挂起来不等于能选** —— 新建会话里那个下拉列的是
+# 「预设」，而预设是 `@deepseek-ai/dsh-agent-preset` 的声明行，得有人写。
+# `setup/install.ps1` 会往 profile 补丁里写一份，但那份脚本不随分享副本分发，
+# 所以从 npm 装的人从来没有过预设。这两段就是补上那一块。
+#
+# 行 id（`preset-cyrene` / `preset-cyrene-dev`）是 loader 的定址方式；
+# 预设身份是 config.id（`cyrene` / `cyrene-dev`），会话存的是后者。
+#
+# 两条预设：`昔涟` 是给她用的（整段系统提示词就是人设，只留联网检索），
+# `昔涟（研发）` 是调试她本人用的夹具（保留 harness 身份与全套工具）。
+#
+# ## 和本机那份撞车怎么办 —— 不用办
+#
+# `setup/install.ps1` 会把同样两条预设写进 profile 自己的 `cordis.patch.yml`。
+# 那样的机器上再装这个包，合成出来的列表里会有**四行**，两两同 id。
+#
+# 这无害。挂载时 loader 按行 id 收成字典（`Object.fromEntries`），同 id 的两行
+# 塌缩成一行，**后面那行赢**。层序是 bundle 在前、profile 与 home 补丁在后，
+# 所以本机原来那份赢、这个包那份静默让位 —— 全程只有一个人去注册那个
+# `config.id`，不会撞上下面这条硬规则。
+#
+# ⚠️ 而这个性质**只在行 id 相同时成立**，别把它推广。行 id 撞车是静默换配置；
+# `config.id` 撞车是硬错误（registry 里 `Duplicate agent preset: <id>`）——
+# 先注册的活下来，后到的那一行激活失败，启动照常、那个预设从此选不了，而且
+# 只在 stderr 留一句。所以上面两个行 id 必须和 install.ps1 写的、以及上游
+# dist 里那两条**一字不差**。
 
 - insert:
     - id: cyrene-agent
@@ -50,3 +92,272 @@
       name: '@lutisure/cyrene-guard'
     - id: ui-theme-cyrene
       name: '@lutisure/dsh-theme-cyrene'
+
+- insert:
+    - id: preset-cyrene
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: cyrene
+        name: 昔涟
+        description: 一个把旅途当作歌谱的少女。她说话像在轻轻哼一段旋律， 温和、耐心，偶尔冒出一句俏皮话，然后自己先笑出来。
+        order: 50
+        plugins:
+          # The worldbook rides in the preset, not in a host plugin: preset YAML
+          # changes take effect on the next new session without a restart, and
+          # the lore is the part most likely to be edited repeatedly.
+          - id: worldbook
+            name: '@lutisure/cyrene-agent/worldbook'
+          # Story retrieval. The worldbook carries 132 curated summaries; this
+          # carries 986 raw passages out of the Amphoreus script. They answer
+          # different questions — "how does she see Castorice" is the worldbook,
+          # "what does the death-touch scene actually say" is this one.
+          # Gated: name hit, or similarity >= STORY_SCORE_FLOOR. Ungated it
+          # retrieves a scene for "在吗" too, because 986 chunks always have a
+          # nearest one.
+          - id: story
+            name: '@lutisure/cyrene-agent/story'
+          # Long-term memory. Registers the `cyrene_memory` template variable
+          # that the persona body references — see the placeholder in render().
+          # ⚠️ The two must ship together: a referenced-but-unregistered
+          # variable fails the whole assembly.
+          - id: memory
+            name: '@lutisure/cyrene-agent/memory'
+          # Talking-style corrections: the correct / uncorrect tools, and the
+          # file persona.mjs splices in right after the body. Kept separate from
+          # memory on purpose — memory holds facts about the user, and mixing
+          # style rules into it crowds them out.
+          - id: corrections
+            name: '@lutisure/cyrene-agent/corrections'
+          # Web search is the one harness tool this preset keeps. She is a
+          # companion, not a coding agent: no filesystem, no shell, no editor,
+          # so "look it up" is the only capability that fits what she is for.
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: true
+              searchTimeoutMs: 60000
+          - id: persona-body
+            name: '@lutisure/cyrene-agent/persona'
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              # complete: true 表示整段系统提示词就是人设本身。
+              # 去掉它则会保留 harness 的身份与工具说明，人设叠加在前面。
+              complete: true
+              includeRuntimeContext: false
+              # ⚠️ 正文不内联，只放占位符。
+              #
+              # dsh-persona 把 prefix 注册成一个 section，而 dsh-system-prompt 在
+              # **每次装配时**对 section 插值 —— 所以这个占位符会调用
+              # cyrene-agent/persona 注册的 provider，读的是 dist/system-prompt.md。
+              # 于是改人设**下一轮就生效，不用重启、不用重新复制补丁**。
+              #
+              # 内联版本还有个额外代价：3 KB 中文要穿过 YAML 转义与块标量缩进，
+              # 写错一个字符就是 DSH 起不来。现在补丁只有这一行，那个风险没了。
+              prefix: '{{cyrene_persona}}'
+
+- insert:
+    - id: preset-cyrene-dev
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: cyrene-dev
+        name: 昔涟（研发）
+        description: 调试她本人时用的夹具：完整人格 + 全套工具。行为不代表其它档位。
+        order: 54
+        plugins:
+          # 完整人格的四件套，一件都不能少：世界书给概括，story 给原文，
+          # memory 是长期记忆，corrections 管说话方式。dev 是拿来调试她本人的，
+          # 缺了 story 就验不到检索那一段。
+          - id: worldbook
+            name: '@lutisure/cyrene-agent/worldbook'
+          - id: story
+            name: '@lutisure/cyrene-agent/story'
+          - id: memory
+            name: '@lutisure/cyrene-agent/memory'
+          - id: corrections
+            name: '@lutisure/cyrene-agent/corrections'
+          - id: persona-body
+            name: '@lutisure/cyrene-agent/persona'
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              complete: false
+              includeRuntimeContext: true
+              prefix: '{{cyrene_persona}}'
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 65536
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+          - id: tool-jobs
+            name: '@deepseek-ai/dsh-tool-jobs'
+          - id: command-goal
+            name: '@deepseek-ai/dsh-command-goal'
+          - id: tool-goal
+            name: '@deepseek-ai/dsh-tool-goal'
+          - id: planning
+            name: cordis:group
+            group: true
+            isolate:
+              planMode: true
+            config:
+              - id: plan-mode
+                name: '@deepseek-ai/dsh-plan-mode'
+                config:
+                  section: >
+                    You are in plan mode. Stay in plan mode until exit_plan_mode
+                    succeeds or the user switches the session mode. Imperative
+                    language to implement changes means plan the implementation,
+                    not execute it. A user's conversational agreement —
+                    including an answer confirming something you asked —
+                    approves nothing and does not end plan mode; fold the
+                    confirmed decision into the plan and submit it through
+                    exit_plan_mode.
+
+                    Explore first. Use non-mutating reads, searches, static
+                    analysis, and checks to ground the plan in the actual
+                    repository. Do not edit or write files, change
+                    configuration, run formatters or code generation that
+                    rewrites tracked files, commit, or otherwise carry out the
+                    plan. Prefer existing functions and patterns over new
+                    machinery.
+
+                    The tool catalog stays the same across modes for
+                    request-cache stability. These plan-mode rules override any
+                    later tool description or guidance that suggests using
+                    mutation tools; those tools remain listed to keep the tool
+                    catalog unchanged. Do not use todo_write to track this
+                    planning phase: it tracks implementation after an approved
+                    plan, while the plan itself belongs in exit_plan_mode.
+
+                    Resolve discoverable facts by inspection. Use
+                    ask_user_question only for user-owned choices or material
+                    ambiguity that inspection cannot answer. Do not ask the user
+                    where code lives or how current behavior works when you can
+                    find out.
+
+                    Make the plan decision-complete: state the goal and success
+                    criteria; group implementation changes by subsystem;
+                    identify public API, schema, and data-flow changes; cover
+                    edge cases, failure modes, tests, acceptance criteria, and
+                    explicit assumptions. Keep it concise enough to review but
+                    detailed enough that another engineer can implement it
+                    without making design decisions.
+
+                    When ready, call exit_plan_mode with the complete plan
+                    markdown, starting with a # title. Make exit_plan_mode the
+                    only and final tool call in that assistant response: it
+                    presents the plan for approval, and implementation begins
+                    only in a later step after approval. Do not paste the final
+                    plan as a plain reply or ask "should I proceed?" through
+                    prose or ask_user_question. If review rejects it,
+                    incorporate the feedback and present again. If the review
+                    channel is unavailable or aborted, stay in plan mode and ask
+                    the user to switch modes manually; do not proceed with
+                    implementation.
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+              toolResultPruner: true
+            config:
+              - id: compaction-basic
+                name: '@deepseek-ai/dsh-compaction-basic'
+              - id: command-compact
+                name: '@deepseek-ai/dsh-command-compact'
+              - id: tool-result-pruner
+                name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+                config:
+                  thresholdChars: 8192
+                  headChars: 4096
+                  tailChars: 1024
+          - id: delegation
+            name: cordis:group
+            group: true
+            isolate:
+              workflowEngine: true
+            config:
+              - id: tool-subagent-control
+                name: '@deepseek-ai/dsh-tool-subagent-control'
+              - id: tool-subagent-list-agents
+                name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+              - id: tool-subagent
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: spawn
+                  toolName: subagent
+                  modelSelectionSettings: true
+                  backgroundMode: continuable
+              - id: tool-subagent-fork
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: fork
+                  toolName: subagent_fork
+                  backgroundMode: continuable
+              - id: tool-subagent-codex
+                name: '@deepseek-ai/dsh-tool-subagent'
+                disabled: true
+                config:
+                  provider: codex
+                  toolName: subagent_codex
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+              - id: tool-subagent-claude-code
+                name: '@deepseek-ai/dsh-tool-subagent'
+                disabled: true
+                config:
+                  provider: claude-code
+                  toolName: subagent_claude_code
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+              - id: workflow-ptc
+                name: '@deepseek-ai/dsh-workflow-ptc'
+                config:
+                  provider: spawn
+              - id: tool-workflow
+                name: '@deepseek-ai/dsh-tool-workflow'
+              - id: tool-ralph
+                name: '@deepseek-ai/dsh-tool-ralph'
+                disabled: true
+                config:
+                  subagentProvider: spawn
+                  maxRounds: 64
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: true
+              searchTimeoutMs: 60000
+          - id: tool-cordis
+            name: '@deepseek-ai/dsh-tool-cordis'
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+            config:
+              customSkillDirs:
+                - !!js >-
+                  process.getBuiltinModule('node:path').join(process.getBuiltinModule('node:path').dirname(process.getBuiltinModule('node:module').createRequire(baseUrl).resolve('@deepseek-ai/dsh-agent-preset/package.json')),
+                  'skills')
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: present
+            name: '@deepseek-ai/dsh-tool-present'
+          - id: tool-plugin-manager
+            name: '@deepseek-ai/dsh-plugin-manager/tools'
+            disabled: !!js '!ctx.get(''profileContext'')'
