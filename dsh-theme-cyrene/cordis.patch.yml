@@ -1,0 +1,16 @@
+# dsh-theme-cyrene bundle：向 profile 注入昔涟主题的客户端行。
+#
+# 客户端模块扫描会读取本包的 dsh.client 声明（只有 platform: web），
+# 把浏览器 bundle（exports["./client"] -> lib/client.js）注入 ui-theme 槽位。
+# 需要另一个客户端插件的服务时，靠的不是 dsh.client.inject —— 那个字段
+# loader 根本不读，写在那里等于没写；真正的机制是插件自己的 Cordis inject
+# （bundle 里 exports.inject = ["theme", "remote"]）。
+#
+# 安装时本 patch 会被自动挂进 loader，无需手动改 profile 的 cordis.patch.yml。
+- insert:
+    - id: ui-theme-cyrene
+      # ⚠️ **这一行的 id 和 name 本来就不一样，而这次只有 name 变**（加了作用域）：
+      #     id    ui-theme-cyrene     loader 里的标识，写它的人自己定的
+      #     name  @<用户名>/...       包的去处，必须和 registry 上的一致
+      # 所以照着改的时候**不要顺手把 id 也对齐**。
+      name: '@<用户名>/dsh-theme-cyrene'

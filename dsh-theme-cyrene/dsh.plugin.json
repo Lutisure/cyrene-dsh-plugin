@@ -1,0 +1,16 @@
+{
+  "id": "dsh-theme-cyrene",
+  "version": "0.17.0",
+  "main": "lib/index.js",
+  "description": "昔涟主题：淡粉柔光配色、半透明壁纸、环境流萤粒子、背景音乐与打字音效。",
+  "engines": {
+    "dsh": ">=0.1.0-rc.6"
+  },
+  "contributes": {
+    "client": {
+      "slots": [
+        "ui-theme"
+      ]
+    }
+  }
+}

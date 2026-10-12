@@ -1,0 +1,11 @@
+# build.include.txt —— `node build.cjs --clean` 的白名单
+#
+# 一行一个，路径必须相对仓库根、且写成 assets/<文件名> 的形式（精确匹配）。
+# --clean 构建只收录这里列出的壁纸，用于生成可公开分发的"干净版"清单。
+# 完整构建（不带 --clean）会收录 assets/ 下的全部壁纸。
+#
+# 留空 ⇒ --clean 构建产出空壁纸清单（不报错，插件在无壁纸时降级为纯配色主题）。
+#
+# 示例（把你的文件加进来即可，注意含空格/中文的文件名要原样照抄）：
+# assets/default-wallpaper.jpg
+# assets/cyrene-01.png
