@@ -62,7 +62,19 @@ const installDirName = () => {
   const m = /^[A-Z]:[\\/]([^\\/]+)/u.exec(asar);
   return m === null ? '' : m[1];
 };
+/**
+ * 仓库目录名。
+ *
+ * ⚠️ 2026-10-13：这个值取的是 `process.cwd()` 的末段。而 `make-share.mjs` 是把
+ * 导出物拷到别处、**在导出目录里**跑这个脚本的 —— 那时 cwd 是导出目录，
+ * 「源仓库叫什么」从根上取不到，`absolute-path` 这条规则于是在导出物上永远不匹配：
+ * 同一份文本，在源目录里报 23 处，在导出目录里报 0 处。验导出物的意义就没了。
+ *
+ * `DSH_REPO_DIRNAME` 由调用方把源仓库名传进来，补上这一段。不设时行为不变。
+ */
 const repoDirName = () => {
+  const fromEnv = process.env.DSH_REPO_DIRNAME ?? '';
+  if (fromEnv !== '') return fromEnv;
   const m = /([^\\/]+)$/u.exec(ROOT);
   return m === null ? '' : m[1];
 };
@@ -94,6 +106,22 @@ const TEXT_EXT = new Set([
 // 2026-10-12 发现 `tools/check-npm-publish.mjs` 里抄了**第三遍**（一并注释
 // 写着「一个字都不要写全」）。规矩写在被违反的地方旁边是不够的 ——
 // 所以它现在只有一份实现，在 tools/memory-pattern.mjs，那里记着完整来历。
+
+// ---- 已知会被「发布 / 导出」那两条路处理掉的位置 -------------------------
+//
+// ⚠️ 这一块存在的理由和 `check-npm-publish.mjs` 里那条一模一样：
+//    **检测器只知道「源码树里有这个东西」，不知道「出门之前会重建它」。**
+//    于是每次跑都固定报「✗ 8 处要处理」—— 而跑的人两周之后就学会不看它了。
+//
+//    所以它们照样被列出来，但不拦人。前提是那两条路真的覆盖了它：
+//      · `cyrene-agent/dist/` → `make-npm.mjs` 发布前用空记忆重建；`make-share.mjs` 不收
+//      · `deploy/`            → 本机状态、被 `.gitignore` 挡住；`make-share.mjs` 不收
+//
+//    **加了新规则、或者改了那两条路的收件范围，这块要跟着重看。**
+const PUBLISH_COVERED = [
+  { prefix: 'cyrene-agent/dist/', why: '发布前由 make-npm.mjs 用空记忆重建；分享导出不收' },
+  { prefix: 'deploy/', why: '本机状态、被 .gitignore 挡住；分享导出不收' }
+];
 
 const RULES = [
   // ---- 私人状态 --------------------------------------------------------
@@ -249,10 +277,21 @@ for (const file of files) {
   const ext = extname(file).toLowerCase();
   if (rel === SELF) continue;
 
+  // 按文件算一次就够了 —— 整条规则的值只取决于路径。
+  // ⚠️ 这里原来是分开算的：内容规则算过，路径规则漏了。于是 `deploy/` 那五处
+  //    永远进 blocking（它们**只**由路径规则命中），补了覆盖名单却一点没生效。
+  //    教训：同一个概念在两处出现，就得在两处都接上 —— 或者只留一处。
+  const covered = PUBLISH_COVERED.find((c) => rel.startsWith(c.prefix));
+
   for (const rule of RULES) {
     if (rule.kind === 'path') {
       if (rule.match.test(rel)) {
-        findings.push({ rule: rule.id, file: rel, advisory: rule.advisory === true, why: rule.why, sample: '' });
+        findings.push({
+          rule: rule.id, file: rel, line: 0, sample: '',
+          advisory: rule.advisory === true || covered !== undefined,
+          covered: covered?.why,
+          why: rule.why
+        });
       }
       continue;
     }
@@ -268,12 +307,33 @@ for (const file of files) {
     // 测试夹具不是泄漏。报它的代价是有人会去「修」一个不存在的问题 ——
     // 而一个会误报的检查会被忽略，然后真问题也跟着被忽略。
     if (isFixture) continue;
+
+    // ⚠️ 2026-10-13：`absolute-path` 在**散文里**只作提醒，在代码里才拦人。
+    //
+    // 这条规则当初是为一场真事故立的：`check-grounding.mjs` 在别人机器上 ENOENT，
+    // 因为源码里写死了 `<本仓库>`（见 `tools/derive-roots.mjs` 的注释）。
+    // 那是**代码里**的路径 —— 该拦。
+    //
+    // 它同时也在二十几份文档、注释和 `.EXAMPLE` 块里命中。那些地方写的是
+    // 「东西在这台机器的哪个盘上」，换台机器只是读起来不对，不会坏 ——
+    // 何况仓库名本来就要公开（`github.com/<作者>/DSH_Plugins`）。
+    // 拿二十几条这种东西去拦一次导出，代价是整条规则被关掉。
+    const lineText = text.split('\n')[line - 1] ?? '';
+    // ⚠️ PowerShell 的 `<# … #>` 块注释里也全是散文，而那些行自己不带标记 ——
+    //    `.EXAMPLE` 里的示例路径就长这样（`pwsh D:\<仓库>\setup\install.ps1`）。
+    //    数一下这行之前 `<#` 和 `#>` 各出现几次，多出来的就是还在块里。
+    const upto = text.split('\n', line).join('\n');
+    const inBlock = (upto.match(/<#/gu) ?? []).length > (upto.match(/#>/gu) ?? []).length;
+    const inProse = rel.endsWith('.md') || inBlock || /^\s*(?:\/\/|#|rem\b|\*|<!--)/iu.test(lineText);
+    const soft = rule.id === 'absolute-path' && inProse;
+
     findings.push({
       rule: rule.id,
       file: rel,
       line,
-      advisory: rule.advisory === true,
-      why: isFixture ? `${rule.why}（疑似测试夹具，核实后可在规则里加例外）` : rule.why,
+      advisory: rule.advisory === true || soft || covered !== undefined,
+      covered: covered?.why,
+      why: soft ? `${rule.why}（散文里只作提醒）` : rule.why,
       sample: hit[0].slice(0, 60)
     });
   }
@@ -281,7 +341,8 @@ for (const file of files) {
 
 // `advisory` 的那些**不拦人**：它们该被看到，但那个决定已经有人做过了。
 const blocking = findings.filter((f) => f.advisory !== true);
-const advisory = findings.filter((f) => f.advisory === true);
+const advisory = findings.filter((f) => f.advisory === true && f.covered === undefined);
+const knownCovered = findings.filter((f) => f.covered !== undefined);
 
 if (JSON_OUT) {
   process.stdout.write(`${JSON.stringify(findings, null, 2)}\n`);
@@ -296,7 +357,8 @@ for (const f of findings) {
 }
 
 console.log(`\n  扫了 ${files.length} 个文件，${blocking.length} 处需要处理` +
-  `${advisory.length === 0 ? '' : `，另有 ${advisory.length} 处只是提醒`}。\n`);
+  `${advisory.length === 0 ? '' : `，另有 ${advisory.length} 处只是提醒`}` +
+  `${knownCovered.length === 0 ? '' : `，${knownCovered.length} 处已知会被发布/导出那条路处理掉`}。\n`);
 for (const [rule, list] of byRule) {
   const files = [...new Set(list.map((f) => f.file))];
   const mark = list[0].advisory === true ? 'ℹ️ ' : '⚠️ ';
@@ -307,14 +369,22 @@ for (const [rule, list] of byRule) {
     console.log(`        ${f}${one.line ? `:${one.line}` : ''}${one.sample ? `   ${JSON.stringify(one.sample)}` : ''}`);
   }
   if (files.length > 5) console.log(`        …… 另外 ${files.length - 5} 个`);
+  if (list[0].covered !== undefined) console.log(`        ↳ 已知覆盖：${list[0].covered}`);
   console.log('');
 }
 
 console.log(
   blocking.length === 0
-    ? (advisory.length === 0
-      ? '  没有发现不该外发的内容。\n'
-      : `  没有拦人的问题。另有 ${advisory.length} 处提醒（素材不适用 MIT，见 NOTICE.md）。\n`)
+    ? [
+      '  没有拦人的问题。',
+      knownCovered.length === 0
+        ? ''
+        : `  ${knownCovered.length} 处落在 dist / deploy 里 —— 发布前会重建或排除，但改了那两条路要回来看。`,
+      advisory.length === 0
+        ? ''
+        : `  ${advisory.length} 处是素材与散文里的路径（素材不适用 MIT，见 NOTICE.md）。`,
+      ''
+    ].filter((l) => l !== '').join('\n') + '\n'
     : '  以上都要在打包之前处理掉。\n'
 );
 process.exit(blocking.length === 0 ? 0 : 1);

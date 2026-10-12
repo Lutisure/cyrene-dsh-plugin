@@ -92,7 +92,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/test-fresh-install.ps1
 |---|---|---|
 | `test-fresh-install.ps1` | **干净机器装一遍**：导出 → 装 → build → 校验 | 每次改了 `setup/`、`package.json` 或 build 流程之后 |
 | `test-profile-conflict.ps1` | profile 里已有同名包时（链接指向别处 / 真目录占名 / 不存在） | 改了链接那一段之后 |
-| `make-share.mjs` | 生成**给朋友**的副本（源码，不含 dist/deploy/素材） | 要发给人之前 |
+| `make-share.mjs` | 生成**给朋友**的副本（源码，不含 dist/deploy） | 要发给人之前 |
 | `make-npm.mjs` | 生成**能发 npm** 的包 —— 用**空的 memory** 重建 `dist/` | 要 `npm publish` 之前 |
 | `set-owner.mjs` | 把 `Lutisure` 换成真实 GitHub 用户名（4 个文件、20 处） | 仓库推上去、知道地址之后 |
 | `derive-roots.mjs` | 把工具里写死的绝对路径换成从 `import.meta.url` 推 | 新写了工具、或在别的机器上跑崩了 |

@@ -97,9 +97,9 @@ function aclOf(path) {
   const lines = raw.split(/\r?\n/u);
 
   // ⚠️ **第一条 ACE 就在第 0 行上**，和路径挤在一起：
-  //      <本仓库> <用户名>\…\<用户名>:(F)
+  //      <本仓库> DESKTOP-XXXX\…\someone:(F)
   //    只从第 1 行开始扫会漏掉正好最要紧的那条。但也不能在整行上扫 ——
-  //    `<本仓库> LUT…` 里的盘符冒号会被当成分隔符，把路径吃进账户名。
+  //    `<本仓库> DES…` 里的盘符冒号会被当成分隔符，把路径吃进账户名。
   //    所以先把路径从第 0 行削掉，再解析。
   const stripped = lines.map((line, index) => {
     if (index !== 0) return line;

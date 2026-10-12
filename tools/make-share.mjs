@@ -480,7 +480,12 @@ let auditFailed = false;
 try {
   const out = execFileSync(process.execPath, [join(OUT, 'tools', 'audit-shareable.mjs')], {
     cwd: OUT,
-    encoding: 'utf8'
+    encoding: 'utf8',
+    // ⚠️ 把**源仓库的目录名**带过去。不带的话，脚本在导出目录里推「仓库叫什么」，
+    //    推出来的是这个临时目录的名字 —— 而 `absolute-path` 那条规则要匹配的
+    //    正是源仓库的名字，于是它在导出物上永远不匹配。同一份文本，在源目录里
+    //    报 23 处，在导出目录里报 0 处。验导出物的意义就这么没了。
+    env: { ...process.env, DSH_REPO_DIRNAME: SRC.split(/[\\/]/u).pop() ?? '' }
   });
   process.stdout.write(out.replace(/^/gmu, '  '));
 } catch (error) {
