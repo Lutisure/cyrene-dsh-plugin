@@ -1,0 +1,64 @@
+# 不进仓库的东西
+#
+# 判据只有一条：**凡是带着本机记忆或本机状态的，一律不进来。**
+# 收件人装上该是一个空白的自己，而不是「记得别人的事的昔涟」。
+
+# 依赖：本地安装，体积大且可重现
+node_modules/
+
+# Python 工具的字节码
+__pycache__/
+*.pyc
+
+# 编辑器与系统杂物
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.swp
+*~
+*.bak
+*.bak-*
+*.orig
+
+# 游戏数据包（155 MB，可从 GitHub 重新抓，见 cyrene-agent/corpus-src/STORY-EXTRACTION.md）
+.data/
+
+# 本机运行留痕：每轮注入了什么、为什么。排障用，不含分享价值
+cyrene-agent/data/
+
+# ── 构建产物 ────────────────────────────────────────────────────────
+#
+# `build.mjs` 会把长期记忆内联进 `dist/skills/cyrene/SKILL.md`，
+# 所以 `dist/` 不是普通的构建产物 —— **它是本机记忆的一份拷贝。**
+#
+# 排除它不影响任何一条路：
+#     GitHub  收件人自己跑 `node build.mjs`
+#     npm     `tools/make-npm.mjs` 用空的记忆重建一份再发
+cyrene-agent/dist/
+cyrene-guard/dist/
+dsh-theme-cyrene/dist/
+
+# 本机快照：记忆、修正、主题状态，以及一份把它们内联进去的技能文件
+deploy/
+
+# ── 本机的手机接入 ──────────────────────────────────────────────────
+#
+# ⚠️ **这一组是「要留在本机、但不外发」的，而不是「不要了」。**
+#
+# 2026-10-11 20:41（提交 47c3a60）把它们从仓库里删掉了，理由是
+# 「它不属于要提交的东西」—— 那个判断是对的。**但只删了一处：**
+# 开机启动项 `DSH mesh access.vbs` 还指着 `setup\mesh-access.vbs`，
+# 于是第二天开机就是一个「打不开」的报错。
+#
+# 2026-10-12 恢复文件、补上下面这两道防线。**而两道缺一不可：**
+#
+#     .gitignore          不进 git
+#     make-share 的 TOP_SKIP_PREFIX     不进分享副本
+#
+# ⚠️ **只加 `.gitignore` 是不够的** —— `make-share` 拷目录用的是
+# `cpSync` 遍历，**不看 git**。所以被 ignore 的文件照样会进分享副本。
+setup/mesh-access.vbs
+setup/mesh-access.cmd
+setup/firewall-mesh.cmd
+tools/phone-bridge.mjs

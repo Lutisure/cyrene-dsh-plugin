@@ -1,0 +1,25 @@
+# 这个仓库的规矩：**git 不许改动工作区里的任何一个字节。**
+#
+# 它是一个备份仓库，工作区就是正在运行的那份插件。git 在 Windows 上默认会做
+# 行尾转换（checkout 时 LF → CRLF），那意味着一次 `git checkout` 就会重写
+# 所有源文件 —— 对一个「顺手备份」的仓库来说这是不能接受的：
+#
+#   · lib/client.js 会被重写，而它是浏览器直接加载的
+#   · dist/system-prompt.md 会被重写，而它整体就是她的人设正文
+#   · 大量媒体文件是二进制，本来就不该碰
+#
+# `-text` 让 git 对所有文件**关闭行尾转换与文本猜测**，一个字节都不动。
+# 代价是 diff 不识别行尾差异 —— 对备份来说完全值得。
+* -text
+
+# 图片、音频、视频明确标为二进制，避免任何「看起来像文本」的误判。
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webm binary
+*.mp4 binary
+*.mp3 binary
+*.ico binary
+*.ttf binary
