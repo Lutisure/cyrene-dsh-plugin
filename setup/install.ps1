@@ -216,7 +216,7 @@ if (Test-Path $indexAt) {
   Say 'story index already built' Green
 } elseif (-not (Test-Path $corpusAt)) {
   Say 'no corpus-src/ - the story index cannot be built' Yellow
-  Say '  story retrieval will return nothing. See SHARING.md' Yellow
+  Say '  story retrieval will return nothing. See SHARING.zh.md' Yellow
 } else {
   Push-Location $agentDir
   try {
@@ -261,6 +261,31 @@ if (-not $SkipState) {
     if (Test-Path $to) {
       $same = (Get-FileHash $from).Hash -eq (Get-FileHash $to).Hash
       if ($same) { Say "identical, left alone: $($entry.Value)" DarkGray; continue }
+
+      # The profile patch is replaced whole, and the copy in the repo can lag
+      # behind the one on this machine. 2026-10-13 was exactly that: the live
+      # preset had seven plugin rows (story among them), the repo copy had six,
+      # and one install would have put the six back. A preset losing a row
+      # changes nothing on screen, so name the rows before the swap.
+      if ($entry.Key -eq 'profile\cordis.patch.yml') {
+        $rowIds = {
+          param([string]$path)
+          $ids = @()
+          foreach ($line in (Get-Content -LiteralPath $path -Encoding UTF8)) {
+            if ($line -match '^\s*-\s*id:\s*(\S+)\s*$') { $ids += $Matches[1] }
+          }
+          return $ids
+        }
+        $before = @(& $rowIds $to)
+        $after = @(& $rowIds $from)
+        $lost = @($before | Where-Object { $after -notcontains $_ })
+        if ($lost.Count -gt 0) {
+          Say "  the copy being installed has no row for $($lost.Count) entry/entries that are live now:" Red
+          foreach ($row in $lost) { Say "    - $row" Red }
+          Say '  the live file is kept below - restore it, or add those rows to the repo copy first.' Yellow
+        }
+      }
+
       Copy-Item $to "$to.superseded-$stamp" -Force
       Say "existing file kept as $(Split-Path $to -Leaf).superseded-$stamp" Yellow
     }

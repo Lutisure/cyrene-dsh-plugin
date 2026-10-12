@@ -1,14 +1,14 @@
 ﻿<#
 .SYNOPSIS
-  Collect the pieces that live outside the repository into deploy/, so git can
-  carry them.
+  Collect the pieces that live outside the repository into deploy/, so they can
+  be put back.
 
 .DESCRIPTION
   The two plugin packages are already in this repo. What is not — and what cannot
   be regenerated — is five files under ~/.dsh:
 
     skills/cyrene/SKILL.md          her, as the /cyrene path sees her
-    profiles/<profile>/cordis.patch.yml   the preset: the six plugin rows
+    profiles/<profile>/cordis.patch.yml   the two presets and their plugin rows
     cyrene-agent/memory.md          what she remembers about you
     cyrene-agent/corrections.md     how she has been told to speak
     theme-cyrene/state.json         wallpaper, volume, collapsed state
@@ -16,7 +16,13 @@
   Two of those are written by talking to her. Losing them means she wakes up
   without knowing you, which is exactly what this script exists to prevent.
 
-  Run this before committing. It is safe to run repeatedly.
+  ⚠️ `deploy/` is gitignored on purpose (see .gitignore): it holds memory, so it
+  never travels with the repository, and nothing here reaches GitHub or npm. The
+  pair is about *this* machine — pack takes the snapshot, install.ps1 reads it
+  back. Worth running before anything that rewrites ~/.dsh, and before letting
+  install.ps1 run, so that what it reads back is not older than what is live.
+
+  Safe to run repeatedly.
 
 .EXAMPLE
   pwsh <本仓库>\setup\pack.ps1
@@ -79,4 +85,5 @@ if ($missing.Count -gt 0) {
 }
 
 Write-Host ''
-Write-Host '  next: git add -A ; git commit -m "sync state"' -ForegroundColor Yellow
+Write-Host '  deploy/ is gitignored, so there is nothing to commit from this.'
+Write-Host '  install.ps1 reads these five files back; run this again after she has been told new things.' -ForegroundColor Yellow
