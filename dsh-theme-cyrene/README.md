@@ -532,7 +532,7 @@ HTTP 200 的那个**。所以这一条有间接的实时证据，不是纯推理
 
 ## 客户端 bundle 的契约（`test/client-contract.test.mjs`）
 
-主题那一侧的验证一直有个盲区：260 项测试全跑在 DOM shim 上，而**客户端插件真正的加载契约**
+主题那一侧的验证一直有个盲区：265 项测试全跑在 DOM shim 上，而**客户端插件真正的加载契约**
 从没被真实实现验过。这一轮去读了 `dsh-client-modules` 的源码和契约文档，抓到一个静默错配。
 
 ### 抓到的：`dsh.client.inject` 这个字段**不存在**
@@ -659,8 +659,8 @@ lib/
     99-epilogue.js    装配 apply()
   client.js         构建产物（node build.mjs 生成，勿手改）
 build.mjs           拼接 + 注入素材清单
-test/               260 项测试
-tools/              素材处理与验证脚本，共 22 个文件，两个值得单独说：
+test/               265 项测试
+tools/              素材处理与验证脚本，共 24 个文件，两个值得单独说：
   probe-panel.mjs     把浏览器半体拼回一页、挂进真 Chromium 量尺寸
                       （DOM shim 没有布局引擎，量不了「这个框多高」）
   check-bundle.mjs    用 Node 的解析器验证拼接结果真的能跑
@@ -744,9 +744,9 @@ if (bytes > LIMIT) throw new Error(`bundle is ${human(bytes)}, over the ${human(
 
 | | 现在的数 |
 |---|---|
-| `lib/client.js`（bundle 本体） | **390 KB**（`node build.mjs --check` 报的数；磁盘上 399,312 字节） |
+| `lib/client.js`（bundle 本体） | **405 KB**（`node build.mjs --check` 报的数；磁盘上 414,596 字节） |
 | `build.mjs` 的上限 | **512 KB** |
-| 剩下的余量 | **约 122 KB** |
+| 剩下的余量 | **约 107 KB** |
 
 > 余量看着不多，是因为它**本来就该不多**：这个闸门存在的意义就是让「顺手内联一张图」
 > 这件事在构建期就失败。真要往里塞东西，先看它是不是该走 `/theme-cyrene-assets/`。
@@ -757,7 +757,9 @@ if (bytes > LIMIT) throw new Error(`bundle is ${human(bytes)}, over the ${human(
 
 > **素材外置还有一个副作用，是好的**：没有 `assets/` `music/` `GIF/` `brand/` 时
 > 主题退回纯色背景和内置图案 —— 任何一步都不报错、不阻塞启动。
-> 分享副本（`tools/make-share.mjs`）正是靠这一点才敢把这些目录整个排除。
+> **npm 上发的就是这个形态**（`package.json` 的 `files` 不含那几个目录）。
+> 分享副本（`tools/make-share.mjs`）反过来，会把它们带上 —— 那是因为收件人拿到的是
+> 「装了就能用」的一整套，不是包。
 
 ---
 
@@ -808,7 +810,7 @@ if (bytes > LIMIT) throw new Error(`bundle is ${human(bytes)}, over the ${human(
   **miHoYo / HoYoverse** 及其各自权利人所有。
 - **`assets/` `music/` `GIF/` `brand/` `docs/` 下的游戏素材不在本项目的 MIT 授权范围内，
   不可再分发**，放在这里仅供本机个人使用。完整说明见
-  [NOTICE.md](./NOTICE.md) 与根目录 [NOTICE.md](../NOTICE.md)。
+  [NOTICE.md](./NOTICE.md) 与根目录 [NOTICE.zh.md](../NOTICE.zh.md)。
 - **代码的 MIT 授权不覆盖角色 IP 与美术资产。** 两者是分开的。
 
 > 素材本身的三方来源（含 `music/true.mp3` 几乎可以确定是 HOYO-MiX 的作品）见
@@ -819,6 +821,6 @@ if (bytes > LIMIT) throw new Error(`bundle is ${human(bytes)}, over the ${human(
 ## 许可
 
 代码 MIT。**素材随分享副本一起发**，但它们不属于这份 MIT —— 版权属于米哈游 / HoYoverse，
-只做个人使用。见 [ASSETS.md](./ASSETS.md) 的版权说明和仓库根的 [NOTICE.md](../NOTICE.md)。
+只做个人使用。见 [ASSETS.md](./ASSETS.md) 的版权说明和仓库根的 [NOTICE.zh.md](../NOTICE.zh.md)。
 **换成自己的素材很容易**（丢进对应目录，或界面里直接导入），换完把随包那份删掉就行。
-**版权方要求下架的话，本项目会在一周内照办** —— 见 NOTICE 第一节之四。
+**版权方要求下架的话，本项目会在一周内照办** —— 见 NOTICE.zh.md 第一节之四。

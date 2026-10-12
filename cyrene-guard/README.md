@@ -50,6 +50,7 @@ cyrene-guard/
   test/
     scanner.test.mjs    19 项：规则命中、遮罩语义、语言门控、假阳性防线
     packages.test.mjs   11 项：包名抽取、三态判定、Go module 转义
+    skip-report.test.mjs 5 项：「扫过没问题」和「根本没扫」在报告上必须分得开
   tools/
     gen-packages.mjs    从抽取出的规则文件生成 packages.mjs
     preflight.mjs       把 apply() 在一个假宿主上真跑一遍（防「挂载时抛 → DSH 起不来」）
@@ -353,8 +354,8 @@ $env:ELECTRON_RUN_AS_NODE="1"
 ## 开发
 
 ```powershell
-cd <本仓库>\cyrene-guard
-node --test                    # 30 项（scanner 19 + packages 11）
+cd cyrene-guard
+node --test                    # 35 项（scanner 19 + packages 11 + skip-report 5）
 node tools/preflight.mjs       # 在假宿主上真跑一遍 apply()
 ```
 
@@ -376,4 +377,4 @@ node tools/preflight.mjs       # 在假宿主上真跑一遍 apply()
 **检测规则来自 Unclecheng-li/DeepSec 的 Shield（MIT）。**
 从 TypeScript 移植到 JavaScript，并修了原版两处会导致误报的问题（`exec(` 的语言门控、
 以及声明了但没执行的 `languages` 字段）。完整署名见 [NOTICE.md](NOTICE.md)，
-仓库根目录的 [NOTICE.md](../NOTICE.md) 里有更完整的三方说明。
+仓库根目录的 [NOTICE.zh.md](../NOTICE.zh.md) 里有更完整的三方说明。

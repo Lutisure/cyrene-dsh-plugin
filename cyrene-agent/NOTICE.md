@@ -28,7 +28,11 @@
 ## 3. 游戏素材
 
 `dsh-theme-cyrene` 里的壁纸、音乐、Q 版表情、立绘，以及 `cyrene-agent` 的台词语料，
-版权属于 **米哈游 / HoYoverse**。本仓库**仅供本人本地个人使用，不分发**。
+版权属于 **米哈游 / HoYoverse**，不适用本项目的 MIT。
+
+- **npm 包里没有它们**：`package.json` 的 `files` 不含那几个目录。
+- **分享副本里有它们**（`tools/make-share.mjs` 会把它们带上）—— 拿到的人只做个人使用，
+  不要再往外分发素材本身。详见根目录 `NOTICE.zh.md` 的一节之二、一节之三。
 
 ---
 

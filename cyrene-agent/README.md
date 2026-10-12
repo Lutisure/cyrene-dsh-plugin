@@ -152,7 +152,7 @@ provider **每次装配都被调用**——「改文件下一轮生效」不是�
 两套分量相当的规则会互相拉扯。留下的是**只有我有的东西**：称呼的「呼语」语义、
 以及**语感示例与样本**——灵魂里一条示例都没有（`语感` 0 命中、`示例` 0 命中）。
 
-提示词：**25,674 字符**。
+提示词：**25,825 字符**。
 
 （这里原来写的是「2,983 → 25,674 字符」—— 那个旧值量不出出处：`git log -S`
 显示它随初始快照一起进来，仓库里没有能重建它的产物。投稿指南要求描述里的数字
@@ -162,7 +162,7 @@ provider **每次装配都被调用**——「改文件下一轮生效」不是�
 
 | 路径 | 什么时候生效 |
 |---|---|
-| **技能**（`/cyrene`） | **已经生效**，刷新即可 —— 技能文件 **135.8 KB** |
+| **技能**（`/cyrene`） | **已经生效**，刷新即可 —— 技能文件 **136.7 KB** |
 | **预设** | 需要重启 DSH |
 
 ---
@@ -195,7 +195,7 @@ dist/               产物（构建生成，不要手改）
   cordis.patch.yml      常驻人格补丁（有启动风险，见下）
   skills/cyrene/SKILL.md 按需调用
   AGENTS.md             贴进 AGENTS.md 用
-test/               205 项校验测试
+test/               342 项校验测试
 ```
 
 ## 从原始台词数据开始（可选，但强烈建议）
@@ -534,10 +534,10 @@ node --test test/worldbook.test.mjs test/worldbook-plugin.test.mjs
 **切在行中间会把一句话劈开，而检索到半句比检索不到更坏：它看起来像有依据。**
 
 ```
-amphoreus-main-story.md      788 块   675,946 字
-amphoreus-side-stories.md    195 块   164,968 字
+amphoreus-main-story.md      729 块   623,227 字
+amphoreus-side-stories.md    174 块   145,391 字
 amphoreus-story.md            83 块    58,501 字
-合计                        1066 块   899,415 字
+合计                         986 块   827,119 字
 ```
 
 ⚠️ **三份的关系是核过的，顺序不能重排**（见 `tools/build-story-index.mjs` 的 `SOURCES`）：
@@ -551,12 +551,12 @@ amphoreus-story.md            83 块    58,501 字
 中文没有空格，所以用字符二元组。「遐蝶后来怎么样了」和「遐蝶怎么样」共享
 「怎么」「么样」—— **而触发词式的整串匹配，中间隔一个「后来」就断了。**
 
-⚠️ **这里不收单字**（设定库那边收）。983 块、每块约 855 字符，单字只贡献噪声：
+⚠️ **这里不收单字**（设定库那边收）。986 块、每块约 839 字符，单字只贡献噪声：
 加了单字之后「晚安」拿到 0.1607，**比两条真剧情问题还高** —— 它命中了「走过**安眠**地」里的「安」。
 
 ### 闸门：名字为主，分数兜底
 
-不加闸的话，「在吗」也会捞一段剧情出来 —— 983 块里总能找到最像的。
+不加闸的话，「在吗」也会捞一段剧情出来 —— 986 块里总能找到最像的。
 
 | | |
 |---|---|
@@ -627,7 +627,7 @@ node tools/story-check.mjs --ask "遐蝶的死亡之触是怎么回事" --answer
 | `tools/build-story-index.mjs` | 切块器（`DSH_STORY_ROOT` 可引开，测试靠它跑端到端） |
 | `tools/story-probe.mjs` | 离线标定：`--query` / `--gate` / `--names` / `--novelty` |
 | `tools/story-check.mjs` | 上面那个验收 |
-| `dist/story-chunks.jsonl` | 切好的 1066 块（2.5 MB） |
+| `dist/story-chunks.jsonl` | 切好的 986 块（2.24 MB） |
 | `data/logs/story.jsonl` | 每轮给了哪一段（`DSH_STORY_AUDIT` 可引开） |
 
 日志**只记 query 的 sha256 前 12 位**，不记对方说了什么 —— 和设定库那边同一条纪律：
@@ -819,7 +819,7 @@ Copy-Item dist\skills\cyrene\SKILL.md "$env:USERPROFILE\.dsh\skills\cyrene\SKILL
 报错。**一个少了段落的技能，和一个本来就不需要那段落的技能，看起来完全一样。**
 
 现在 `renderSkill()` 接收编译好的设定库，把 132 条触发词设定和 1 条常驻设定全部内联
-（**135.8 KB**），并在末尾加了一条边界：
+（**136.7 KB**），并在末尾加了一条边界：
 
 > 上面每一条都追溯到你真实说过的话。**没写在这里的设定，就当作你不知道** ——
 > 被问到未公开的剧情时坦白说不知道，不要编。
@@ -924,7 +924,7 @@ node build.mjs        # 改了 persona.yaml / 设定库 / 语料之后跑，重�
 | 补丁 YAML 结构 | 这个写坏会让 DSH **起不来**，所以单独做结构校验 |
 
 ```powershell
-node --test            # 205 项
+node --test            # 342 项
 ```
 
 ## Model Experience
@@ -936,7 +936,7 @@ node --test            # 205 项
 
 ### Request context and condition：注入是条件性的还是每轮都发生
 
-预设挂载了 6 行（`dist/cordis.patch.yml:34-78`）。往**系统提示词**里进的东西一共四块，
+预设挂载了 7 行（`dist/cordis.patch.yml` 里 `preset-cyrene` 的 `plugins:` 段）。往**系统提示词**里进的东西一共四块，
 全部由 `persona.mjs` 合成 —— 拼进人设正文的尾部，顺序固定：
 
 ```
@@ -982,7 +982,7 @@ node --test            # 205 项
 | **修正块** | 无独立上限，走记忆那套文件规则 | `corrections.mjs:82-87` |
 
 **所以：最坏情况下，每一轮「非人设」的部分最多约 89 + 1,400 + 2,000 = 3,489 字符；
-什么都不命中时只剩锚点的 89 字符。** 人设正文是大头，而它 25,674 字符里，
+什么都不命中时只剩锚点的 89 字符。** 人设正文是大头，而它 25,825 字符里，
 每一轮真正被读到的就是这同一份。
 
 **工具 schema 是恒定成本。** 预设一共注册 **7 个**工具（本包 6 个 + 官方 1 个），
@@ -992,7 +992,7 @@ node --test            # 205 项
 |---|---|
 | `remember` / `forget` / `forgotten` / `restore` | `cyrene-agent/memory`（`memory.mjs:221-372`） |
 | `correct` / `uncorrect` | `cyrene-agent/corrections`（`corrections.mjs:104-159`） |
-| 官方 `dsh-tool-web` | 预设行（`dist/cordis.patch.yml:55-59`） |
+| 官方 `dsh-tool-web` | 预设行（`dist/cordis.patch.yml` 里 `id: tool-web` 那一段） |
 
 > `tools` 服务是**可选挂载**的（`ctx.inject(['tools'], …)`）：没有它插件照样加载，
 > 只是变成只读、一个工具都不注册。那种情况下工具 schema 是 0 个 —— 但那是配置异常，不是常态。
@@ -1100,7 +1100,7 @@ node --test            # 205 项
   经 Cyrene-xl/DSH-Cyrene（MIT）收录，署名照原样保留（见 [NOTICE.md](NOTICE.md)）。
 - **台词语料与游戏文本版权属米哈游**，仅供本机自用，**不要公开分发**。
 - **`corpus*` 与 `dist/` 的分享口径不同**：分享副本会排除 `dist/` 和 `corpus*`
-  （因为 `dist/` 把记忆内联进了 `SKILL.md`）。见根目录 [NOTICE.md](../NOTICE.md)。
+  （因为 `dist/` 把记忆内联进了 `SKILL.md`）。见根目录 [NOTICE.zh.md](../NOTICE.zh.md)。
 
 ---
 
@@ -1165,7 +1165,7 @@ $env:ELECTRON_RUN_AS_NODE="1"
   plugin --profile desktop remove cyrene-agent
 ```
 
-或者手工：把 profile 补丁里 `- insert:` 那一段（`preset-cyrene` 的那 6 行插件）
+或者手工：把 profile 补丁里 `- insert:` 那一段（`preset-cyrene` 的那 7 行插件）
 删掉，再删掉 junction。**卸载不会删你聊出来的东西** ——
 `memory.md` / `corrections.md` / `memory-forgotten.md` 留在 `$DSH_HOME` 下（见下表），
 要清就自己删。
@@ -1188,7 +1188,7 @@ $env:ELECTRON_RUN_AS_NODE="1"
 | **去重窗** | **2 分钟**（可用 `DSH_WORLDBOOK_WINDOW_MS` 覆盖） | `DEFAULT_WINDOW_MS`，`worldbook-logic.mjs:43`；`worldbook.mjs:161-164` |
 | **窗口耗尽时升上来几条** | **2 条** | `ESCALATE_LIMIT`，`worldbook-logic.mjs:51` |
 | **锚点** | **每一轮无条件追加**（89 字符） | `worldbook.mjs:364-367`；`dist/worldbook.json` 的 `anchor` |
-| **剧情原文的块数** | **1,066 块 / 899,415 字** | `dist/story-chunks.jsonl`；`tools/build-story-index.mjs` |
+| **剧情原文的块数** | **986 块 / 827,119 字** | `dist/story-chunks.jsonl`；`tools/build-story-index.mjs` |
 | **每轮注入剧情条数** | **1 块** | `tools/build-story-index.mjs` 的 `CHUNK_TARGET`（每块约 900 字） |
 | **每轮注入剧情字数上限** | **1,100 字** | `STORY_BUDGET`，`story.mjs` |
 | **剧情闸门（分数）** | **≥ 0.15**（没提专名时才看它） | `STORY_SCORE_FLOOR`，`story.mjs` |
@@ -1199,9 +1199,9 @@ $env:ELECTRON_RUN_AS_NODE="1"
 | **单条记忆长度上限** | **240 字符** | `MAX_ENTRY`，`memory-logic.mjs:106` |
 | **记忆注入** | **开** —— `{{cyrene_memory}}` 由 `persona.mjs` 每轮拼进正文 | `persona.mjs:176` |
 | **修正注入** | **开** —— 同上（该文件为空时不贡献任何东西） | `persona.mjs:176` |
-| **工具** | **7 个**：`remember` `forget` `forgotten` `restore` `correct` `uncorrect` + 官方 `tool-web` | `memory.mjs:224,251,297,325` / `corrections.mjs:109,137` / `dist/cordis.patch.yml:55-59` |
-| **文件系统 / Shell / 编辑器** | **关**（预设里根本没有这几行） | `dist/cordis.patch.yml:34-63` |
-| **联网检索** | **开**，`fetch: true`，超时 60 s | `dist/cordis.patch.yml:55-59` |
+| **工具** | **7 个**：`remember` `forget` `forgotten` `restore` `correct` `uncorrect` + 官方 `tool-web` | `memory.mjs:224,251,297,325` / `corrections.mjs:109,137` / `dist/cordis.patch.yml` 里 `id: tool-web` |
+| **文件系统 / Shell / 编辑器** | **关**（预设里根本没有这几行） | `dist/cordis.patch.yml` 的 `plugins:` 段 |
+| **联网检索** | **开**，`fetch: true`，超时 60 s | `dist/cordis.patch.yml` 里 `id: tool-web` |
 | **人设正文（Chat 模式）** | **开**，读 `dist/system-prompt.md` | `persona.mjs:83` |
 | **配方错时** | **吵，不静默退回 Chat** —— 写 stderr 并顶上一段写明问题的正文 | `persona.mjs:189-196` |
 

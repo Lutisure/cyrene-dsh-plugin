@@ -97,10 +97,12 @@ node build.mjs
 | `deploy/` | 原机器的运行状态：记忆、修正、主题状态 |
 | `cyrene-agent/dist/` | 构建产物 —— 而构建时把记忆内联进了 `SKILL.md` |
 | `docs/` | 游戏素材的衍生物（头像候选、开场帧预览），运行时不读它 |
-| `corpus*` | 对话语料来源 |
+| `corpus-raw/` `corpus-backup-*` `corpus/` | 抓取中间态与派生缓存，构建不读它们 |
+| `cyrene-agent/docs/` | 迭代记录与设计档，运行时不读 |
 
 **`assets/` `music/` `GIF/` `brand/` 不在这个表里了 —— 它们现在随包发。**
-见上面「自己准备素材」那一节。
+`cyrene-agent/corpus-src/` 同理（剧情检索要读它）。
+见上面「素材已经在包里了」那一节。
 
 第二行值得多说一句。`dist/` 是构建产物，但 `build.mjs` 在构建时把 `memory.md` 和
 `corrections.md` **内联进生成的 `SKILL.md`**。所以 `dist/` 是机器相关的，发出去就是
