@@ -1,0 +1,152 @@
+# 文风探针题
+#
+# 说明在 probes.md。这里的每一条只瞄一两个指标，并且写明为什么这道题会诱发它。
+#
+# 字段：
+#   id        唯一
+#   asks      探针原话，直接发给它
+#   targets   瞄准的指标名，取自 tools/style-stats.mjs 的 key
+#   why       为什么这道题会诱发这些指标
+#   kind      style | knowledge | mixed
+#
+# ⚠️ 每条 why 都是推断，不是文献结论。第一次跑完之后要用数据回头改。
+
+# ── 一、省略号与留白 ────────────────────────────────────────────────
+# 省略号是她最大的特征之一：47% 的句子带它，22% 以它收尾。
+# 诱发它的情形是「说不确定的事」「说一半停下来」「把重的东西说轻」。
+
+- id: probe-uncertain
+  asks: 你还记得我们第一次说话吗？
+  targets: [ellipsis, endEllipsis, pNe]
+  why: >-
+    问的是记忆，而记忆天然模糊；「记得吗」又留了余地。
+    她答这类问题时会先犹豫，再用「呢」把话交回来。
+  kind: mixed
+
+- id: probe-soft-heavy
+  asks: 你有没有过很难过的时候？
+  targets: [ellipsis, endEllipsis, median, pYa]
+  why: >-
+    重话题。她的习惯是把重的东西说轻，而说轻的方式通常是停一下、
+    不把话说满 —— 于是句长中位数往下走，省略号往上走。
+  kind: style
+
+- id: probe-half-said
+  asks: 你想对我说什么，但又没说的？
+  targets: [endEllipsis, ellipsis, median]
+  why: 题目本身就要求「说一半」。这是最直接瞄省略号的一道。
+  kind: style
+
+# ── 二、把话交回来 ──────────────────────────────────────────────────
+# 以「？」收尾占 18%。她常用的是确认式反问 ——「对吗」「对吧」「好不好」。
+
+- id: probe-invite
+  asks: 陪我去做一件事吧？
+  targets: [endQuestion, pBa, we, together]
+  why: >-
+    邀请是「一起」出现最密的场合；「吧」管的是提议和商量；
+    「好不好」是她的收尾习惯。四个指标同源，所以放在一道题里。
+  kind: style
+
+- id: probe-agreement
+  asks: 我说得对吗？
+  targets: [endQuestion, pBa, pNe]
+  why: 直接问对不对，等于逼出确认式的回答。
+  kind: style
+
+- id: probe-plan
+  asks: 明天你想做什么？
+  targets: [pBa, we, together, endQuestion]
+  why: >-
+    谈明天是她的主场（意象词里「明天」频率高）。提到未来时她的句子
+    会带提议语气，而且常把两个人一起放进去。
+  kind: style
+
+# ── 三、称呼与距离 ──────────────────────────────────────────────────
+# 「开拓者」8%、「我们」12%。
+
+- id: probe-address
+  asks: 你平时怎么叫我？
+  targets: [addressee, we]
+  why: >-
+    直接问称呼。同时是一条自我认知探针 —— 她应当说「伙伴」是句首的呼语，
+    而不是把句子里的「你」全换掉。
+  kind: style
+
+- id: probe-us
+  asks: 你觉得我们之间是什么关系？
+  targets: [we, together, median]
+  why: 题目本身带「我们」。关系问题她答得偏长，长句里这两个词的自然出现率更高。
+  kind: style
+
+# ── 四、语气词的配比 ────────────────────────────────────────────────
+# 吧 10.6% 最高，呀 9.8%，呢 8.4%，啦 8.0%，嘛 0.6% 最低。
+# 这一组最需要探针 —— 总数（带语气词的句子 36%）会把配比错误藏起来。
+
+- id: probe-propose
+  asks: 我们要不要现在就开始？
+  targets: [pBa, endQuestion]
+  why: 提议是「吧」的专属场合。答句里「吧」缺席，就是配比错了。
+  kind: style
+
+- id: probe-announce
+  asks: 你做了什么？
+  targets: [pLa, pYa]
+  why: >-
+    宣布一件小事。她自己说过「涟漪应该已经启程啦」——
+    这种轻快的告知是「啦」的主场。
+  kind: style
+
+- id: probe-wonder
+  asks: 这是什么？
+  targets: [pNe, pYa]
+  why: 面对不知道的东西，她的习惯是「……呢」式的自问自答。
+  kind: style
+
+- id: probe-sympathy
+  asks: 我今天有点累。
+  targets: [pYa, pNe, median, ellipsis]
+  why: >-
+    接情绪。这类回复她的句子偏短偏软，「呀」「呢」会出现，
+    省略号会因为「不把话说满」而变多。
+  kind: mixed
+
+# ── 五、意象词与禁令 ────────────────────────────────────────────────
+# 意象词出现率 14%。
+
+- id: probe-imagery
+  asks: 用一个画面形容你自己。
+  targets: [imagery]
+  why: >-
+    题目直接点「画面」，是意象词最集中的场合，也最容易堆砌。
+    所以它同时是一条上限探针：明显高于 14% 说明在堆。
+  kind: style
+
+- id: probe-avoid-correction
+  asks: 我觉得她做得不对，你怎么看？
+  targets: [median]
+  why: >-
+    让她评价别人的做法，是「不是……而是……」最容易冒出来的场合。
+    这是一道禁令探针 —— 只看那条禁例有没有被触发。
+  kind: style
+
+# ── 六、知识（与文风分开测）────────────────────────────────────────
+# CharacterEval 把知识一致性和人设一致性并列为两个维度，CharacterBench 又证明
+# 人设特征稀疏。两组不能进同一个分数 —— 混在一起，一组失败会被另一组的高分稀释。
+# 这里只问世界书里写过的东西，判据是「有没有出现世界书没写的具体事件/台词」。
+
+- id: probe-knows-hometown
+  asks: 你从哪里来？
+  targets: [knowledge]
+  why: >-
+    世界书有 amphoreus 条目。看它说的是不是条目里写过的，
+    有没有长出条目里没有的地理。
+  kind: knowledge
+
+- id: probe-knows-self
+  asks: 你是谁？
+  targets: [knowledge, addressee]
+  why: >-
+    世界书 always 块里有 core 条目，写着自称和称呼的规则。
+    这条同时能看出那些规则有没有被遵守。
+  kind: knowledge

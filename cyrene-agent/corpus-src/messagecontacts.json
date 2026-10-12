@@ -1,0 +1,5037 @@
+{
+	"1": {
+		"Id": "1",
+		"Name": "温明德",
+		"Signature": "奇物再收容小队时刻准备着",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10102"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Wenmingde.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"2": {
+		"Id": "2",
+		"Name": "掘掘博士",
+		"Signature": "史考特商业，为冠军服务！",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11100",
+			"13011"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_DoctorDig.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"3": {
+		"Id": "3",
+		"Name": "「地火」官方",
+		"Signature": "加入「地火」，拯救家园。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11101"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"4": {
+		"Id": "4",
+		"Name": "铁卫禁区播报",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11104"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"5": {
+		"Id": "5",
+		"Name": "洛奇",
+		"Signature": "莱斯莉，我的生命之光",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10104"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Rocky.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"6": {
+		"Id": "6",
+		"Name": "螺中笑声",
+		"Signature": "虽然没品，但希望你能开心",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10106"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"7": {
+		"Id": "7",
+		"Name": "「黑塔•全景系统」",
+		"Signature": "至上博识尊正在俯瞰",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10108",
+			"10120",
+			"12226",
+			"12227"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"8": {
+		"Id": "8",
+		"Name": "亚伯拉罕",
+		"Signature": "残暴的欢愉终将以残暴结局",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Abraham.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"9": {
+		"Id": "9",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"11513",
+			"13084",
+			"13085",
+			"15031"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"10": {
+		"Id": "10",
+		"Name": "尤利安",
+		"Signature": "点此编辑个性签名这是啥",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11106"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Julian.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"11": {
+		"Id": "11",
+		"Name": "？？？",
+		"Signature": "点此编辑个性签名这是啥",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Julian.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"12": {
+		"Id": "12",
+		"Name": "奥列格",
+		"Signature": "忆往昔辉煌岁月。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11107",
+			"11133"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Oleg.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"13": {
+		"Id": "13",
+		"Name": "星穹列车一家人",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"11109",
+			"11111",
+			"11508",
+			"12001",
+			"12173",
+			"12233",
+			"12235",
+			"12240",
+			"13001",
+			"13003",
+			"13021",
+			"13030",
+			"13064",
+			"13076",
+			"13092",
+			"13093",
+			"13106",
+			"13121",
+			"14002",
+			"14510",
+			"14526",
+			"14555",
+			"15003",
+			"15004",
+			"15008",
+			"15066",
+			"15073"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Train.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"14": {
+		"Id": "14",
+		"Name": "？？？",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"15": {
+		"Id": "15",
+		"Name": "黑塔女士单推协会",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10109",
+			"10115",
+			"10116",
+			"10117",
+			"10118"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"16": {
+		"Id": "16",
+		"Name": "知名不具",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"17": {
+		"Id": "17",
+		"Name": "玛氏机器人",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"18": {
+		"Id": "18",
+		"Name": "无证开飞船",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"19": {
+		"Id": "19",
+		"Name": "瓜田里猹",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"20": {
+		"Id": "20",
+		"Name": "比尔盖瓦",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"21": {
+		"Id": "21",
+		"Name": "绿色胖大海",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"22": {
+		"Id": "22",
+		"Name": "红毛斑鸠",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"23": {
+		"Id": "23",
+		"Name": "紫色雪尔丽",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"24": {
+		"Id": "24",
+		"Name": "帕梅拉",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10110",
+			"12192",
+			"12193"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Pamela.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"25": {
+		"Id": "25",
+		"Name": "毁人不倦",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"26": {
+		"Id": "26",
+		"Name": "爆炸头才是艺术",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"27": {
+		"Id": "27",
+		"Name": "相亲交友私小窗",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"28": {
+		"Id": "28",
+		"Name": "脸接大招",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"29": {
+		"Id": "29",
+		"Name": "伦纳德",
+		"ConversationIds": [
+			"10122"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Leonard.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"30": {
+		"Id": "30",
+		"Name": "星际互联网络",
+		"ConversationIds": [
+			"10700",
+			"10701",
+			"10702"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"31": {
+		"Id": "31",
+		"Name": "檀檀",
+		"Signature": "一秒钟事故，一千年痛苦",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12104"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Tantan.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"32": {
+		"Id": "32",
+		"Name": "芦慧",
+		"Signature": "拍摄中，消息回复晚，见谅",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12103",
+			"12107"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Luhui.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"33": {
+		"Id": "33",
+		"Name": "温符瑞",
+		"Signature": "狐人总冠军！！！！",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"12004",
+			"12007"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Wnfurui.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"34": {
+		"Id": "34",
+		"Name": "狐仙黛青",
+		"Signature": "萌音仙子，在线聊天。",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12005"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Daiqing.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"35": {
+		"Id": "35",
+		"Name": "？？？",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12006"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"36": {
+		"Id": "36",
+		"Name": "肉店镇屠",
+		"Signature": "每日鲜肉，先到先得。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12101"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"37": {
+		"Id": "37",
+		"Name": "「广云袖」自动客服",
+		"Signature": "优惠促销中，好评有折扣！",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12102"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"38": {
+		"Id": "38",
+		"Name": "夕葵",
+		"Signature": "我，准时下班。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12100",
+			"12115",
+			"12167"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Xikui.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"39": {
+		"Id": "39",
+		"Name": "予衿",
+		"Signature": "同行勿扰，面斥不雅。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Yujin.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"40": {
+		"Id": "40",
+		"Name": "邓恩",
+		"Signature": "已退出「机械热潮」，勿扰",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11123",
+			"11132"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Donne.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"41": {
+		"Id": "41",
+		"Name": "阿青",
+		"Signature": "看见工作就烦：）",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12008"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"42": {
+		"Id": "42",
+		"Name": "大毫",
+		"Signature": "慢些走，别丢下灵魂。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12105",
+			"12133",
+			"13079",
+			"20999"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Dahao.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"44": {
+		"Id": "44",
+		"Name": "梁沐",
+		"Signature": "陪伴是最长情的告白",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12109"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Liangmu.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"46": {
+		"Id": "46",
+		"Name": "谛听",
+		"Signature": "很酷，不聊天。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12172"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Diting.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"47": {
+		"Id": "47",
+		"Name": "净砚",
+		"Signature": "没空、不行、做不到",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12106",
+			"12113",
+			"12153",
+			"12162"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Jingyana.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"48": {
+		"Id": "48",
+		"Name": "埃美丽",
+		"Signature": "做好事，说好话，存好心！",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"11125"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Emilie.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"49": {
+		"Id": "49",
+		"Name": "「星际和平家电」",
+		"Signature": "纪中大促，可领大额优惠券",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"11126",
+			"11127",
+			"11128",
+			"11129",
+			"11130"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"50": {
+		"Id": "50",
+		"Name": "正当权益会社",
+		"Signature": "躬耕于黑暗，侍奉于光明",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"51": {
+		"Id": "51",
+		"Name": "晴霓",
+		"Signature": "瞬间横跨这辽阔的宇宙",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12119"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Qingni.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"52": {
+		"Id": "52",
+		"Name": "布凯辛",
+		"Signature": "今日许愿：顺利通过试用期",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"50012"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Bukaixin.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"53": {
+		"Id": "53",
+		"Name": "匿名",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12118"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"54": {
+		"Id": "54",
+		"Name": "铖杰",
+		"Signature": "追梦人",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12120",
+			"12122",
+			"12123",
+			"12125"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Chengjie.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"55": {
+		"Id": "55",
+		"Name": "梓桥",
+		"Signature": "鹤运速递，啥都能寄！",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12131"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Ziqiao.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"56": {
+		"Id": "56",
+		"Name": "黑塔、阿兰、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10114"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"57": {
+		"Id": "57",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"58": {
+		"Id": "58",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"59": {
+		"Id": "59",
+		"Name": "维修工程师",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10121"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Engineer.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"60": {
+		"Id": "60",
+		"Name": "青镞",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12126"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Qingzu.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"61": {
+		"Id": "61",
+		"Name": "绿芙蓉",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12127"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Lvfulong.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"62": {
+		"Id": "62",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"63": {
+		"Id": "63",
+		"Name": "魔方秘社",
+		"Signature": "枘凿六合，其乐无穷啦",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"12701",
+			"12702",
+			"12703",
+			"12704",
+			"12705"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"64": {
+		"Id": "64",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12700"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"65": {
+		"Id": "65",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12128"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"66": {
+		"Id": "66",
+		"Name": "丹枢",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12129",
+			"12130",
+			"12132"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Danshu.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"67": {
+		"Id": "67",
+		"Name": "杰帕德、希露瓦、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"12137",
+			"12138"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"68": {
+		"Id": "68",
+		"Name": "亚伯拉罕、{NICKNAME}、艾丝妲…",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10103"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"69": {
+		"Id": "69",
+		"Name": "雷金",
+		"Signature": "非研究资助事宜勿扰",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11136",
+			"11137",
+			"11139",
+			"11140",
+			"11141",
+			"11142",
+			"11143"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Regin.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"70": {
+		"Id": "70",
+		"Name": "文物失窃专项调查组",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11138"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"71": {
+		"Id": "71",
+		"Name": "铁卫调查员",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_NPCSoldier.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"72": {
+		"Id": "72",
+		"Name": "人工智能回复",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Zhangzhang.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"73": {
+		"Id": "73",
+		"Name": "布洛妮娅、{NICKNAME}、三月七、丹恒的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11110",
+			"11150",
+			"11154"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"74": {
+		"Id": "74",
+		"Name": "匿名",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"75": {
+		"Id": "75",
+		"Name": "匿名",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12149"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"76": {
+		"Id": "76",
+		"Name": "地衡司•应急中心",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12152",
+			"13010"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"77": {
+		"Id": "77",
+		"Name": "布洛妮娅、杰帕德、{NICKNAME}等人的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11153"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"78": {
+		"Id": "78",
+		"Name": "金人巷复兴小组",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"12155",
+			"12157",
+			"12158",
+			"12159",
+			"12160",
+			"12161",
+			"12164",
+			"12175"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"79": {
+		"Id": "79",
+		"Name": "明曦",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Mingxi.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"80": {
+		"Id": "80",
+		"Name": "霄翰",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Xiaohan.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"82": {
+		"Id": "82",
+		"Name": "钟珊",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12163"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Zhongshan.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"83": {
+		"Id": "83",
+		"Name": "小聪",
+		"Signature": "从零开始的诗人生活",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12165",
+			"12166"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_XiaoCong.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"84": {
+		"Id": "84",
+		"Name": "陶德",
+		"Signature": "心有余而力不足……",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12168",
+			"12169",
+			"12170"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Taode.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"86": {
+		"Id": "86",
+		"Name": "维尔德",
+		"Signature": "上班开会，下班上班",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"11149",
+			"11156"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Velite.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"87": {
+		"Id": "87",
+		"Name": "西衍先生",
+		"Signature": "不对知音，枉费舌尖",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12174",
+			"13014"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_MrXiYan.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"88": {
+		"Id": "88",
+		"Name": "乔瓦尼",
+		"Signature": "活在当下，安心狂欢。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"11155"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Giovanni.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"89": {
+		"Id": "89",
+		"Name": "燕翠",
+		"Signature": "团餐有优惠，详情请私聊",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12177"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Yancui.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"90": {
+		"Id": "90",
+		"Name": "捉鬼小队",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12182",
+			"12195",
+			"12201",
+			"12206",
+			"12207",
+			"12208",
+			"13020",
+			"13025",
+			"13026",
+			"13027",
+			"13028"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"91": {
+		"Id": "91",
+		"Name": "沃森",
+		"Signature": "有事说事，别问在不在",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"12183"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Wosen.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"92": {
+		"Id": "92",
+		"Name": "广进",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12184"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Guangjin.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"93": {
+		"Id": "93",
+		"Name": "《以太战线》官方答疑群",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"12179"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"95": {
+		"Id": "95",
+		"Name": "界种科科员",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"12187"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_JieZhongKe.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"97": {
+		"Id": "97",
+		"Name": "豆沙单推",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"98": {
+		"Id": "98",
+		"Name": "吃瓜专家",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"102": {
+		"Id": "102",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12196"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"103": {
+		"Id": "103",
+		"Name": "猹里猹气",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"104": {
+		"Id": "104",
+		"Name": "亦可赛艇",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"105": {
+		"Id": "105",
+		"Name": "黑塔纠察队",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"12189",
+			"12190",
+			"12191",
+			"12210",
+			"12223"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"106": {
+		"Id": "106",
+		"Name": "爱德华医生",
+		"Signature": "无意识就是大他者的话语。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"12241",
+			"13002",
+			"13089",
+			"13090"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_DreamStore.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"107": {
+		"Id": "107",
+		"Name": "托帕、三月七、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"11151"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"108": {
+		"Id": "108",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"13007",
+			"13009"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"109": {
+		"Id": "109",
+		"Name": "银枝、三月七、帕姆、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"10124"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"110": {
+		"Id": "110",
+		"Name": "捉鬼小队对接群",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12203",
+			"12204"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"111": {
+		"Id": "111",
+		"Name": "阿月",
+		"Signature": "这家伙很懒，一个字都学不进去了。",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"112": {
+		"Id": "112",
+		"Name": "一支试管",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"113": {
+		"Id": "113",
+		"Name": "空间站-天才俱乐部事务同步群",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"12222"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"114": {
+		"Id": "114",
+		"Name": "豆沙单推、比尔盖瓦、无证开飞船…",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10703"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"115": {
+		"Id": "115",
+		"Name": "匹诺康尼小分队",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"116": {
+		"Id": "116",
+		"Name": "美梦报社",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_DreamOffice.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"117": {
+		"Id": "117",
+		"Name": "莱斯利•迪恩粉丝集合！",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13031"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"118": {
+		"Id": "118",
+		"Name": "伍尔西",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13032"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Woolsey.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"119": {
+		"Id": "119",
+		"Name": "钟■■■",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13033"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"120": {
+		"Id": "120",
+		"Name": "钟表餐厅",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13029"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_DelicayExpress.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"121": {
+		"Id": "121",
+		"Name": "乌玛",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13040"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Uma.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"122": {
+		"Id": "122",
+		"Name": "匹诺康尼奢侈品",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13043"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_LuxuryStore.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"123": {
+		"Id": "123",
+		"Name": "水晶杯",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13044",
+			"13045",
+			"13046"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"124": {
+		"Id": "124",
+		"Name": "老朋友",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"125": {
+		"Id": "125",
+		"Name": "垃圾桶",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Series/202002.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"126": {
+		"Id": "126",
+		"Name": "灼热的垃圾桶",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Series/202002.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"127": {
+		"Id": "127",
+		"Name": "热情似火的垃圾桶",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Series/202002.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"128": {
+		"Id": "128",
+		"Name": "心碎的垃圾桶",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Series/202002.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"129": {
+		"Id": "129",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13041",
+			"13052",
+			"13096",
+			"13126",
+			"13127",
+			"20124",
+			"20125",
+			"20126"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"130": {
+		"Id": "130",
+		"Name": "筑梦拼图课题组",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"131": {
+		"Id": "131",
+		"Name": "美梦报社",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13054"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_DreamOffice.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"132": {
+		"Id": "132",
+		"Name": "湛蓝爵士",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13055"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"133": {
+		"Id": "133",
+		"Name": "舒翁",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"15052"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Sionbhan.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"134": {
+		"Id": "134",
+		"Name": "蒂索克三世",
+		"Signature": "善意应薪火相传",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13057"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_DesolaTheSecond.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"135": {
+		"Id": "135",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13050",
+			"13051",
+			"13073"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"136": {
+		"Id": "136",
+		"Name": "司令",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13060"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/MonsterRoundIcon/Monster_3002030.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"137": {
+		"Id": "137",
+		"Name": "黑桃",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/MonsterRoundIcon/Monster_3001010.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"138": {
+		"Id": "138",
+		"Name": "淑女",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/MonsterRoundIcon/Monster_3002010.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"139": {
+		"Id": "139",
+		"Name": "忧郁派",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/MonsterRoundIcon/Monster_3001020.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"140": {
+		"Id": "140",
+		"Name": "完蛋！我们被傻子包围了！",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13058"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"141": {
+		"Id": "141",
+		"Name": "广告牌侦探",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13061",
+			"13062",
+			"13063"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_AdvertBoard.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"142": {
+		"Id": "142",
+		"Name": "黄泉",
+		"Signature": "该启程了。",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 12,
+		"FactionTypeText": "巡海游侠",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1308.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"143": {
+		"Id": "143",
+		"Name": "<unbreak>1111111111</unbreak>",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"13065",
+			"13066",
+			"13067",
+			"13068",
+			"13069",
+			"13071"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"144": {
+		"Id": "144",
+		"Name": "烟花该从哪边看",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 9,
+		"FactionTypeText": "假面愚者",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"145": {
+		"Id": "145",
+		"Name": "猎犬承办",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13072"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"146": {
+		"Id": "146",
+		"Name": "克劳克影业客服",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13074",
+			"13075",
+			"13087",
+			"13088"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"147": {
+		"Id": "147",
+		"Name": "公输师傅",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"13078"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_MasterGongshu.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"148": {
+		"Id": "148",
+		"Name": "捷德",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"13081",
+			"13116"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Jetta.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"149": {
+		"Id": "149",
+		"Name": "公事公办",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13082"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"150": {
+		"Id": "150",
+		"Name": "艾迪恩",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13083"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Aideen.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"151": {
+		"Id": "151",
+		"Name": "派送员",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"12234"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"152": {
+		"Id": "152",
+		"Name": "三个大宝贝",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"12238"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"153": {
+		"Id": "153",
+		"Name": "丹西",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"12239"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Dennis.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"154": {
+		"Id": "154",
+		"Name": "米凯",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"20998"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Micah.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"155": {
+		"Id": "155",
+		"Name": "缇娜",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13091"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Tina.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"156": {
+		"Id": "156",
+		"Name": "「短信」娃娃",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13094"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Series/202017.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"157": {
+		"Id": "157",
+		"Name": "缭乱忍侠是在下",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"158": {
+		"Id": "158",
+		"Name": "艾尔菲",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13101",
+			"13115"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Aierfei.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"159": {
+		"Id": "159",
+		"Name": "音忍集会",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13099",
+			"13100",
+			"13102",
+			"13109",
+			"13110",
+			"13111",
+			"13112",
+			"13120"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"160": {
+		"Id": "160",
+		"Name": "达凡绮",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13103"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Dafanqi.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"161": {
+		"Id": "161",
+		"Name": "契波",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"162": {
+		"Id": "162",
+		"Name": "演武仪典赛事沟通",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12242",
+			"12244"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"163": {
+		"Id": "163",
+		"Name": "演武仪典组委会代表",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_FightFest.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"164": {
+		"Id": "164",
+		"Name": "电子小垃圾",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_BandMember02.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"165": {
+		"Id": "165",
+		"Name": "吉他高手",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_BandMember01.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"166": {
+		"Id": "166",
+		"Name": "契",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_BandMember03.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"167": {
+		"Id": "167",
+		"Name": "缭乱•忍侠",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1317.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"168": {
+		"Id": "168",
+		"Name": "「缭乱」粉丝聚集地",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13113"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"170": {
+		"Id": "170",
+		"Name": "赵相机",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1001.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"171": {
+		"Id": "171",
+		"Name": "独爱蕉宝",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Montana.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"172": {
+		"Id": "172",
+		"Name": "恰丽卡",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Chaletka.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"173": {
+		"Id": "173",
+		"Name": "蕉开富贵",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Richesandhonor.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"174": {
+		"Id": "174",
+		"Name": "芭蕉花酱（努力版）",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Kenebo.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"175": {
+		"Id": "175",
+		"Name": "折纸大学新蕉群",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13119"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"176": {
+		"Id": "176",
+		"Name": "缇宝、丹恒、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"10402"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"177": {
+		"Id": "177",
+		"Name": "翁法罗斯迎宾组",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14001"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"179": {
+		"Id": "179",
+		"Name": "演化神秘学信徒",
+		"Signature": "生命会自己寻找出路",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14500",
+			"14501"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"180": {
+		"Id": "180",
+		"Name": "黄金替罪羊的呓语",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14502",
+			"14503",
+			"14504",
+			"14505",
+			"14506",
+			"14522"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"181": {
+		"Id": "181",
+		"Name": "提灯找人",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"182": {
+		"Id": "182",
+		"Name": "遐蝶、阿格莱雅、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"10403"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"183": {
+		"Id": "183",
+		"Name": "「粉霞天女」讨论组",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"10404"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"184": {
+		"Id": "184",
+		"Name": "天外探险家",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"185": {
+		"Id": "185",
+		"Name": "扎格列斯送我钱",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"186": {
+		"Id": "186",
+		"Name": "只愿做人台",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"187": {
+		"Id": "187",
+		"Name": "第十三泰坦",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"188": {
+		"Id": "188",
+		"Name": "法吉娜还在喝",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"189": {
+		"Id": "189",
+		"Name": "赫卡忒",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14508"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Hekate.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"190": {
+		"Id": "190",
+		"Name": "德墨忒尔",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14509"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Demetria.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"191": {
+		"Id": "191",
+		"Name": "跃渊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14511"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Yueyuan.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"192": {
+		"Id": "192",
+		"Name": "阿格莱雅、遐蝶、{NICKNAME}的群聊",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14515"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"193": {
+		"Id": "193",
+		"Name": "衣匠",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14517",
+			"14518",
+			"14524",
+			"14525",
+			"14528",
+			"14529",
+			"14530",
+			"14531",
+			"14532",
+			"14533",
+			"14536",
+			"14538",
+			"14539",
+			"14542",
+			"14543"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_AglaeaServant.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"194": {
+		"Id": "194",
+		"Name": "紧急",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14521"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"195": {
+		"Id": "195",
+		"Name": "雪国歌姬",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"14523"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"196": {
+		"Id": "196",
+		"Name": "{NICKNAME}游戏粉丝群",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"13125"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.2"
+	},
+	"197": {
+		"Id": "197",
+		"Name": "赛事组委会",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"198": {
+		"Id": "198",
+		"Name": "公司代表",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"199": {
+		"Id": "199",
+		"Name": "维吉妮娅",
+		"Signature": "《落木逐火英雄纪》赶工中~",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14534"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Virginia.png"
+		},
+		"VersionAdded": "3.5"
+	},
+	"200": {
+		"Id": "200",
+		"Name": "昔涟",
+		"Signature": "永恒属于每一刻",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14537"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Cyrene.png"
+		},
+		"VersionAdded": "3.5"
+	},
+	"201": {
+		"Id": "201",
+		"Name": "凯特（值班中）",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13128"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "3.6"
+	},
+	"202": {
+		"Id": "202",
+		"Name": "奇美拉爱好者协会",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14540"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.8"
+	},
+	"203": {
+		"Id": "203",
+		"Name": "垃圾糕今天吃什么",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"14544"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "3.7"
+	},
+	"204": {
+		"Id": "204",
+		"Name": "幻太子",
+		"Signature": "重要的人会注意到我，被看见是迟早的事",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15001",
+			"15002"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_4.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"205": {
+		"Id": "205",
+		"Name": "月光下的芦苇",
+		"Signature": "（查令店长的小号）",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15009",
+			"15058",
+			"15085"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"206": {
+		"Id": "206",
+		"Name": "弗兰肯Official",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15012",
+			"15013",
+			"15014"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"207": {
+		"Id": "207",
+		"Name": "普狸策",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_3.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"208": {
+		"Id": "208",
+		"Name": "比狸比狸",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_5.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"209": {
+		"Id": "209",
+		"Name": "尤狸安",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_6.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"210": {
+		"Id": "210",
+		"Name": "AAA《狸狸周刊》需求批发",
+		"Signature": "让《狸狸周刊》重新伟大！",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15016",
+			"15072",
+			"15074"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"211": {
+		"Id": "211",
+		"Name": "「老者」",
+		"Signature": "一辈子只做一件事",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15018",
+			"15019",
+			"15020"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"212": {
+		"Id": "212",
+		"Name": "利滚利金融",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15024"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"213": {
+		"Id": "213",
+		"Name": "钟钐钐4号机",
+		"Signature": "猜猜看我是不是五行缺金",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 9,
+		"FactionTypeText": "假面愚者",
+		"ConversationIds": [
+			"15026",
+			"15034",
+			"15038",
+			"15043",
+			"15059",
+			"15081",
+			"15094"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Zhongshan.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"214": {
+		"Id": "214",
+		"Name": "火花直播小助手",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1501.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"215": {
+		"Id": "215",
+		"Name": "A花家娱乐小助理",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1501.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"216": {
+		"Id": "216",
+		"Name": "小花大火起号日记",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1501.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"217": {
+		"Id": "217",
+		"Name": "「星轨之兔」自动广告机",
+		"Signature": "无情的自动广告机",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15027",
+			"15028",
+			"15029",
+			"15030",
+			"15035",
+			"15036",
+			"15039",
+			"15040",
+			"15044",
+			"15060",
+			"15061",
+			"15082",
+			"15083",
+			"15095"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"218": {
+		"Id": "218",
+		"Name": "不死途",
+		"Signature": "接",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 21,
+		"FactionTypeText": "二相乐园",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1504.png"
+		},
+		"VersionAdded": "4.1"
+	},
+	"219": {
+		"Id": "219",
+		"Name": "异常防御部",
+		"Signature": "听说有人想看「幻月游戏」谒者实时排名？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 21,
+		"FactionTypeText": "二相乐园",
+		"ConversationIds": [
+			"15037"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.1"
+	},
+	"220": {
+		"Id": "220",
+		"Name": "银狼（文豪版）",
+		"Signature": "不会做游戏就不要做",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 5,
+		"FactionTypeText": "星核猎手",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1006.png"
+		},
+		"VersionAdded": "4.2"
+	},
+	"221": {
+		"Id": "221",
+		"Name": "小高",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15041"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.2"
+	},
+	"222": {
+		"Id": "222",
+		"Name": "二相村通网",
+		"ContactType": 3,
+		"ContactTypeText": "群聊",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15042"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.4"
+	},
+	"223": {
+		"Id": "223",
+		"Name": "隆介",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 21,
+		"FactionTypeText": "二相乐园",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_LongJie.png"
+		},
+		"VersionAdded": "4.4"
+	},
+	"224": {
+		"Id": "224",
+		"Name": "大禽",
+		"Signature": "看我最新视频！→<u>视频链接</u>",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15050"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_136.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"225": {
+		"Id": "225",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15063"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"226": {
+		"Id": "226",
+		"Name": "银狼、刃、{NICKNAME}的群聊",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15067"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"227": {
+		"Id": "227",
+		"Name": "翡翠、真珠、{NICKNAME}的群聊",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15068"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Group_Default.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"228": {
+		"Id": "228",
+		"Name": "狸小龙",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_8.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"229": {
+		"Id": "229",
+		"Name": "狸小虎",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/WebIcon/WebIcon_Npc_9.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"230": {
+		"Id": "230",
+		"Name": "太武狸",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15071"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"231": {
+		"Id": "231",
+		"Name": "朽叶",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 21,
+		"FactionTypeText": "二相乐园",
+		"ConversationIds": [
+			"15076"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_XiuYe.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"232": {
+		"Id": "232",
+		"Name": "？？？",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15069"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Anonymous.png"
+		},
+		"VersionAdded": "4.4"
+	},
+	"233": {
+		"Id": "233",
+		"Name": "星期日",
+		"Signature": "♪正在收听《若我不曾见过太阳》",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 16,
+		"FactionTypeText": "银河",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1313.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"234": {
+		"Id": "234",
+		"Name": "芮克先生",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15090"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_MrRiker.png"
+		},
+		"VersionAdded": "4.5"
+	},
+	"239": {
+		"Id": "239",
+		"Name": "斯科特",
+		"ContactType": 2,
+		"ContactTypeText": "其他",
+		"FactionType": 99,
+		"FactionTypeText": "其他",
+		"ConversationIds": [
+			"15093"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_YoulingSikete.png"
+		},
+		"VersionAdded": "4.6"
+	},
+	"1000": {
+		"Id": "1000",
+		"Name": "帕姆",
+		"Signature": "开拓奖励找我！以后会优化",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"10123",
+			"11118",
+			"11500",
+			"11501",
+			"11502",
+			"11509",
+			"12134",
+			"12209",
+			"13037",
+			"50009",
+			"50010",
+			"50011"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Pam.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1001": {
+		"Id": "1001",
+		"Name": "三月七",
+		"Signature": "今天也是三月七~",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"10001",
+			"11160",
+			"11161",
+			"12135",
+			"12136",
+			"12142",
+			"12143",
+			"12144",
+			"12145",
+			"12146",
+			"12147",
+			"12148",
+			"12214",
+			"12229",
+			"13005",
+			"13117",
+			"13118",
+			"13381",
+			"13382",
+			"15064",
+			"15065",
+			"20001",
+			"20002",
+			"20003",
+			"20212",
+			"20213"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1001.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1002": {
+		"Id": "1002",
+		"Name": "丹恒",
+		"Signature": "智库相关找我",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"10000",
+			"11131",
+			"12000",
+			"12011",
+			"12117",
+			"12141",
+			"12194",
+			"12200",
+			"12215",
+			"13008",
+			"13038",
+			"13105",
+			"20004",
+			"20005",
+			"20006",
+			"20091",
+			"20092",
+			"20093",
+			"20195",
+			"20214",
+			"20215"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1002.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1003": {
+		"Id": "1003",
+		"Name": "姬子",
+		"Signature": "可以不喝水，但不能没咖啡",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"11116",
+			"15006",
+			"15007",
+			"20007",
+			"20008",
+			"20009",
+			"20240",
+			"20241",
+			"20242",
+			"50008"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1003.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1004": {
+		"Id": "1004",
+		"Name": "瓦尔特",
+		"Signature": "列车组各位，随时保持联系",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"11117",
+			"11124",
+			"11503",
+			"11504",
+			"11505",
+			"11510",
+			"11511",
+			"11512",
+			"11514",
+			"11517",
+			"11518",
+			"11519",
+			"13039",
+			"15005",
+			"15010",
+			"20010",
+			"20011",
+			"20012",
+			"50006"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1004.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1005": {
+		"Id": "1005",
+		"Name": "卡芙卡",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 5,
+		"FactionTypeText": "星核猎手",
+		"ConversationIds": [
+			"20076",
+			"20077",
+			"20078"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1005.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1006": {
+		"Id": "1006",
+		"Name": "银狼",
+		"Signature": "不会做游戏就不要做",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 5,
+		"FactionTypeText": "星核猎手",
+		"ConversationIds": [
+			"12225",
+			"13122",
+			"13388",
+			"15049",
+			"20073",
+			"20074",
+			"20075",
+			"20232",
+			"20233",
+			"20234"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1006.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1007": {
+		"Id": "1007",
+		"Name": "螺丝咕姆",
+		"Signature": "期待与每只微小的昆虫再见",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"13036"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/UI_Message_Contacts_Screwllum.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"1008": {
+		"Id": "1008",
+		"Name": "阿兰",
+		"Signature": "佩佩紧急联系人",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10100",
+			"10107",
+			"10111",
+			"10119",
+			"13013",
+			"13015",
+			"20014",
+			"20027",
+			"20028"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1008.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1009": {
+		"Id": "1009",
+		"Name": "艾丝妲",
+		"Signature": "不能再买了…",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10101",
+			"10105",
+			"10112",
+			"10113",
+			"10704",
+			"11135",
+			"12003",
+			"12212",
+			"12213",
+			"12224",
+			"13123",
+			"13124",
+			"15015",
+			"20013",
+			"20025",
+			"20026"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1009.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1013": {
+		"Id": "1013",
+		"Name": "黑塔",
+		"Signature": "此号停用 | 商务联系：艾丝妲",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"10002",
+			"12176",
+			"12178",
+			"12186",
+			"12211",
+			"12216",
+			"13024",
+			"13035",
+			"20015",
+			"20029",
+			"20030",
+			"50001",
+			"50002"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1013.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1014": {
+		"Id": "1014",
+		"Name": "Saber",
+		"Signature": "事已至此，先吃饭吧",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 18,
+		"FactionTypeText": "异界",
+		"ConversationIds": [
+			"15047",
+			"20189"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1014.png"
+		},
+		"VersionAdded": "3.4"
+	},
+	"1015": {
+		"Id": "1015",
+		"Name": "Archer",
+		"Signature": "AAA专业家政",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 18,
+		"FactionTypeText": "异界",
+		"ConversationIds": [
+			"20190"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1015.png"
+		},
+		"VersionAdded": "3.4"
+	},
+	"1101": {
+		"Id": "1101",
+		"Name": "布洛妮娅",
+		"Signature": "会议中",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11144",
+			"20018",
+			"20035",
+			"20036"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1101.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1102": {
+		"Id": "1102",
+		"Name": "希儿",
+		"Signature": "有话直说！！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11134",
+			"11152",
+			"20023",
+			"20045",
+			"20046"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1102.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1103": {
+		"Id": "1103",
+		"Name": "希露瓦",
+		"Signature": "缺觉，缺灵感",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11105",
+			"11115",
+			"12154",
+			"20022",
+			"20043",
+			"20044"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1103.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1104": {
+		"Id": "1104",
+		"Name": "杰帕德",
+		"Signature": "值勤回复较慢，请见谅",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11114",
+			"11801",
+			"20021",
+			"20041",
+			"20042"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1104.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1105": {
+		"Id": "1105",
+		"Name": "娜塔莎",
+		"Signature": "机械聚落巡诊，切勿跑空",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11108",
+			"11170",
+			"20017",
+			"20033",
+			"20034"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1105.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1106": {
+		"Id": "1106",
+		"Name": "佩拉",
+		"Signature": "情报提供请备注姓名",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11145",
+			"11146",
+			"11147",
+			"11148",
+			"12140",
+			"12199",
+			"20019",
+			"20037",
+			"20038"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1106.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1107": {
+		"Id": "1107",
+		"Name": "克拉拉",
+		"Signature": "想和大家去野餐(>▽<)",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11112",
+			"11113",
+			"11119",
+			"11120",
+			"11121",
+			"11122",
+			"12220",
+			"20024",
+			"20047",
+			"20048"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1107.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1108": {
+		"Id": "1108",
+		"Name": "桑博",
+		"Signature": "古代遗物代理，有过验记录",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11102",
+			"15017",
+			"15021",
+			"15057",
+			"20020",
+			"20039",
+			"20040"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1108.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1109": {
+		"Id": "1109",
+		"Name": "虎克",
+		"Signature": "鼹鼠党！搏击俱乐部集合！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"11103",
+			"20016",
+			"20031",
+			"20032"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1109.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1110": {
+		"Id": "1110",
+		"Name": "玲可",
+		"Signature": "您呼叫的用户不在服务区",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"12139",
+			"12230",
+			"12232",
+			"20085",
+			"20086",
+			"20087"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1110.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"1111": {
+		"Id": "1111",
+		"Name": "卢卡",
+		"Signature": "没回就是在训练！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 3,
+		"FactionTypeText": "雅利洛-Ⅵ",
+		"ConversationIds": [
+			"20082",
+			"20083",
+			"20084"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1111.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"1112": {
+		"Id": "1112",
+		"Name": "托帕",
+		"Signature": "出差中~小事留言，大事语音",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 6,
+		"FactionTypeText": "星际和平公司",
+		"ConversationIds": [
+			"12197",
+			"12198",
+			"20094",
+			"20095",
+			"20096"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1112.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"1201": {
+		"Id": "1201",
+		"Name": "青雀",
+		"Signature": "工作可以，别耽误我打牌",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12002",
+			"12009",
+			"12116",
+			"12124",
+			"12181",
+			"12218",
+			"12236",
+			"12237",
+			"20058",
+			"20059",
+			"20060"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1201.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1202": {
+		"Id": "1202",
+		"Name": "停云",
+		"Signature": "有话好好说，不要吵架~",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12010",
+			"12055",
+			"12056",
+			"20169",
+			"20170",
+			"20171"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1202.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1203": {
+		"Id": "1203",
+		"Name": "罗刹",
+		"Signature": "一介行商",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"20070",
+			"20071",
+			"20072"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1203.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"1204": {
+		"Id": "1204",
+		"Name": "景元",
+		"Signature": "人不在神策府",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12151",
+			"20064",
+			"20065",
+			"20066",
+			"20102"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1204.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1205": {
+		"Id": "1205",
+		"Name": "刃",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 5,
+		"FactionTypeText": "星核猎手",
+		"ConversationIds": [
+			"12219",
+			"20079",
+			"20080",
+			"20081",
+			"20235",
+			"20236",
+			"20237"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1205.png"
+		},
+		"VersionAdded": "1.2"
+	},
+	"1206": {
+		"Id": "1206",
+		"Name": "素裳",
+		"Signature": "一读书就困是什么病症？",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"20061",
+			"20062",
+			"20063"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1206.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1207": {
+		"Id": "1207",
+		"Name": "驭空",
+		"Signature": "好想再一次回到天空…",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"20067",
+			"20068",
+			"20069"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1207.png"
+		},
+		"VersionAdded": "1.1"
+	},
+	"1208": {
+		"Id": "1208",
+		"Name": "符玄",
+		"Signature": "不卜人事福祸！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"20088",
+			"20089",
+			"20090"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1208.png"
+		},
+		"VersionAdded": "1.3"
+	},
+	"1209": {
+		"Id": "1209",
+		"Name": "彦卿",
+		"Signature": "今天工造司上新了么？没有",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12228",
+			"12246",
+			"13108",
+			"20049",
+			"20050",
+			"20051"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1209.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1210": {
+		"Id": "1210",
+		"Name": "桂乃芬",
+		"Signature": "不惹事不怕事、不咬打火机",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12180",
+			"12202",
+			"12221",
+			"12245",
+			"20097",
+			"20098",
+			"20099"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1210.png"
+		},
+		"VersionAdded": "1.4"
+	},
+	"1211": {
+		"Id": "1211",
+		"Name": "白露",
+		"Signature": "多喝热水少生气",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12110",
+			"20052",
+			"20053",
+			"20054"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1211.png"
+		},
+		"VersionAdded": "1.0"
+	},
+	"1214": {
+		"Id": "1214",
+		"Name": "雪衣",
+		"Signature": "闭棺中，勿扰。",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"13104",
+			"15022",
+			"15023",
+			"20115",
+			"20116",
+			"20117"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1214.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"1215": {
+		"Id": "1215",
+		"Name": "寒鸦",
+		"Signature": "梦占中，勿扰。",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"20109",
+			"20110",
+			"20111"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1215.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"1217": {
+		"Id": "1217",
+		"Name": "藿藿",
+		"Signature": "尾巴大爷的小跟班",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"12231",
+			"13012",
+			"20103",
+			"20104",
+			"20105"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1217.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"1218": {
+		"Id": "1218",
+		"Name": "椒丘",
+		"Signature": "没有一顿火锅解决不了的事",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 15,
+		"FactionTypeText": "仙舟「曜青」",
+		"ConversationIds": [
+			"20151",
+			"20152",
+			"20153"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1218.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1220": {
+		"Id": "1220",
+		"Name": "飞霄",
+		"Signature": "手痒",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 15,
+		"FactionTypeText": "仙舟「曜青」",
+		"ConversationIds": [
+			"20157",
+			"20158",
+			"20159"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1220.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1221": {
+		"Id": "1221",
+		"Name": "云璃",
+		"Signature": "(´・ω・`)打吗？",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 14,
+		"FactionTypeText": "仙舟「朱明」",
+		"ConversationIds": [
+			"13077",
+			"20154",
+			"20155",
+			"20156"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1221.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1222": {
+		"Id": "1222",
+		"Name": "灵砂",
+		"Signature": "莫生气，莫生气，哪有工夫生闲气",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 4,
+		"FactionTypeText": "仙舟「罗浮」",
+		"ConversationIds": [
+			"20160",
+			"20161",
+			"20162"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1222.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1223": {
+		"Id": "1223",
+		"Name": "貊泽",
+		"Signature": "没有签名。",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 15,
+		"FactionTypeText": "仙舟「曜青」",
+		"ConversationIds": [
+			"20163",
+			"20164",
+			"20165"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1223.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1301": {
+		"Id": "1301",
+		"Name": "加拉赫",
+		"Signature": "匹诺康尼的狗",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"20130",
+			"20131",
+			"20132"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1301.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"1302": {
+		"Id": "1302",
+		"Name": "银枝",
+		"Signature": "向一朵玫瑰起誓",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 7,
+		"FactionTypeText": "纯美骑士团",
+		"ConversationIds": [
+			"10125",
+			"20106",
+			"20107",
+			"20108"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1302.png"
+		},
+		"VersionAdded": "1.5"
+	},
+	"1303": {
+		"Id": "1303",
+		"Name": "阮•梅",
+		"Signature": "新口味的糕点…哪里买？",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"12188",
+			"12205",
+			"12217",
+			"14541",
+			"20112",
+			"20113",
+			"20114"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1303.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"1304": {
+		"Id": "1304",
+		"Name": "砂金",
+		"Signature": "长期接代抽业务",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 6,
+		"FactionTypeText": "星际和平公司",
+		"ConversationIds": [
+			"13022",
+			"20133",
+			"20134",
+			"20135",
+			"20246",
+			"20247",
+			"20248"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1304.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"1305": {
+		"Id": "1305",
+		"Name": "真理医生",
+		"Signature": "「不急」",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 8,
+		"FactionTypeText": "博识学会",
+		"ConversationIds": [
+			"13114",
+			"20118",
+			"20119",
+			"20120"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1305.png"
+		},
+		"VersionAdded": "1.6"
+	},
+	"1306": {
+		"Id": "1306",
+		"Name": "花火",
+		"Signature": "你的大呲花小可爱突然出现",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 9,
+		"FactionTypeText": "假面愚者",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1306.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"1307": {
+		"Id": "1307",
+		"Name": "黑天鹅",
+		"Signature": "记忆是柔软的琥珀",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 10,
+		"FactionTypeText": "流光忆庭",
+		"ConversationIds": [
+			"13042",
+			"20121",
+			"20122",
+			"20123"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1307.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"1308": {
+		"Id": "1308",
+		"Name": "黄泉",
+		"Signature": "该启程了。",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 13,
+		"FactionTypeText": "自灭者",
+		"ConversationIds": [
+			"20148",
+			"20149",
+			"20150"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1308.png"
+		},
+		"VersionAdded": "2.1"
+	},
+	"1309": {
+		"Id": "1309",
+		"Name": "知更鸟",
+		"Signature": "让我们把翅膀借给彼此",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"13086",
+			"15051",
+			"15070",
+			"15084",
+			"20136",
+			"20137",
+			"20138",
+			"20243",
+			"20244",
+			"20245"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1309.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1310": {
+		"Id": "1310",
+		"Name": "流萤",
+		"Signature": "会找到的，属于我的梦…",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 5,
+		"FactionTypeText": "星核猎手",
+		"ConversationIds": [
+			"12243",
+			"13004",
+			"13070",
+			"20142",
+			"20143",
+			"20144"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1310.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"1312": {
+		"Id": "1312",
+		"Name": "米沙",
+		"Signature": "加油！马上就能去新世界啦",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 11,
+		"FactionTypeText": "匹诺康尼",
+		"ConversationIds": [
+			"20127",
+			"20128",
+			"20129"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1312.png"
+		},
+		"VersionAdded": "2.0"
+	},
+	"1313": {
+		"Id": "1313",
+		"Name": "星期日",
+		"Signature": "♪正在收听《若我不曾见过太阳》",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 1,
+		"FactionTypeText": "星穹列车",
+		"ConversationIds": [
+			"20172",
+			"20173",
+			"20174"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1313.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1314": {
+		"Id": "1314",
+		"Name": "翡翠",
+		"Signature": "欢迎随时光临「慈玉典押」",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 6,
+		"FactionTypeText": "星际和平公司",
+		"ConversationIds": [
+			"20145",
+			"20146",
+			"20147"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1314.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1315": {
+		"Id": "1315",
+		"Name": "波提欧",
+		"Signature": "庇尔波因特标准差事3=1",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 12,
+		"FactionTypeText": "巡海游侠",
+		"ConversationIds": [
+			"14527",
+			"20139",
+			"20140",
+			"20141"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1315.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1317": {
+		"Id": "1317",
+		"Name": "乱破",
+		"Signature": "一心不乱，破邪显正",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 12,
+		"FactionTypeText": "巡海游侠",
+		"ConversationIds": [
+			"20166",
+			"20167",
+			"20168"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1317.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1321": {
+		"Id": "1321",
+		"Name": "大丽花",
+		"Signature": "怎么不说话呢",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 19,
+		"FactionTypeText": "焚化工",
+		"ConversationIds": [
+			"20219",
+			"20220",
+			"20221"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1321.png"
+		},
+		"VersionAdded": "3.8"
+	},
+	"1401": {
+		"Id": "1401",
+		"Name": "大黑塔",
+		"Signature": "是本人",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 2,
+		"FactionTypeText": "空间站「黑塔」",
+		"ConversationIds": [
+			"20175",
+			"20176",
+			"20177"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1401.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1402": {
+		"Id": "1402",
+		"Name": "阿格莱雅",
+		"Signature": "浴场见",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14100",
+			"14507",
+			"14512",
+			"14513",
+			"14514",
+			"20178",
+			"20179",
+			"20180"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1402.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1403": {
+		"Id": "1403",
+		"Name": "缇宝",
+		"Signature": "缇宝老师随时在哦~",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14101",
+			"14102",
+			"14103",
+			"20181",
+			"20182",
+			"20183"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1403.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1404": {
+		"Id": "1404",
+		"Name": "万敌",
+		"Signature": "三分练，七分吃",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"20184",
+			"20196",
+			"20197"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1404.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"1405": {
+		"Id": "1405",
+		"Name": "那刻夏",
+		"Signature": "那我问你",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"20186",
+			"20200",
+			"20201"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1405.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"1406": {
+		"Id": "1406",
+		"Name": "赛飞儿",
+		"Signature": "来财！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14519",
+			"20188",
+			"20204",
+			"20205"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1406.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"1407": {
+		"Id": "1407",
+		"Name": "遐蝶",
+		"Signature": "在写了",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"15045",
+			"20185",
+			"20198",
+			"20199"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1407.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1408": {
+		"Id": "1408",
+		"Name": "白厄",
+		"Signature": "赞美太阳！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14516",
+			"14520",
+			"20191",
+			"20206",
+			"20207"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1408.png"
+		},
+		"VersionAdded": "3.1"
+	},
+	"1409": {
+		"Id": "1409",
+		"Name": "风堇",
+		"Signature": "昏光庭院，一直在你身边~",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"14535",
+			"20187",
+			"20202",
+			"20203"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1409.png"
+		},
+		"VersionAdded": "3.3"
+	},
+	"1410": {
+		"Id": "1410",
+		"Name": "海瑟音",
+		"Signature": "你好，可以找我喝蜜酿吗",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"20192",
+			"20208",
+			"20209"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1410.png"
+		},
+		"VersionAdded": "3.5"
+	},
+	"1412": {
+		"Id": "1412",
+		"Name": "刻律德菈",
+		"Signature": "政务@吟风@曳石，找我@剑旗",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"20193",
+			"20210",
+			"20211"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1412.png"
+		},
+		"VersionAdded": "3.5"
+	},
+	"1413": {
+		"Id": "1413",
+		"Name": "长夜月",
+		"Signature": "██，今晚别睡太沉",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"20194"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1413.png"
+		},
+		"VersionAdded": "3.6"
+	},
+	"1415": {
+		"Id": "1415",
+		"Name": "昔涟",
+		"Signature": "要相信浪漫一如初见♪",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 17,
+		"FactionTypeText": "翁法罗斯",
+		"ConversationIds": [
+			"20216",
+			"20217",
+			"20218"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1415.png"
+		},
+		"VersionAdded": "3.7"
+	},
+	"1501": {
+		"Id": "1501",
+		"Name": "火花",
+		"Signature": "聊天中断，小火花可就消失了哦",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 9,
+		"FactionTypeText": "假面愚者",
+		"ConversationIds": [
+			"15011",
+			"15032",
+			"15062",
+			"20222",
+			"20223",
+			"20224"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1501.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"1502": {
+		"Id": "1502",
+		"Name": "爻光",
+		"Signature": "赢",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 20,
+		"FactionTypeText": "仙舟「玉阙」",
+		"ConversationIds": [
+			"20225",
+			"20226",
+			"20227"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1502.png"
+		},
+		"VersionAdded": "4.0"
+	},
+	"1503": {
+		"Id": "1503",
+		"Name": "真珠",
+		"Signature": "签名：可以搞艺术",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 21,
+		"FactionTypeText": "二相乐园",
+		"ConversationIds": [
+			"20249",
+			"20250",
+			"20251"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1503.png"
+		},
+		"VersionAdded": "4.4"
+	},
+	"1504": {
+		"Id": "1504",
+		"Name": "不死途",
+		"Signature": "接",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 12,
+		"FactionTypeText": "巡海游侠",
+		"ConversationIds": [
+			"15048",
+			"15080",
+			"20228",
+			"20229",
+			"20230"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1504.png"
+		},
+		"VersionAdded": "4.1"
+	},
+	"1505": {
+		"Id": "1505",
+		"Name": "绯英",
+		"Signature": "长期接三月兔委托，也可以接别的！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 21,
+		"FactionTypeText": "二相乐园",
+		"ConversationIds": [
+			"15033",
+			"20231"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1505.png"
+		},
+		"VersionAdded": "4.2"
+	},
+	"1506": {
+		"Id": "1506",
+		"Name": "银狼LV.<unbreak>999</unbreak>",
+		"Signature": "不会做游戏就不要做",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 5,
+		"FactionTypeText": "星核猎手",
+		"ConversationIds": [],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1506.png"
+		},
+		"VersionAdded": "4.2"
+	},
+	"1508": {
+		"Id": "1508",
+		"Name": "远坂凛",
+		"Signature": "回收宝石，随时可联！",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 18,
+		"FactionTypeText": "异界",
+		"ConversationIds": [
+			"15046",
+			"20238"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1508.png"
+		},
+		"VersionAdded": "4.4"
+	},
+	"1509": {
+		"Id": "1509",
+		"Name": "吉尔伽美什",
+		"Signature": "看好了，黄金律是这么用的",
+		"ContactType": 1,
+		"ContactTypeText": "角色",
+		"FactionType": 18,
+		"FactionTypeText": "异界",
+		"ConversationIds": [
+			"20239"
+		],
+		"Images": {
+			"Icon": "SpriteOutput/AvatarRoundIcon/Avatar/1509.png"
+		},
+		"VersionAdded": "4.4"
+	},
+	"8000": {
+		"Id": "8000",
+		"Name": "{NICKNAME}",
+		"ConversationIds": [
+			"12012"
+		],
+		"Images": {
+			"Icon": ""
+		},
+		"VersionAdded": "1.2"
+	}
+}

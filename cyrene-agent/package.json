@@ -1,0 +1,108 @@
+{
+  "name": "@<用户名>/cyrene-agent",
+  "version": "0.10.0",
+  "private": false,
+  "type": "module",
+  "description": "昔涟 · 对话 agent：132 条设定库加 1 条常驻锚点、长期记忆、一层说话方式修正，以及一套按需检索的剧情原文。作为 DSH 预设级插件挂载。",
+  "license": "MIT",
+  "author": {
+    "name": "<用户名>"
+  },
+  "homepage": "https://github.com/Lutisure/cyrene-dsh-plugin/tree/main/cyrene-agent",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lutisure/cyrene-dsh-plugin.git",
+    "directory": "cyrene-agent"
+  },
+  "bugs": {
+    "url": "https://github.com/Lutisure/cyrene-dsh-plugin/issues"
+  },
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./worldbook": "./worldbook.mjs",
+    "./worldbook-logic": "./worldbook-logic.mjs",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json",
+    "./memory": "./memory.mjs",
+    "./memory-logic": "./memory-logic.mjs",
+    "./persona": "./persona.mjs",
+    "./file-cache": "./file-cache.mjs",
+    "./corrections": "./corrections.mjs",
+    "./story": "./story.mjs",
+    "./retrieval": "./retrieval.mjs"
+  },
+  "files": [
+    "index.js",
+    "persona.mjs",
+    "memory.mjs",
+    "worldbook.mjs",
+    "worldbook-logic.mjs",
+    "memory-logic.mjs",
+    "file-cache.mjs",
+    "worldbook/",
+    "tools/",
+    "cordis.patch.yml",
+    "persona-soul.md",
+    "NOTICE.md",
+    "LICENSES/",
+    "corrections.mjs",
+    "story.mjs",
+    "retrieval.mjs",
+    "dist/",
+    "README.md",
+    "dsh.plugin.json",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check",
+    "ingest": "node tools/ingest.mjs",
+    "test": "node --test test/*.test.mjs",
+    "verify": "node tools/verify-real-prompt.mjs",
+    "test:degradation": "node tools/test-degradation.mjs",
+    "build:story": "node tools/build-story-index.mjs",
+    "story:probe": "node tools/story-probe.mjs",
+    "story:check": "node tools/story-check.mjs",
+    "lore:eval": "node tools/retrieve.mjs --eval",
+    "lore:selftest": "node tools/retrieve.mjs --selftest",
+    "fetch:story": "node tools/fetch-story.mjs",
+    "adapt:story": "node tools/adapters/starrail-story.mjs",
+    "corpus": "node tools/ingest.mjs --in corpus-raw/combined.jsonl --aliases HER --samples 72 --out corpus && node tools/merge-corpus.mjs --turns corpus-raw/turns.yaml --samples corpus/line-samples.yaml --target dialogues-corpus.yaml --max-dialogues 16"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "agent",
+    "persona",
+    "memory",
+    "worldbook"
+  ],
+  "engines": {
+    "node": "^22.19 || >=24",
+    "dsh": ">=0.1.0-rc.6"
+  },
+  "dsh": {
+    "id": "cyrene-agent",
+    "name": "昔涟 · 对话 agent",
+    "displayName": "昔涟 · 对话 agent",
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=0.2.0-rc.1 <0.3.0-0",
+    "@deepseek-ai/dsh-system-prompt": ">=0.2.0-rc.1 <0.3.0-0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-system-prompt": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "js-yaml": "^4.3.2"
+  }
+}
