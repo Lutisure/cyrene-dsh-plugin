@@ -72,17 +72,17 @@ const next = check ? '«新名字»' : apply;
 function rules(name) {
   const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
   return [
-    // ① **紧跟 `<用户名>/` 的那个仓库名。**
+    // ① **紧跟 `Lutisure/` 的那个仓库名。**
     //
     //    锚是 `owner/` 而不是 `github.com/` —— 第一版写成后者，于是漏了四处：
-    //      name: <用户名>/DSH_Plugins#cyrene-agent        （投稿的 name 字段没域名）
-    //      gh api … repos/<用户名>/DSH_Plugins/topics     （gh 的路径写法）
-    //    **而 `<用户名>/DSH_Plugins` 这个形状不可能是本机路径** ——
-    //    本机那条是 `<本仓库>`，前面根本没有 `<用户名>/`。
+    //      name: Lutisure/DSH_Plugins#cyrene-agent        （投稿的 name 字段没域名）
+    //      gh api … repos/Lutisure/DSH_Plugins/topics     （gh 的路径写法）
+    //    **而 `Lutisure/DSH_Plugins` 这个形状不可能是本机路径** ——
+    //    本机那条是 `<本仓库>`，前面根本没有 `Lutisure/`。
     //    所以锚在斜杠上是窄得刚好、又不会误伤的写法。
     //
     //    `\\b` 在末尾：`DSH_Plugins_backup` 那种不该被吃进来。
-    [new RegExp(`(<用户名>/)${esc(CURRENT)}\\b`, 'gu'), `$1${name}`],
+    [new RegExp(`(Lutisure/)${esc(CURRENT)}\\b`, 'gu'), `$1${name}`],
     // ② 投稿文件名：`Lutisure__DSH_Plugins--cyrene-agent.yml`。
     //    `__` 和 `--` 是那个仓库的命名格式，不是随便的分隔符。
     //    （它其实也会被 ① 之外的这一条单独命中，保留是因为语义不同 ——

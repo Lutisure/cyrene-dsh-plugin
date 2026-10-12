@@ -11,10 +11,10 @@
 # 由 build.mjs 生成后追加到 profile 补丁的顶层数组。
 - insert:
     - id: cyrene-agent
-      # ⚠️ 2026-10-12：加了 `@<用户名>/` 作用域 —— **因为 `cyrene-agent` 这个名字
+      # ⚠️ 2026-10-12：加了 `@lutisure/` 作用域 —— **因为 `cyrene-agent` 这个名字
       # 在 npm 上已经被别人占了（1.2.1）**，而 patch 里的 `name` 是**包的去处**，
       # 必须和 registry 上的名字一致，否则装不上。
       #
       # 而上面那个 `id` **不动**：它是 loader 里的标识，不是 npm 名。
       # 改它会牵动 profile 里已经写下的挂载记录。
-      name: '@<用户名>/cyrene-agent'
+      name: '@lutisure/cyrene-agent'

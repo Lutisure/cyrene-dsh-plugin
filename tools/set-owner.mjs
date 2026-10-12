@@ -1,9 +1,9 @@
 /**
- * 把 `<用户名>` 换成你的 GitHub 用户名。
+ * 把 `Lutisure` 换成你的 GitHub 用户名。
  *
  * ## 为什么要有这一步工具
  *
- * `<用户名>` 是仓库推上去**之前填不了**的占位符（`SUBMIT.md` 里写着原因：
+ * `Lutisure` 是仓库推上去**之前填不了**的占位符（`SUBMIT.md` 里写着原因：
  * 把包挂到一个并未认领它的仓库上，是明确的拒收理由）。所以它只能等推完之后，
  * 从 GitHub 地址栏抄下来回填。
  *
@@ -14,11 +14,11 @@
  *
  *   node tools/set-owner.mjs <用户名>      填进去
  *   node tools/set-owner.mjs --check        只看还剩几处，不改
- *   node tools/set-owner.mjs --revert       换回 <用户名>
+ *   node tools/set-owner.mjs --revert       换回 Lutisure
  *
  * ## 它不做什么
  *
- * **不改 git 历史。** 已经提交过的 `<用户名>` 留在老提交里 —— 那不是问题，
+ * **不改 git 历史。** 已经提交过的 `Lutisure` 留在老提交里 —— 那不是问题，
  * 因为占位符本身不含任何私人信息，而且**它本来就是要被替换掉的东西**。
  * 真正不能进历史的是别的（见 `.gitignore`）。
  */
@@ -26,7 +26,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
-const OWNER = '<用户名>';
+const OWNER = 'Lutisure';
 
 /**
  * 哪些文件里有占位符。

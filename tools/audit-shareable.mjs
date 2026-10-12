@@ -15,8 +15,10 @@
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
-import { homedir } from 'node:os';
+import { hostname } from 'node:os';
 import { extname, join, relative } from 'node:path';
+
+import { memoryContentPattern } from './memory-pattern.mjs';
 
 const ROOT = process.cwd();
 const JSON_OUT = process.argv.includes('--json');
@@ -27,6 +29,28 @@ const JSON_OUT = process.argv.includes('--json');
 // 写进源码**：写进去，这个工具自己就成了导出物里的一处命中（2026-10-10 实际发生过）。
 // 从环境取，源码里就没有可洗的东西，而且换一台机器它认得那台机器。
 const userName = () => process.env.USERNAME ?? process.env.USER ?? '';
+/** 机器名。**「这是谁的机器」的正确判据是它，不是用户名** —— 见下面 `username` 那条规则。 */
+const hostName = () => hostname();
+/** 把一段字面量转义成能放进 `RegExp` 的形式。 */
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+
+/**
+ * 机器名的匹配模式。
+ *
+ * **不只用全名。** Windows 的 NetBIOS 名是**大写且截断**的，`icacls` 之类的输出里
+ * 印的就是那个形态（2026-10-12 实际撞上：全名 13 个字，注释里留下的是前 12 个）。
+ * 只匹配 `os.hostname()` 会漏掉它。
+ *
+ * 所以把长度 ≥ 10 的前缀一并列进去。**再短的片段不行** —— 机器名里常常嵌着用户名，
+ * 短到只剩用户名那一段就会在正常文字里误伤。
+ */
+const hostnamePattern = () => {
+  const name = hostName();
+  if (name === '') return /$^/u;
+  const parts = [];
+  for (let n = Math.min(10, name.length); n <= name.length; n += 1) parts.push(esc(name.slice(0, n)));
+  return new RegExp(parts.join('|'), 'iu');
+};
 /** DSH 的安装目录名 —— 从 `DSH_ASAR` 推。 */
 const installDirName = () => {
   // ⚠️ 一开始是从 `process.execPath` 推的，推出 `"Program Files"` —— 因为跑这个
@@ -60,55 +84,16 @@ const TEXT_EXT = new Set([
  *
  * `why` 是给人看的 —— 一条检查说不出「为什么这算泄漏」，被报的人就只会把它当噪音。
  */
-/**
- * 按本机那份 `memory.md` 现生成「私人记忆内容」的匹配模式。
- *
- * ## 为什么要现生成，而不是写死
- *
- * 这一条原来是一条**写死的正则，里面抄着那两行记忆的原文**。
- *
- * **那是把要防的东西抄进了检测器。** 而这个文件本身要发布出去 ——
- * 于是「防止记忆外泄的脚本」自己带着两行记忆。**补漏的动作本身成了漏。**
- *
- * ⚠️ 而 2026-10-12 又发现：**这段话本身仍然在引用那两行原文。**
- * 也就是说上面那句「补漏的动作本身成了漏」，在第一版修完之后**依然成立** ——
- * 只是这次漏在注释里而不是在代码里。
- *
- * **所以规矩是**：描述「在哪、什么类型、多少字」就够了，**一个字都不要复述**。
- * 这个文件自己就是那条规矩最早的反例，所以写在这里，让下一个改它的人看见。
- *
- * ## 换一台机器它会匹配不到，那是对的
- *
- * 别人那台没有这段记忆可漏。规则在这里的意义是「本机发出去会漏什么」，
- * 不是「任何机器都会漏这两句」。
- *
- * ## 没有 memory.md 时
- *
- * 返回一个**永不匹配**的模式，而不是抛。收件人那台本来就没有 memory.md。
- *
- * @returns {RegExp} 匹配本机任何一条记忆内容的模式。
- */
-function memoryContentPattern() {
-  const never = /(?!)/u;
-  try {
-    const home = process.env.DSH_HOME ?? join(homedir(), '.dsh');
-    const file = join(home, 'cyrene-agent', 'memory.md');
-    if (!existsSync(file)) return never;
-    const escaped = readFileSync(file, 'utf8')
-      .replace(/\r\n?/gu, '\n')
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.startsWith('- '))
-      .map((line) => line.slice(2).trim())
-      // 太短的片段会在任何文档里误伤，只拿真正有信息量的。
-      .filter((entry) => entry.length >= 8)
-      .map((entry) => entry.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'));
-    if (escaped.length === 0) return never;
-    return new RegExp(escaped.join('|'), 'u');
-  } catch {
-    return never;
-  }
-}
+// 私人记忆的匹配模式**不在这里实现**。
+//
+// 它原来在这个文件里，是一条写死的正则 —— 里面抄着本机 `memory.md` 那两行的
+// 原文。这个文件本身要发布出去，于是「防止记忆外泄的脚本」自己带着那两行：
+// **补漏的动作本身成了漏**。第一版把它改成现读本机之后，那段**注释里**又
+// 引用了一遍，等于同一个错犯了两次。
+//
+// 2026-10-12 发现 `tools/check-npm-publish.mjs` 里抄了**第三遍**（一并注释
+// 写着「一个字都不要写全」）。规矩写在被违反的地方旁边是不够的 ——
+// 所以它现在只有一份实现，在 tools/memory-pattern.mjs，那里记着完整来历。
 
 const RULES = [
   // ---- 私人状态 --------------------------------------------------------
@@ -163,14 +148,43 @@ const RULES = [
   {
     id: 'username',
     kind: 'content',
-    // ⚠️ **`github.com/<用户名>/` 后面那个不算泄漏 —— 那是仓库地址，本来就该有。**
+    // ⚠️ **只在路径里算泄漏。**
     //
-    // 2026-10-11 撞上的：Windows 用户名和 GitHub 用户名常常是同一个
+    // 2026-10-11 撞上的第一次：Windows 用户名和 GitHub 用户名常常是同一个
     // （这台机器就是），于是这条规则把 `package.json` 里的 URL 全报成泄漏，
-    // **而导出物本身是对的。** 一个会误报的检查会被关掉，关掉之后一条都拦不住 ——
-    // 上面那条 `home-path` 的注释里写着同一句话。
-    match: userName() === '' ? /$^/u : new RegExp(`(?<!github\\.com/)\\b${userName().replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}\\b`, 'iu'),
-    why: 'Windows 用户名。'
+    // **而导出物本身是对的。** 那次的修法是加了一条 `(?<!github\.com/)`。
+    //
+    // 2026-10-12 撞上的第二次：三个包加了 npm 作用域，`@lutisure/<包名>` 满地都是 ——
+    // 这条规则报出 **22 处，全是身份位置**（npm 作用域、署名、`LICENSE` 抬头、仓库地址）。
+    // 而**就在同一天早些时候，正是「把作用域洗掉」这一个动作**让包名与客户端 loader id
+    // 分了家，产物谁 clone 谁崩。
+    //
+    // 判据因此换了个方向：**不看「这个词出现了吗」，看「它出现在什么位置上」。**
+    //
+    //   `C:\Users\<用户名>`、`/home/<用户名>`       路径段 —— 泄露「这是谁的机器」→ 报
+    //   `@lutisure/cyrene-agent`                    npm 作用域，必须原样保留      → 不报
+    //   `"name": "Lutisure"`、`Copyright … Lutisure` 署名                        → 不报
+    //   `github.com/Lutisure/…`、`repos/Lutisure/…`  地址，本来就该有            → 不报
+    //
+    // 机器名另立了一条 `hostname` 规则：**「这是我的机器」的正确判据是机器名。**
+    // 用户名在这台机器上同时是三种身份，单靠它区分不了这两件事。
+    //
+    // 一个会误报的检查会被关掉，关掉之后一条都拦不住 —— 上面那条 `home-path`
+    // 的注释里写着同一句话。
+    match: userName() === '' ? /$^/u
+      : new RegExp(`(?<=[\\\\/])(?<!github\\.com/)(?<!repos/)${esc(userName())}(?!\\w)`, 'iu'),
+    why: '路径里写死的 Windows 用户名。'
+  },
+  {
+    id: 'hostname',
+    kind: 'content',
+    // 「这台机器是谁的」—— 机器名直接回答这个问题，用户名回答不了（见上一条）。
+    //
+    // ⚠️ **这是一张网，不是一份证明。** Windows 在 `icacls` 这类输出里印的是
+    //    NetBIOS 名，大小写可能不同、也可能被截断，`os.hostname()` 是匹配不全的。
+    //    真正的修法是**别把机器名写进注释** —— 描述「那台机器的 NetBIOS 名」就够了。
+    match: hostnamePattern(),
+    why: '写死的机器名。'
   },
   {
     id: 'home-path',

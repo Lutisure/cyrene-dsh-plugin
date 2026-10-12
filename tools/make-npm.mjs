@@ -159,22 +159,56 @@ if (!hasCorrections || !hasPersona) {
 console.log('  ✓ 产物干净且完整：只有规则，没有记忆。');
 
 // ── 四、打包 / 发布 ───────────────────────────────────────────────────
+//
+// ⚠️ **这一段的第一版是个坑，值得记下来。**
+//
+// 它原来是：`--publish` 时**不发布**，只把命令打出来（「真正 publish 留给人按」），
+// 然后在 L178 调 `restore()` —— **而那一步把本机那份（带记忆的）恢复了回去。**
+//
+// 于是照着它打出来的命令按的人，发上去的**正是那份带记忆的**。
+//
+// **它的口吻是「安全起见留给人按」，读起来像更谨慎 —— 而实际相反。**
+// 一个把最要紧的那一步推出门外的脚本，给出的那条命令必然是错的：
+// 因为「干净」只在 dist 还是临时构建的那一刻成立，而那一刻在脚本里面。
+//
+// 现在：`--publish` 真的发，而 `restore()` 走 `finally` ——
+// **无论发布成功、失败、还是抛异常，本机那份都会回来。**
 
-if (doPack) {
-  console.log('\n  打包……');
-  const packed = spawnSync('npm', ['pack', '--dry-run'], { cwd: ROOT, encoding: 'utf8', shell: true });
-  const out = `${packed.stdout ?? ''}${packed.stderr ?? ''}`;
-  const list = (out.match(/npm notice.*\n/g) ?? []).slice(0, 6);
-  console.log(list.map((l) => `    ${l.trim()}`).join('\n'));
-  const bad = /SKILL\.md/.test(out) && /memory|人家做成了/.test(readFileSync(join(DIST, 'skills', 'cyrene', 'SKILL.md'), 'utf8'));
-  console.log(bad ? '    ✗ SKILL.md 里仍有记忆' : '    ✓ 包里那份 SKILL.md 是干净的');
+const cleanup = () => {
+  restore();
+  rmSync(staging, { recursive: true, force: true });
+  console.log('\n  本机 dist 已恢复。\n');
+};
+
+try {
+  if (doPack) {
+    console.log('\n  打包……');
+    const packed = spawnSync('npm', ['pack', '--dry-run'], { cwd: ROOT, encoding: 'utf8', shell: true });
+    const out = `${packed.stdout ?? ''}${packed.stderr ?? ''}`;
+    const list = (out.match(/npm notice.*\n/g) ?? []).slice(0, 6);
+    console.log(list.map((l) => `    ${l.trim()}`).join('\n'));
+    const bad = /SKILL\.md/.test(out) && /memory|人家做成了/.test(readFileSync(join(DIST, 'skills', 'cyrene', 'SKILL.md'), 'utf8'));
+    console.log(bad ? '    ✗ SKILL.md 里仍有记忆' : '    ✓ 包里那份 SKILL.md 是干净的');
+    if (bad) {
+      console.log('\n  ✗ **不发。** 包里那份 SKILL.md 还带着记忆 —— 那说明清洗这一步没生效。');
+      cleanup();
+      process.exit(1);
+    }
+  }
+
+  if (doPublish) {
+    console.log('\n  发布……（在 dist 还是干净的这一瞬间发，而那正是这个脚本存在的理由）');
+    const published = spawnSync('npm', ['publish', '--access', 'public'], { cwd: ROOT, encoding: 'utf8', shell: true });
+    const out = `${published.stdout ?? ''}${published.stderr ?? ''}`.trim();
+    if (out) console.log(out.split('\n').map((l) => `    ${l}`).join('\n'));
+    if (published.status !== 0) {
+      console.log(`\n  ✗ publish 失败（退出码 ${published.status ?? '?'}）。**本机那份不受影响，稍后恢复。**`);
+      cleanup();
+      process.exit(published.status ?? 1);
+    }
+    console.log(`\n  ✓ 发出去了：@lutisure/cyrene-agent@${JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version}`);
+    console.log('     再发另外三个时不走这个脚本 —— 它们没有 dist、没有记忆可清。');
+  }
+} finally {
+  cleanup();
 }
-
-if (doPublish) {
-  console.log('\n  ⚠️ 真正 publish 这一步**留给人按** —— 见 SUBMIT.md。');
-  console.log('     命令：cd cyrene-agent && npm publish --access public');
-}
-
-restore();
-rmSync(staging, { recursive: true, force: true });
-console.log('\n  本机 dist 已恢复。\n');

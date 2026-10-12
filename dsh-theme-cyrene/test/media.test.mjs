@@ -16,6 +16,8 @@ import { tmpdir } from 'node:os';
 import { extname, join } from 'node:path';
 import test, { after, before } from 'node:test';
 
+import { PLUGIN_ID } from './plugin-id.mjs';
+
 const SCRATCH_HOME = mkdtempSync(join(tmpdir(), 'cyrene-media-'));
 process.env.DSH_HOME = SCRATCH_HOME;
 
@@ -195,6 +197,6 @@ test('a caller cannot walk out of the media directories', async (t) => {
   ]) {
     const response = await request(attempt);
     assert.ok(response.status >= 400, `${attempt} must not be served`);
-    assert.ok(!response.body.includes(Buffer.from('dsh-theme-cyrene')), `${attempt} must not leak the manifest`);
+    assert.ok(!response.body.includes(Buffer.from(PLUGIN_ID)), `${attempt} must not leak the manifest`);
   }
 });

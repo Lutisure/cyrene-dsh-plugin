@@ -10,7 +10,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { mountPlugin } from './harness.mjs';
+import {PLUGIN_ID,  mountPlugin } from './harness.mjs';
 
 /** A minimal well-formed package. */
 function packageWith(settings, overrides = {}) {
@@ -89,7 +89,7 @@ test('a well-formed package is adopted wholesale', async () => {
   // And it reached the live interface, not only the document.
   const sheet = sandbox.document.head
     .querySelectorAll('style')
-    .find((node) => node.dataset.pluginCss === 'dsh-theme-cyrene/identity.css').textContent;
+    .find((node) => node.dataset.pluginCss === `${PLUGIN_ID}/identity.css`).textContent;
   assert.ok(sheet.includes('#4ade80'), 'the imported skin is applied');
 });
 

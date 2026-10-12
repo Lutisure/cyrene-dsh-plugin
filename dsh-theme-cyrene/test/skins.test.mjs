@@ -10,14 +10,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { mountPlugin } from './harness.mjs';
+import {PLUGIN_ID,  mountPlugin } from './harness.mjs';
 import { loadTheme } from '../tools/palette.mjs';
 
 /** The identity sheet's text, or null. */
 function identitySheet(sandbox) {
   const sheet = sandbox.document.head
     .querySelectorAll('style')
-    .find((node) => node.dataset.pluginCss === 'dsh-theme-cyrene/identity.css');
+    .find((node) => node.dataset.pluginCss === `${PLUGIN_ID}/identity.css`);
   return sheet === undefined ? null : sheet.textContent;
 }
 
@@ -231,7 +231,7 @@ test('the plugin stylesheet is rebuilt too, not only the tokens', async () => {
 
   const controls = () => sandbox.document.head
     .querySelectorAll('style')
-    .find((node) => node.dataset.pluginCss === 'dsh-theme-cyrene/controls.css').textContent;
+    .find((node) => node.dataset.pluginCss === `${PLUGIN_ID}/controls.css`).textContent;
 
   const before = controls();
   // The dock and the popovers carry the accent directly in their own rules, so a

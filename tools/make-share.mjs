@@ -278,7 +278,7 @@ for (const dir of TOP_DIRS) {
  * （那个脚本后来去掉了；**这个坑本身还在** —— 任何工具脚本里都可能再出现。）
  *
  * 同一个错误在这个文件里已经出现过四次了 —— `_backup`、`corpus-src`、
- * 大小写的 `<用户名>`、现在是转义反斜杠。**共同点都是「我以为输入长这样」。**
+ * 大小写的 `LUTISURE`、现在是转义反斜杠。**共同点都是「我以为输入长这样」。**
  * 所以这里不再手写规则，而是从一张路径清单生成两套。
  */
 const PATHS = [
@@ -298,17 +298,35 @@ const SCRUB = [
     // 转义形式：文件里出现的是两个反斜杠
     [new RegExp(`[A-Z]:\\\\\\\\${esc(p)}`, 'gu'), to]
   ]),
-  // 用户名：全小写、全大写、混合，一律洗。以前那条区分大小写，漏掉了 `<用户名>`。
+  // 用户名：**只在路径里洗**。
   //
-  // ⚠️ **但 `github.com/<用户名>/` 后面那个不能洗。**
+  // 大小写三种形态都要洗（以前那条区分大小写，漏掉了 `LUTISURE`）。
   //
-  // 2026-10-11 撞上的：他的 Windows 用户名和 GitHub 用户名是同一个，
-  // 于是这条规则把 `package.json` 里的仓库 URL 洗成了
-  // `https://github.com/<用户名>/DSH_Plugins` —— **链接全断，而导出物报告「干净」。**
+  // ## 这条规则收窄过，理由值得记住
   //
-  // **「抹掉用户名」和「留下仓库地址」在同一个字符串上打架。** 断言把这两件事分开：
-  // 路径里的那个是隐私，URL 里的那个**是要给人看的**。
-  ...(USER === '' ? [] : [[new RegExp(`(?<!github\\.com/)\\b${esc(USER)}\\b`, 'giu'), '<用户名>']]),
+  // 原来它按字面全局匹配。撞过五次，每次都是**同一个字符串，两种意思**：
+  //
+  //   1. `github.com/<用户名>/`        仓库 URL    2026-10-11 洗断，链接全断而报告「干净」
+  //   2. `@<用户名>/<包名>`            npm 作用域  2026-10-12 洗成含 `<>` 和中文的**非法包名**，
+  //                                                 而且让包名 ≠ 客户端 loader id —— clone 下来装了就崩
+  //   3. `"name": "<用户名>"`          author 署名 和 LICENSE 对不上
+  //   4. `Copyright (c) 2026 <用户名>` 许可证抬头  同上
+  //   5. `name: <用户名>/<仓库>`、`<用户名>__<仓库>.yml`  投稿字段与文件名，CI 报「仓库不存在」
+  //
+  // 每撞一次就在负向后顾里补一条例外，补到第四条才看明白方向错了：
+  // **用户名只在路径里才标识这台机器**，别处它标识的是作者本人 ——
+  // 而作者是谁在这份导出物里本来就是公开的，每个 `package.json` 都写着
+  // `github.com/Lutisure/`。洗它换不来隐私，只换来一个坏掉的标识。
+  //
+  // 所以判据从「哪里不洗」翻成「**哪里才洗**」：紧挨着反斜杠的那个才洗。
+  // 上面五条身份串一个都不挨着反斜杠，一次全放过，不必再逐条开例外。
+  //
+  // 代价是「路径外面的用户名一个不洗」，所以下面配了 `IDENTITY_SLOTS` 断言：
+  // **占位符绝不许落在身份位置上**，落进去就叫导出失败。
+  ...(USER === '' ? [] : [[
+    new RegExp(`(?<=[\\\\])${esc(USER)}\\b|\\b${esc(USER)}(?=[\\\\])`, 'giu'),
+    '<用户名>'
+  ]]),
   [/C:\\Users\\[A-Za-z0-9_.-]+/gu, '%USERPROFILE%'],
   [/[A-Z]:\\\\Users\\\\[A-Za-z0-9_.-]+/gu, '%USERPROFILE%'],
 
@@ -405,6 +423,56 @@ const scrubDir = (dir) => {
 };
 scrubDir(OUT);
 console.log(`  ✓    洗掉真实路径 —— ${scrubbed} 个文件${reencoded === 0 ? '' : `，另有 ${reencoded} 个统一了编码`}`);
+
+// ---- 兜底：占位符绝不许落在身份位置上 -----------------------------------
+//
+// 2026-10-12 撞的就是这个：npm 作用域被洗成 `@<用户名>/dsh-theme-cyrene` ——
+// 一个含 `<>` 和中文的**非法包名**，而且让包名 ≠ 客户端 loader id，谁 clone 谁崩。
+//
+// 上面那条规则已经收窄成「只在路径里洗」，但**收窄本身不该是唯一防线**：
+// 规则描述的是意图，这条断言检查的是结果。两者都要有。
+//
+// 正面表述比反面表述好验：不说「别洗坏身份」，说「身份位置上不许出现占位符」。
+const IDENTITY_SLOTS = [
+  [/@<用户名>\//u, 'npm 作用域 / 包名'],
+  [/"name"\s*:\s*"<用户名>"/u, 'author 署名'],
+  [/Copyright \(c\) \d{4} <用户名>/u, '许可证抬头'],
+  [/github\.com\/<用户名>/u, '仓库 URL'],
+  [/repos\/<用户名>/u, 'gh api 路径'],
+  [/name:\s*<用户名>\//u, '投稿的 name 字段'],
+  [/<用户名>__/u, '投稿文件名']
+];
+
+const slotHits = [];
+const walkSlots = (dir) => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const at = join(dir, entry.name);
+    // **`tools/` 不扫。** 检测器必须写出它要检测的那个字面量 —— `audit-shareable.mjs`
+    // 和这个文件自己都有 `<用户名>` 的原文，那是规则，不是泄漏。
+    //
+    // 这一条安全，是因为**身份位置里不可能有工具**：`package.json`、`LICENSE`、
+    // `SUBMIT.md` 都在仓库根或包根，没有一个在 `tools/` 下面。
+    // （2026-10-12 第一次跑这条断言，7 个命中全是这个文件自己。）
+    if (entry.isDirectory()) {
+      if (entry.name !== 'tools') walkSlots(at);
+      continue;
+    }
+    if (!TEXT.has(at.slice(at.lastIndexOf('.')))) continue;
+    const { text } = readText(at);
+    for (const [pattern, what] of IDENTITY_SLOTS) {
+      if (pattern.test(text)) slotHits.push(`${at.slice(OUT.length + 1)} — ${what}`);
+    }
+  }
+};
+walkSlots(OUT);
+
+if (slotHits.length > 0) {
+  console.log(`\n  ✗    占位符落进了 ${slotHits.length} 个身份位置：`);
+  for (const hit of slotHits.slice(0, 12)) console.log(`         ${hit}`);
+  console.log('         身份位置是给人看的，不是隐私 —— 收窄上一节 `SCRUB` 里那条用户名规则。\n');
+  process.exit(1);
+}
+console.log('  ✓    身份位置上没有占位符');
 
 // ---- 验导出物，不是验源目录 ---------------------------------------------
 console.log('\n  对导出物跑一遍分享检查……\n');

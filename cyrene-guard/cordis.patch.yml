@@ -28,4 +28,4 @@
     - id: cyrene-guard
       # ⚠️ `name` 是包的去处，必须和 registry 上的名字一致（2026-10-12 加了作用域）。
       # 而上面那个 `id` 是 loader 里的标识，不动 —— 改它会牵动 profile 里已有的挂载记录。
-      name: '@<用户名>/cyrene-guard'
+      name: '@lutisure/cyrene-guard'

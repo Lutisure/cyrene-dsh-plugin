@@ -12,6 +12,8 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
+import { PLUGIN_ID } from './plugin-id.mjs';
+
 /**
  * 要跑的那份 bundle。
  *
@@ -26,6 +28,23 @@ import vm from 'node:vm';
  *       node --test test/*.test.mjs
  */
 const BUNDLE = process.env.CYRENE_BUNDLE ?? fileURLToPath(new URL('../lib/client.js', import.meta.url));
+
+/**
+ * The package name, read from `package.json` rather than hardcoded.
+ *
+ * The loader registers the browser half under the package's own `name`, and the
+ * bundle has to declare that same id — if the two disagree the loader installs
+ * the file twice and the whole web boot dies with:
+ *
+ *     client-modules: duplicate factory registration for "..."
+ *
+ * This check used to spell the name out as the bare `dsh-theme-cyrene`. That
+ * held right up until the package gained its `@lutisure/` scope, at which point
+ * 183 tests failed for a reason that had nothing to do with the code under
+ * test. Reading the name here keeps the check honest: it now fails when the id
+ * and the package really disagree, whatever the package happens to be called.
+ */
+const PACKAGE_NAME = PLUGIN_ID;
 
 /* ------------------------------------------------------------------ *
  * DOM
@@ -823,7 +842,7 @@ export function createEnvironment() {
     const path = String(url);
     fetchLog.push({ path, method: (options && options.method) || 'GET' });
     const canned = responses.get(path.split('?')[0]);
-    const body = canned === undefined ? { plugin: 'dsh-theme-cyrene', wallpapers: [], music: [], covers: [], boot: [], emotes: [], state: {}, limits: {} } : canned;
+    const body = canned === undefined ? { plugin: PLUGIN_ID, wallpapers: [], music: [], covers: [], boot: [], emotes: [], state: {}, limits: {} } : canned;
     return Promise.resolve({
       ok: true,
       status: 200,
@@ -1071,7 +1090,9 @@ export async function mountPlugin(options = {}) {
     throw new Error(`the bundle must call __ModuleLoader__.load exactly once, saw ${sandbox.__loaderCalls.length}`);
   }
   const spec = sandbox.__loaderCalls[0];
-  if (spec.id !== 'dsh-theme-cyrene') throw new Error(`loader id must be the package name, saw ${spec.id}`);
+  if (spec.id !== PACKAGE_NAME) {
+    throw new Error(`loader id must be the package name (${PACKAGE_NAME}), saw ${spec.id}`);
+  }
 
   const plugin = spec.factory(() => {
     throw new Error('the browser half must not require() anything');
@@ -1135,4 +1156,4 @@ export async function mountPlugin(options = {}) {
   return { sandbox, plugin, registered, activated, disposers, themeListeners };
 }
 
-export { BUNDLE, ShimNode };
+export { BUNDLE, PLUGIN_ID, ShimNode };

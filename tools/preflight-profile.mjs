@@ -12,10 +12,10 @@
  * 它跑在**真实的 profile 目录**上，读的是真实文件，不做任何修改。
  */
 
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 
 
@@ -148,8 +148,36 @@ for (const row of patches.flatMap((r) => r?.insert ?? [])) {
 // ---- 6. 每个我们自己写的插件都能 import 且导出正确 ----------------------
 // 只测链接到本地的那些：node_modules 里的第三方包不归我们管，而且它们没有副作用地
 // import 未必可行。
-const OURS = ['cyrene-guard', 'cyrene-agent', 'dsh-theme-cyrene'];
-for (const dep of deps.filter((d) => OURS.includes(d))) {
+//
+// ⚠️ 判「是不是我们自己写的」换过两次写法，**两次都错在同一件事上：拿名字去比，
+//    而手里那个名字不是名单里那一个。**
+//
+//   1. 一开始写死三个**裸名** `['cyrene-guard', 'cyrene-agent', 'dsh-theme-cyrene']`。
+//      2026-10-12 三个包都加了 `@lutisure/` 作用域（裸名 `cyrene-agent` 在 npm 上
+//      被别人占了 1.2.1），这个数组一个都对不上 —— **这一节静悄悄地一个包都不测了**，
+//      而它照常打印别的节、照常看起来是健康的。
+//   2. 第二版改成从各包 `package.json` 现取 `name` 建名单 —— **仍然对不上**，
+//      因为 profile 里依赖的键是 **link 名**（`link:<本仓库>/cyrene-agent`，
+//      所以是裸的），跟包自己声明的 `name` 是**两个不同的标识**。
+//
+// 现在不问名字，问**它实际落在哪**：依赖目录的真身在这个仓库里，就是我们的。
+// 包名再改多少次都不影响它。
+const REPO_ROOT = realpathSync(fileURLToPath(new URL('..', import.meta.url))).toLowerCase();
+const isOurs = (dep) => {
+  try {
+    return realpathSync(join(nm, dep)).toLowerCase().startsWith(REPO_ROOT);
+  } catch {
+    return false;
+  }
+};
+const ours = deps.filter(isOurs);
+// 这一节出过的那个错**形态就是「安静」**：条件恒 false，循环体一次不跑，
+// 于是没有任何一行输出，而整份报告仍然写着「全部通过」。所以「一个都没认出」
+// 必须自己喊出来 —— 否则下一次它还会以同样的方式安静地失效。
+if (ours.length === 0) {
+  bad('插件自检', '一个都没认出是自己写的 —— 判据失效，这一节等于没测');
+}
+for (const dep of ours) {
   const at = join(nm, dep);
   let manifest;
   try {

@@ -17,6 +17,8 @@ import { join } from 'node:path';
 import test, { after, before } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { PLUGIN_ID } from './plugin-id.mjs';
+
 // `lib/index.js` derives its storage paths at load time, so `$DSH_HOME` must be
 // redirected before it is imported — hence a dynamic import in `before()`
 // rather than a static one, which ESM would hoist above this assignment.
@@ -119,7 +121,7 @@ test('manifest lists the asset buckets and the persisted state', async () => {
   const response = await request(`${PREFIX}/manifest`);
   assert.equal(response.status, 200);
   const body = json(response);
-  assert.equal(body.plugin, 'dsh-theme-cyrene');
+  assert.equal(body.plugin, PLUGIN_ID);
   for (const key of ['wallpapers', 'music', 'covers', 'boot', 'emotes']) {
     assert.ok(Array.isArray(body[key]), `${key} must be an array`);
   }

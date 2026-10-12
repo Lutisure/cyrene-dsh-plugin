@@ -390,6 +390,33 @@ function main() {
   ].join('\n');
   const output = `${banner}\n${bundle}`;
 
+  // ⚠️ 客户端 bundle 的 loader id 必须**等于包名**。
+  //
+  // 2026-10-12：这个 id 写的是裸名，而包按 npm 的要求加了 `@lutisure/` 作用域 ——
+  // 加载器按包名装一次、bundle 又按这个 id 注册一次，同一个文件执行了两遍：
+  //
+  //     client-modules: duplicate factory registration for "dsh-theme-cyrene"
+  //
+  // 整个 web boot 起不来。而它只在**装上去之后**才发作 —— 本地构建、测试、`--check`
+  // 全都是绿的。所以这道断言放在构建里：**改包名忘了改 id，构建当场失败。**
+  //
+  // 依据不是惯例，是加载器的要求：两个官方客户端插件
+  // （`@deepseek-ai/dsh-client-ui-skill`、`@deepseek-ai/dsh-client-ui-theme`）
+  // 的 id 都等于各自的包名。去看一眼就知道。
+  const pkgName = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).name;
+  const declared = /__ModuleLoader__\.load\(\{\s*\n\s*id:\s*"([^"]+)"/u.exec(bundle);
+  if (declared === null) {
+    throw new Error('客户端 bundle 里找不到 `__ModuleLoader__.load({ id: "..." })` —— 检查 lib/client/00-prologue.js');
+  }
+  if (declared[1] !== pkgName) {
+    throw new Error(
+      `客户端 loader id 与包名不一致：\n` +
+      `    lib/client/00-prologue.js 里写的是  "${declared[1]}"\n` +
+      `    package.json 的 name 是          "${pkgName}"\n` +
+      `  两者必须相同 —— 否则加载器会把同一个 bundle 装两次，启动时 duplicate factory registration 直接失败。`
+    );
+  }
+
   // A bundle that grows past a few hundred KB starts to threaten the combo
   // loader, so fail loudly rather than shipping something that will not load.
   const bytes = Buffer.byteLength(output);

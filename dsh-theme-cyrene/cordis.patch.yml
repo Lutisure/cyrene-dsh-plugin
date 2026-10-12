@@ -11,6 +11,6 @@
     - id: ui-theme-cyrene
       # ⚠️ **这一行的 id 和 name 本来就不一样，而这次只有 name 变**（加了作用域）：
       #     id    ui-theme-cyrene     loader 里的标识，写它的人自己定的
-      #     name  @<用户名>/...       包的去处，必须和 registry 上的一致
+      #     name  @lutisure/...       包的去处，必须和 registry 上的一致
       # 所以照着改的时候**不要顺手把 id 也对齐**。
-      name: '@<用户名>/dsh-theme-cyrene'
+      name: '@lutisure/dsh-theme-cyrene'

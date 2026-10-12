@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { BUNDLE, mountPlugin } from './harness.mjs';
+import {PLUGIN_ID,  BUNDLE, mountPlugin } from './harness.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -79,7 +79,7 @@ function dockButton(sandbox, label) {
 test('the bundle registers exactly one module whose id is the package name', async () => {
   const { sandbox, plugin } = await mountPlugin();
   assert.equal(sandbox.__loaderCalls.length, 1);
-  assert.equal(sandbox.__loaderCalls[0].id, 'dsh-theme-cyrene');
+  assert.equal(sandbox.__loaderCalls[0].id, PLUGIN_ID);
   assert.equal(typeof sandbox.__loaderCalls[0].factory, 'function');
   // The array is created inside the VM realm, so compare contents rather than
   // prototypes: `deepStrictEqual` would fail on the differing Array prototype.
@@ -109,18 +109,18 @@ test('every stylesheet is mounted and tagged with the plugin id', async () => {
   // first change needed a different code path from every later one.
   assert.equal(sheets.length, 7, 'expected the reply-avatar, working-edge, identity, glass, controls, fonts and glass-tuning sheets');
   for (const sheet of sheets) {
-    assert.equal(sheet.dataset.plugin, 'dsh-theme-cyrene');
-    assert.ok(sheet.dataset.pluginCss.startsWith('dsh-theme-cyrene/'));
+    assert.equal(sheet.dataset.plugin, PLUGIN_ID);
+    assert.ok(sheet.dataset.pluginCss.startsWith(`${PLUGIN_ID}/`));
   }
   const identity = sheets.find((sheet) => sheet.dataset.pluginCss.endsWith('identity.css'));
   assert.ok(identity.textContent.includes('html[data-cyrene-theme="on"]'), 'identity rules must be scoped');
   assert.ok(identity.textContent.includes('--dsw-alias-bg-base'), 'identity sheet must carry the tokens');
 
-  const fonts = sheets.find((sheet) => sheet.dataset.pluginCss === 'dsh-theme-cyrene/fonts');
+  const fonts = sheets.find((sheet) => sheet.dataset.pluginCss === `${PLUGIN_ID}/fonts`);
   assert.notEqual(fonts, undefined, 'the fonts sheet must exist');
   assert.equal(fonts.textContent, '', 'and stays empty until something is customised');
 
-  const tuning = sheets.find((sheet) => sheet.dataset.pluginCss === 'dsh-theme-cyrene/glass-tuning');
+  const tuning = sheets.find((sheet) => sheet.dataset.pluginCss === `${PLUGIN_ID}/glass-tuning`);
   assert.notEqual(tuning, undefined, 'the glass-tuning sheet must exist');
   // Not empty any more, and no longer a marker of "nothing is customised": the
   // two fallbacks are unconditional, because a reader with reduced transparency
@@ -201,7 +201,7 @@ test('the dock carries one button per subsystem, in a stable order', async () =>
     buttons.map((button) => button.dataset.id),
     ['music', 'wallpaper', 'sound', 'fonts', 'particles', 'pointer']
   );
-  assert.notEqual(sandbox.document.getElementById('dsh-theme-cyrene-toasts'), null);
+  assert.notEqual(sandbox.document.getElementById(`${PLUGIN_ID}-toasts`), null);
 });
 
 test('every dock button is an icon, and keeps its word as its accessible name', async () => {
@@ -580,7 +580,7 @@ test('a trigger word in incoming text shows the matching emote', async () => {
   };
   const { sandbox } = await mountPlugin({
     responses: new Map([['/theme-cyrene-assets/manifest', {
-      plugin: 'dsh-theme-cyrene',
+      plugin: PLUGIN_ID,
       wallpapers: [],
       music: [],
       covers: [],
@@ -611,7 +611,7 @@ test('a boot keyword replays the opening animation when one exists', async () =>
   };
   const { sandbox } = await mountPlugin({
     responses: new Map([['/theme-cyrene-assets/manifest', {
-      plugin: 'dsh-theme-cyrene',
+      plugin: PLUGIN_ID,
       wallpapers: [],
       music: [],
       covers: [],
@@ -641,7 +641,7 @@ async function mountWithBoot(name, mime, style) {
     source: 'builtin'
   };
   const responses = new Map([['/theme-cyrene-assets/manifest', {
-    plugin: 'dsh-theme-cyrene',
+    plugin: PLUGIN_ID,
     wallpapers: [],
     music: [],
     covers: [],
@@ -759,7 +759,7 @@ test('the pet can be switched off from the 景 panel', async () => {
 test('no pet stickers means no pet, rather than an empty one', async () => {
   const { sandbox } = await mountPlugin({
     responses: new Map([['/theme-cyrene-assets/manifest', {
-      plugin: 'dsh-theme-cyrene',
+      plugin: PLUGIN_ID,
       wallpapers: [],
       music: [],
       covers: [],
@@ -811,7 +811,7 @@ test('unmounting releases the DOM, the stylesheets and the document marker', asy
   assert.equal(sandbox.document.querySelectorAll('.cy-dock').length, 0);
   assert.equal(sandbox.document.querySelectorAll('.cy-layer-root').length, 0);
   assert.equal(sandbox.document.querySelectorAll('style').length, 0, 'both sheets must be removed');
-  assert.equal(sandbox.document.getElementById('dsh-theme-cyrene-toasts'), null);
+  assert.equal(sandbox.document.getElementById(`${PLUGIN_ID}-toasts`), null);
   assert.equal(sandbox.document.documentElement.dataset.cyreneTheme, undefined);
 });
 
@@ -837,7 +837,7 @@ test('the bundle carries no inlined media payload', async () => {
  * ------------------------------------------------------------------ */
 
 const LIBRARY = new Map([['/theme-cyrene-assets/manifest', {
-  plugin: 'dsh-theme-cyrene',
+  plugin: PLUGIN_ID,
   wallpapers: [
     {
       id: 'builtin:assets/cyrene-01.png',
@@ -1233,7 +1233,7 @@ test('the wallpaper is brightened with a filter and a much lighter shade', async
 
   // Every layer reads that same variable, so they cannot drift apart.
   const sheet = sandbox.document.head.querySelectorAll('style')
-    .find((node) => node.dataset.pluginCss === 'dsh-theme-cyrene/identity.css').textContent;
+    .find((node) => node.dataset.pluginCss === `${PLUGIN_ID}/identity.css`).textContent;
   assert.ok(sheet.includes('filter: var(--cy-wall-filter'), 'the wallpaper must read the variable');
   assert.ok(sheet.includes('blur(var(--cy-wall-blur'), 'and the video layer carries the fog');
 

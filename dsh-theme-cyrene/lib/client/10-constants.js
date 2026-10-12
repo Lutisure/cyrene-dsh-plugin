@@ -9,8 +9,31 @@
  * values stick.
  */
 
-/** Plugin id: must equal the package name so the loader can match the row. */
-var PLUGIN_ID = "dsh-theme-cyrene";
+/**
+ * Plugin id — **must equal `package.json`'s `name`, exactly.**
+ *
+ * Two independent mechanisms compare this string, and getting it wrong fails
+ * differently in each:
+ *
+ *   1. the client module loader registers the browser half under the package
+ *      name, so a registration whose `id` disagrees makes it install the same
+ *      file twice and the entire web boot dies with
+ *      `duplicate factory registration for "..."`;
+ *   2. the host claims — and later removes — the plugin's `<style>` tags by
+ *      matching `style[data-plugin]` against that same id (the runtime's
+ *      `claimStyles(id)` / `removeOwnedStyles(id)`). Tag a sheet with anything
+ *      else and the host concludes the plugin owns no styles, so HMR and
+ *      uninstall leak them.
+ *
+ * DSH's own client plugins tag their sheets with the scoped package name
+ * (`tag.dataset.plugin = "@deepseek-ai/dsh-client-locale"`), which is the
+ * convention this follows.
+ *
+ * `lib/client/00-prologue.js` carries the loader copy of the value, and
+ * `build.mjs` asserts it matches `package.json` before writing the bundle — so
+ * a rename that misses one of the two fails the build instead of the boot.
+ */
+var PLUGIN_ID = "@lutisure/dsh-theme-cyrene";
 
 /** Theme id handed to the theme service. */
 var THEME_ID = "cyrene";
@@ -18,7 +41,18 @@ var THEME_ID = "cyrene";
 /** The single route prefix the host half owns. */
 var ROUTE = "/theme-cyrene-assets";
 
-/** localStorage key for the instant-boot mirror of the settings. */
+/**
+ * localStorage key for the instant-boot mirror of the settings.
+ *
+ * Deliberately **not** derived from `PLUGIN_ID`. This is persisted user data:
+ * re-scoping it would silently reset every setting the user has, for no gain —
+ * only the host matches ids, and it never reads our storage keys.
+ *
+ * `UNDO_KEY`, `BOOT_SESSION_KEY`, `PACKAGE_KIND` and the fontset document kind
+ * keep their historical prefixes for the same reason. They name on-disk
+ * *formats* and storage slots, which have to outlive a rename; `PLUGIN_ID` is
+ * the only identifier that has to keep up with one.
+ */
 var STORAGE_KEY = "dsh-theme-cyrene:settings";
 
 /** The background stack sits behind every shell surface. */

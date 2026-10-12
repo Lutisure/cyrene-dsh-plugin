@@ -16,13 +16,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { mountPlugin } from './harness.mjs';
+import {PLUGIN_ID,  mountPlugin } from './harness.mjs';
 
 /** The font sheet's text, or null when it is not mounted. */
 function fontSheet(sandbox) {
   const sheet = sandbox.document.head
     .querySelectorAll('style')
-    .find((node) => node.dataset.pluginCss === 'dsh-theme-cyrene/fonts');
+    .find((node) => node.dataset.pluginCss === `${PLUGIN_ID}/fonts`);
   return sheet === undefined ? null : sheet.textContent;
 }
 

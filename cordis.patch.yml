@@ -39,14 +39,14 @@
 # ⚠️ 而 loader 对 insert 顺序**并不做依赖排序** —— 这个顺序只是为了日志好读，
 # 不是正确性所必需的。真正的依赖由每个包自己的 `inject` 声明决定。
 #
-# ⚠️ 2026-10-12：三个 `name` 都加了 `@<用户名>/` 作用域 —— 因为裸名 `cyrene-agent`
+# ⚠️ 2026-10-12：三个 `name` 都加了 `@lutisure/` 作用域 —— 因为裸名 `cyrene-agent`
 # 在 npm 上已经被人占了，而 `name` 是**包的去处**，必须和 registry 上的一致。
 # 三个 `id` **都没动**：它们是 loader 里的标识，不是 npm 名。
 
 - insert:
     - id: cyrene-agent
-      name: '@<用户名>/cyrene-agent'
+      name: '@lutisure/cyrene-agent'
     - id: cyrene-guard
-      name: '@<用户名>/cyrene-guard'
+      name: '@lutisure/cyrene-guard'
     - id: ui-theme-cyrene
-      name: '@<用户名>/dsh-theme-cyrene'
+      name: '@lutisure/dsh-theme-cyrene'

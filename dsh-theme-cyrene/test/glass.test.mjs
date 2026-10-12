@@ -10,14 +10,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { mountPlugin } from './harness.mjs';
+import {PLUGIN_ID,  mountPlugin } from './harness.mjs';
 import { loadTheme } from '../tools/palette.mjs';
 
 /** The glass-tuning sheet's text, or null when it is not mounted. */
 function tuningSheet(sandbox) {
   const sheet = sandbox.document.head
     .querySelectorAll('style')
-    .find((node) => node.dataset.pluginCss === 'dsh-theme-cyrene/glass-tuning');
+    .find((node) => node.dataset.pluginCss === `${PLUGIN_ID}/glass-tuning`);
   return sheet === undefined ? null : sheet.textContent;
 }
 

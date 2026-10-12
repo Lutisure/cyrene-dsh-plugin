@@ -34,8 +34,16 @@ import {
 } from './assets.js';
 import { controlMedia, readMedia } from './media.js';
 
-/** Diagnostic prefix and plugin identifier. */
-const NAME = 'dsh-theme-cyrene';
+/**
+ * Diagnostic prefix and plugin identifier.
+ *
+ * The scoped package name, to match `PLUGIN_ID` in the browser half. Nothing
+ * compares the two today — the client no longer reads the `plugin` field of the
+ * manifest envelope — but this is the value that identifies the plugin in a
+ * response body and in the logs, and an identity string that has drifted from
+ * the package name is how the loader-id bug started. Keep it equal.
+ */
+const NAME = '@lutisure/dsh-theme-cyrene';
 
 /** The single route prefix this plugin owns. */
 const PREFIX = '/theme-cyrene-assets';

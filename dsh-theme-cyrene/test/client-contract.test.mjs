@@ -26,6 +26,8 @@ import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { PLUGIN_ID } from './plugin-id.mjs';
+
 const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 /** The package manifest. */
@@ -49,7 +51,7 @@ test('the bundle is a classic script that registers itself exactly once', () => 
   );
   const registrations = [...source.matchAll(/__ModuleLoader__\.load\(/gu)];
   assert.equal(registrations.length, 1, 'the bundle must register exactly one module');
-  assert.ok(source.includes('id: "dsh-theme-cyrene"'), 'and register under the package id');
+  assert.ok(source.includes(`id: "${PLUGIN_ID}"`), 'and register under the package id');
   assert.ok(source.includes('factory: (require) =>'), 'with a factory the loader can materialise lazily');
 });
 

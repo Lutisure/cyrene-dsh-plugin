@@ -1,12 +1,12 @@
 {
-  "name": "@<用户名>/cyrene-guard",
+  "name": "@lutisure/cyrene-guard",
   "version": "0.1.0",
   "private": false,
   "type": "module",
   "description": "写完代码之后自动扫一遍——本地安全扫描，规则来自 DeepSec 的 Shield。",
   "license": "MIT",
   "author": {
-    "name": "<用户名>"
+    "name": "Lutisure"
   },
   "homepage": "https://github.com/Lutisure/cyrene-dsh-plugin/tree/main/cyrene-guard",
   "repository": {

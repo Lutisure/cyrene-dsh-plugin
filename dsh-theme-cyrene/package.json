@@ -1,12 +1,12 @@
 {
-  "name": "@<用户名>/dsh-theme-cyrene",
+  "name": "@lutisure/dsh-theme-cyrene",
   "version": "0.17.0",
   "private": false,
   "type": "module",
   "description": "昔涟主题 · Cyrene — 淡粉柔光配色 + 半透明壁纸 + 环境流萤粒子 + 背景音乐 + 打字音效（DeepSeek Harness 客户端主题插件）",
   "license": "MIT",
   "author": {
-    "name": "<用户名>"
+    "name": "Lutisure"
   },
   "homepage": "https://github.com/Lutisure/cyrene-dsh-plugin/tree/main/dsh-theme-cyrene",
   "repository": {
