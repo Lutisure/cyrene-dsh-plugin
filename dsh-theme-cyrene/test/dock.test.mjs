@@ -348,7 +348,8 @@ test('a brief move is a drag, and only changes places once it crosses a slot', a
   // made. Without the swallow, every reorder would also toggle a subsystem.
   sound.click();
   assert.equal(settingsOf(sandbox).sound, false, 'the click after a drag must be swallowed');
-  assert.equal(settingsOf(sandbox).particles, 'trail', 'and it must not fire the next press either');
+  // 星点 is the shipped default, and the swallowed click must leave it there.
+  assert.equal(settingsOf(sandbox).particles, 'star', 'and it must not fire the next press either');
 });
 
 test('a drag across two slots moves two places, and carries its own gap', async () => {

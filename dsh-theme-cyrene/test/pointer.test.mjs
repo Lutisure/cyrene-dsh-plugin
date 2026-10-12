@@ -67,13 +67,37 @@ test('the pointer canvas is mounted in the background stack', async () => {
   assert.equal(root.contains(canvas), true, 'it belongs to the fixed background stack');
 });
 
-test('both effects are off on a fresh install, and a click draws nothing', async () => {
+test('both effects are live on a fresh install, and 关 draws nothing', async () => {
   const { sandbox } = await mountPlugin();
+
+  // 两者 + 星尘 ship as the defaults, so a fresh install is not silent and the
+  // old form of this test — "off means off", measured on a fresh install — has
+  // no fresh install left to measure. Both halves are still here: the shipped
+  // pair draws, and 关 is silence.
   const before = inkCount(sandbox);
-  sandbox.__dispatch('pointerdown', { clientX: 120, clientY: 240, button: 0 });
+  // Two moves: the first only tells the layer where the pointer is, which is
+  // what makes the second one the first with a segment to drop specks along.
+  sandbox.__dispatch('pointermove', { clientX: 100, clientY: 100 });
   sandbox.__dispatch('pointermove', { clientX: 130, clientY: 250 });
+  sandbox.__flushFrames(4);
+  assert.ok(inkCount(sandbox) > before, 'the shipped 星尘 trail draws without being asked');
+
+  // Let the trail drain, so the click below is the only thing that can add ink.
+  sandbox.__flushFrames(200);
+  const settled = inkCount(sandbox);
+  sandbox.__dispatch('pointerdown', { clientX: 120, clientY: 240, button: 0 });
+  sandbox.__flushFrames(3);
+  assert.ok(inkCount(sandbox) > settled, 'and so does the shipped 两者 burst');
+
+  await openPanel(sandbox);
+  choose(sandbox, 'clickEffect', '关');
+  choose(sandbox, 'trailEffect', '关');
+  sandbox.__flushFrames(200);
+  const quiet = inkCount(sandbox);
+  sandbox.__dispatch('pointerdown', { clientX: 400, clientY: 120, button: 0 });
+  sandbox.__dispatch('pointermove', { clientX: 420, clientY: 140 });
   sandbox.__flushFrames(6);
-  assert.equal(inkCount(sandbox), before, 'off means off: not one ink call');
+  assert.equal(inkCount(sandbox), quiet, 'off means off: not one ink call');
 });
 
 test('clicking 涟漪 draws rings', async () => {
@@ -130,11 +154,16 @@ test('彗尾 draws a trail, and movement stays silent with it off', async () => 
   const { sandbox } = await mountPlugin();
   await openPanel(sandbox);
 
+  // 星尘 ships as the default, so the silence has to be asked for now. Picking
+  // 关 first keeps the control meaning what it always did — and draining the
+  // 星尘 that is already in flight is what makes the count below a baseline.
+  choose(sandbox, 'trailEffect', '关');
+  sandbox.__flushFrames(200);
   const quiet = inkCount(sandbox);
   sandbox.__dispatch('pointermove', { clientX: 100, clientY: 100 });
   sandbox.__dispatch('pointermove', { clientX: 140, clientY: 130 });
   sandbox.__flushFrames(4);
-  assert.equal(inkCount(sandbox), quiet, 'no trail before it is switched on');
+  assert.equal(inkCount(sandbox), quiet, 'no trail while it is off');
 
   choose(sandbox, 'trailEffect', '彗尾');
   const before = inkCount(sandbox);

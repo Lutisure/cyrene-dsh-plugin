@@ -220,11 +220,26 @@ var THEME = {
     lv3: "0 4px 10px rgba(0,0,0,0.32), 0 24px 60px rgba(0,0,0,0.44)"
   },
 
-  /* ---- wallpaper treatment ---- */
-  wallBrightness: 1.22,
-  wallSaturate: 1.10,
-  /** Default darkness of the readability gradient; much lighter than before. */
-  shade: 0.14,
+  /* ---- wallpaper treatment ----
+   *
+   * Tuned by eye on the author's own machine, 2026-10-12: brightness 1.22 →
+   * 0.60, saturate 1.10 → 0.90, shade 0.14 → 0.70.
+   *
+   * The old numbers lifted the image and left the gradient doing almost
+   * nothing — with `shade` at 0.14 the middle of the reading area was darkened
+   * by 7.8%, and 1.22 brightness on top of that reads as over-exposure on any
+   * wallpaper that is not already dark. Readability still comes from the
+   * surfaces (see {@link THEME.alpha.base}), so these are a correction rather
+   * than a change of approach.
+   *
+   * ⚠️ These three are written as expressions in `DEFAULT_SETTINGS`, which
+   * `tools/derive-theme-defaults.mjs` refuses to move automatically — text
+   * comparison against `THEME.shade` says nothing. They were set by hand.
+   */
+  wallBrightness: 0.6,
+  wallSaturate: 0.9,
+  /** Darkness of the readability gradient; 0..0.9. */
+  shade: 0.7,
 
   /* ---- shape: the shipped 4/8/12/16/20 scale, which is already geometric ---- */
   radius: { xs: "5px", sm: "8px", md: "12px", lg: "16px", xl: "20px", panel: "22px" },
@@ -698,9 +713,9 @@ var DEFAULT_SETTINGS = {
   // written twice, so the stylesheet's own fallback and the initial setting can
   // never disagree about what "unmodified" means.
   wallSaturate: THEME.wallSaturate,
-  wallContrast: 1,
+  wallContrast: 1.24,
   wallOpacity: 1,
-  wallFog: 0,
+  wallFog: 3,
   // Zoom only ever grows. The point of it is to hide the soft edge that blur
   // pulls inside the viewport, and cropping *in* is the only direction that does.
   wallScale: 1,
@@ -708,18 +723,18 @@ var DEFAULT_SETTINGS = {
   // It is decorative on top of the material system, so it is a switch rather
   // than a set of numbers.
   glass: true,
-  particles: "trail",
+  particles: "star",
   // Pointer effects. Both default off: they are additive decoration, and the
   // ambient field already carries the theme when nobody has asked for more.
-  clickEffect: "off",
-  clickColor: "theme",
+  clickEffect: "both",
+  clickColor: "rainbow",
   clickColorCustom: "#ff8fd0",
   clickOpacity: 0.85,
   clickBlend: "screen",
-  trailEffect: "off",
-  trailColor: "theme",
-  trailColorCustom: "#8fe8ff",
-  trailOpacity: 0.7,
+  trailEffect: "stardust",
+  trailColor: "custom",
+  trailColorCustom: "#ffcb8f",
+  trailOpacity: 0.75,
   trailBlend: "screen",
   // Typography. Every field defaults to "leave the host alone": an empty face
   // means "keep whatever the host chose", scale 1 and weight 0 mean "do not
@@ -734,15 +749,25 @@ var DEFAULT_SETTINGS = {
   // library travels inside the settings document (which the host already
   // persists), leaving nothing to keep in sync separately.
   fontSets: [],
+  // ⚠️ 2026-10-12：他自己的面板上选的是「柔和圆体」，但这一项**不能当默认值**。
+  //
+  //    「柔和圆体」的 values 里带着 `fontScale: 1.05`，装成默认就等于让每次新装都
+  //    把字号阶梯按今天的数字重发一遍 —— 而 `FONT_BUILTIN_PRESETS` 上面那段注
+  //    释写的正是「新装不该重发阶梯，否则字号会被冻在这一版宿主上」。这不是品味
+  //    问题，是那条决定的反面。
+  //
+  //    顺带一提，它最前面那个 `"Yuanti SC"` 是 macOS 的字体。
+  //
+  //    想和他一样，装完开一次面板点一下就行，不用从这里走。
   fontActiveSet: "host",
   // The caret. Two positions rather than one: the composer already has the
   // host's deliberate colour, while every other text field (the sidebar search
   // box included) computes `caret-color` to the text colour. A single global
   // value would either override the deliberate one or leave the plain ones
   // untouched, so they are separate settings that share a default.
-  caretColor: "auto",
+  caretColor: "pink",
   caretColorCustom: "#f2a7d5",
-  caretComposerColor: "auto",
+  caretComposerColor: "pink",
   caretComposerCustom: "#f2a7d5",
   // Glass tuning. Defaults are the shipped recipe, so an untouched install
   // derives exactly the same tokens it did before these knobs existed.

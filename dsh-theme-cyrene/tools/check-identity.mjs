@@ -5,6 +5,16 @@
  * artwork and the door-peek image must survive all of this. That is a claim about
  * the *built output*, so this reads the built bundle and the asset tree rather
  * than trusting the module sources.
+ *
+ * ⚠️ 「identity」在这里指**她的美术身份** —— 人像、表情、配色、皮肤表。
+ * 它不查、也从来没查过**插件的身份串**。
+ *
+ * 2026-10-12 的崩溃正是从这个缝里过去的：包名加上了 `@lutisure/` 作用域，
+ * 而 bundle 里的 loader id 还是裸名，装上去 `duplicate factory registration`
+ * 直接起不来 —— 这个文件叫 identity，通过得漂漂亮亮。
+ *
+ * 查身份串的是 `build.mjs` 里那道断言（改了包名忘了改 id，构建当场失败）。
+ * 两件事都叫 identity，但一件是她的，一件是这个包的。
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 

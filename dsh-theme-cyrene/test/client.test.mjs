@@ -104,9 +104,10 @@ test('every stylesheet is mounted and tagged with the plugin id', async () => {
   const { sandbox } = await mountPlugin();
   const sheets = sandbox.document.head.querySelectorAll('style');
   // reply-avatar, identity, glass, controls, fonts, glass-tuning and the working
-  // edge. The fonts and glass-tuning sheets are mounted unconditionally and come
-  // out empty while nothing is customised — mounting them lazily meant the very
-  // first change needed a different code path from every later one.
+  // edge. The fonts and glass-tuning sheets are mounted unconditionally:
+  // neither of them is empty on a fresh install — the fonts sheet carries the
+  // shipped caret pair — and mounting them lazily meant the very first change
+  // needed a different code path from every later one.
   assert.equal(sheets.length, 7, 'expected the reply-avatar, working-edge, identity, glass, controls, fonts and glass-tuning sheets');
   for (const sheet of sheets) {
     assert.equal(sheet.dataset.plugin, PLUGIN_ID);
@@ -118,7 +119,15 @@ test('every stylesheet is mounted and tagged with the plugin id', async () => {
 
   const fonts = sheets.find((sheet) => sheet.dataset.pluginCss === `${PLUGIN_ID}/fonts`);
   assert.notEqual(fonts, undefined, 'the fonts sheet must exist');
-  assert.equal(fonts.textContent, '', 'and stays empty until something is customised');
+  // Not empty any more: both carets ship as 粉色, and those two rules are the
+  // whole of it. No face and no size, so the host's ladder is still the one in
+  // use — a caret colour is a colour, not typography.
+  assert.equal(
+    fonts.textContent,
+    'html[data-cyrene-theme="on"] { caret-color: #f2a7d5 !important; }\n'
+      + 'html[data-cyrene-theme="on"] [data-composer-input] { caret-color: #f2a7d5 !important; }',
+    'the shipped caret pair, and nothing else'
+  );
 
   const tuning = sheets.find((sheet) => sheet.dataset.pluginCss === `${PLUGIN_ID}/glass-tuning`);
   assert.notEqual(tuning, undefined, 'the glass-tuning sheet must exist');
@@ -394,7 +403,7 @@ test('the sound button toggles the setting and persists it both ways', async () 
   assert.equal(sound.dataset.on, 'false');
 });
 
-test('the particle button cycles through the tiers and back to off', async () => {
+test('the particle button cycles through the tiers and back to the shipped default', async () => {
   const { sandbox } = await mountPlugin();
   const particles = dockButton(sandbox, 'Particles');
   const seen = [];
@@ -402,8 +411,10 @@ test('the particle button cycles through the tiers and back to off', async () =>
     particles.click();
     seen.push(settingsOf(sandbox).particles);
   }
-  // Default is "trail"; four clicks visit every tier and return to it.
-  assert.deepEqual(seen, ['swarm', 'off', 'star', 'trail']);
+  // Default is "star"; four clicks visit every tier and return to it. The tiers
+  // cycle in PARTICLE_TIERS order — off, star, trail, swarm — so 星点 is where
+  // the first and the last of the four land.
+  assert.deepEqual(seen, ['trail', 'swarm', 'off', 'star']);
   assert.equal(particles.dataset.on, 'true');
 });
 
@@ -1218,7 +1229,7 @@ test('stacked surfaces are near-opaque, so a nested dialog cannot ghost', async 
   assert.ok(alphaOf('--dsw-alias-bg-base') <= 0.5, 'the app base should still read the wallpaper through');
 });
 
-test('the wallpaper is brightened with a filter and a much lighter shade', async () => {
+test('the wallpaper is dimmed with a filter and a deeper shade', async () => {
   const { sandbox } = await mountPlugin();
   const layers = sandbox.document.querySelector('.cy-layer-root');
   const shade = layers.querySelector('.cy-shade');
@@ -1228,8 +1239,10 @@ test('the wallpaper is brightened with a filter and a much lighter shade', async
   // to land on all of them, and a variable lets the stylesheet decide that
   // instead of three writers that each have to remember the full list.
   const filter = sandbox.document.documentElement.style.getPropertyValue('--cy-wall-filter');
-  assert.match(filter, /^brightness\(1\.[0-9]{2}\) saturate\([0-9.]+\) contrast\([0-9.]+\)$/u, `unexpected filter: ${filter}`);
-  assert.ok(!filter.includes('brightness(1.00)'), 'the filter must actually lift the image');
+  // The shipped brightness is 0.60: below 1, so the image is dimmed rather than
+  // lifted. The old default was 1.22 and this line used to assert `1.xx`.
+  assert.match(filter, /^brightness\(0\.60\) saturate\([0-9.]+\) contrast\([0-9.]+\)$/u, `unexpected filter: ${filter}`);
+  assert.ok(!filter.includes('brightness(1.00)'), 'the shipped brightness must be applied, not left at the identity');
 
   // Every layer reads that same variable, so they cannot drift apart.
   const sheet = sandbox.document.head.querySelectorAll('style')
@@ -1237,10 +1250,14 @@ test('the wallpaper is brightened with a filter and a much lighter shade', async
   assert.ok(sheet.includes('filter: var(--cy-wall-filter'), 'the wallpaper must read the variable');
   assert.ok(sheet.includes('blur(var(--cy-wall-blur'), 'and the video layer carries the fog');
 
-  // The readability gradient is light: at most ~0.2 alpha on the deepest edge.
+  // The readability gradient: at the shipped shade of 0.70 the three stops are
+  // 0.10 + 0.7 * 0.62 = 0.534, 0.03 + 0.7 * 0.34 = 0.268 and 0.7 * 0.12 = 0.084.
+  // The ceiling is a live one rather than a generous one — it starts failing at
+  // a shade of ~0.81, past which "the surfaces carry readability" would quietly
+  // have become "the picture is dark".
   const alphas = [...shade.style.background.matchAll(/rgba\([^)]*?,\s*([0-9.]+)\)/gu)].map((m) => Number(m[1]));
   assert.ok(alphas.length >= 2, 'the gradient must be emitted');
-  assert.ok(Math.max(...alphas) <= 0.25, `the shade is too dark (max ${Math.max(...alphas)})`);
+  assert.ok(Math.max(...alphas) <= 0.6, `the shade is too dark (max ${Math.max(...alphas)})`);
 });
 
 test('the wallpaper panel exposes the live look controls', async () => {

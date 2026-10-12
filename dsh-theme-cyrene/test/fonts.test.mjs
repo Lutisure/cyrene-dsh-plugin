@@ -26,6 +26,14 @@ function fontSheet(sandbox) {
   return sheet === undefined ? null : sheet.textContent;
 }
 
+/**
+ * What a fresh install writes into that sheet: the two caret rules, and nothing
+ * else. Both caret positions ship as 粉色, so the sheet is no longer empty — the
+ * half that stays empty is the typography, which is the half the host owns.
+ */
+const CARET_DEFAULT = 'html[data-cyrene-theme="on"] { caret-color: #f2a7d5 !important; }\n'
+  + 'html[data-cyrene-theme="on"] [data-composer-input] { caret-color: #f2a7d5 !important; }';
+
 /** The dock button with a given label. */
 function dockButton(sandbox, label) {
   const button = sandbox.document.querySelectorAll('.cy-btn').find((node) => node.textContent === label);
@@ -54,9 +62,10 @@ function setFace(sandbox, key, value) {
   input.dispatchEvent({ type: 'change', target: input });
 }
 
-test('a fresh install emits an empty sheet, so the host keeps its own fonts', async () => {
+test('a fresh install emits only the caret pair, so the host keeps its own fonts', async () => {
   const { sandbox } = await mountPlugin();
-  assert.equal(fontSheet(sandbox), '', 'nothing customised, nothing emitted');
+  assert.equal(fontSheet(sandbox), CARET_DEFAULT, 'the caret pair, and nothing else');
+  assert.equal(fontSheet(sandbox).includes('--dsw-font-'), false, 'not one step of the ladder');
 });
 
 test('a face change lands on body, not only on :root', async () => {
@@ -135,17 +144,17 @@ test('the monospace face goes through the upstream token, never the terminal one
   assert.equal(sheet.includes('--dsl-terminal-font'), false, 'the terminal token must NOT be rebound directly');
 });
 
-test('restoring the host defaults empties the sheet again', async () => {
+test('restoring the host defaults leaves only the caret pair', async () => {
   const { sandbox } = await mountPlugin();
   const panel = await openFonts(sandbox);
   setFace(sandbox, 'fontBodyFamily', 'Inter');
-  assert.notEqual(fontSheet(sandbox), '', 'something is customised');
+  assert.notEqual(fontSheet(sandbox), CARET_DEFAULT, 'something is customised');
 
   const reset = panel.querySelectorAll('.cy-act').find((node) => node.textContent.includes('恢复宿主默认'));
   assert.notEqual(reset, undefined, 'the panel must offer a reset');
   reset.click();
 
-  assert.equal(fontSheet(sandbox), '', 'and the sheet goes back to empty');
+  assert.equal(fontSheet(sandbox), CARET_DEFAULT, 'and the sheet goes back to the shipped caret pair');
 });
 
 test('a semicolon in a typed face cannot escape the declaration', async () => {
@@ -268,14 +277,14 @@ test('applying 宿主默认 clears every customisation', async () => {
   const { sandbox } = await mountPlugin();
   await openFonts(sandbox);
   setFace(sandbox, 'fontBodyFamily', 'Georgia, serif');
-  assert.notEqual(fontSheet(sandbox), '', 'something is customised');
+  assert.notEqual(fontSheet(sandbox), CARET_DEFAULT, 'something is customised');
 
   const host = setRows(sandbox).find((row) => row.label === '宿主默认');
   host.buttons[0].click();
 
   // The bug this guards: a merge that skips empty strings would refuse to clear
   // the face, so 宿主默认 would look like it did nothing.
-  assert.equal(fontSheet(sandbox), '', 'the sheet must go back to empty');
+  assert.equal(fontSheet(sandbox), CARET_DEFAULT, 'the sheet must go back to the shipped caret pair');
   assert.equal(settingsOf(sandbox).fontBodyFamily, '', 'and the stored face is cleared');
 });
 
@@ -369,7 +378,7 @@ test('import merges a file, skipping names that would collide', async () => {
   assert.deepEqual(sets.map((set) => set.name), ['外来甲'], 'only the one usable, non-colliding set');
   assert.equal(sets[0].values.fontBodyFamily, 'Inter');
   // An import must not change how the interface renders until the user says so.
-  assert.equal(fontSheet(sandbox), '', 'importing alone applies nothing');
+  assert.equal(fontSheet(sandbox), CARET_DEFAULT, 'importing alone applies nothing');
 });
 
 test('an unreadable file is refused rather than half-applied', async () => {
@@ -381,7 +390,7 @@ test('an unreadable file is refused rather than half-applied', async () => {
   input.dispatchEvent({ type: 'change', target: input });
 
   assert.equal((settingsOf(sandbox).fontSets ?? []).length, 0, 'nothing may be added');
-  assert.equal(fontSheet(sandbox), '', 'and nothing is applied');
+  assert.equal(fontSheet(sandbox), CARET_DEFAULT, 'and nothing is applied');
 });
 
 /** The caret row for a given mode key. */
@@ -407,12 +416,18 @@ function chooseCaret(sandbox, modeKey, label) {
   pick.dispatchEvent({ type: 'change', target: pick });
 }
 
-test('the caret is left alone by default, in both positions', async () => {
+test('both carets ship as 粉色, and 跟随宿主 gives the field back', async () => {
   const { sandbox } = await mountPlugin();
   await openFonts(sandbox);
-  // Both default to `auto`, which must emit nothing at all — the composer
-  // already carries a deliberate colour of the host's choosing, and every other
-  // field already inherits the text colour.
+  // Both positions default to 粉色 rather than 跟随宿主, so a fresh install does
+  // write the pair — it is the only thing in the sheet.
+  assert.equal(fontSheet(sandbox), CARET_DEFAULT, 'the shipped pair, in both positions');
+
+  // 跟随宿主 is still "emit nothing at all" — the composer already carries a
+  // colour of the host's choosing, and every other field already inherits the
+  // text colour. That is now something the user asks for rather than the default.
+  chooseCaret(sandbox, 'caretColor', '跟随宿主');
+  chooseCaret(sandbox, 'caretComposerColor', '跟随宿主');
   assert.equal(fontSheet(sandbox), '', '跟随宿主 must emit nothing');
 });
 
@@ -425,7 +440,12 @@ test('a global caret colour is written on html so it inherits everywhere', async
   // `caret-color` inherits, so one declaration on html reaches the sidebar
   // search box — which has no stable selector of its own, only a hashed class.
   assert.ok(sheet.includes('html[data-cyrene-theme="on"] { caret-color: #8fe8ff !important; }'), 'expected an html-scoped rule: ' + sheet);
-  assert.equal(sheet.includes('[data-composer-input]'), false, 'the composer stays untouched by the global value');
+  // The composer has a rule of its own now (it ships as 粉色), so the claim is
+  // that this one keeps its own value rather than that the selector is absent.
+  assert.ok(sheet.includes('[data-composer-input] { caret-color: #f2a7d5 !important; }'),
+    'the composer keeps the shipped value: ' + sheet);
+  assert.equal(sheet.includes('[data-composer-input] { caret-color: #8fe8ff'), false,
+    'the composer stays untouched by the global value');
 });
 
 test('主题强调色 spells out the token the composer already uses', async () => {
