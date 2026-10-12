@@ -1,0 +1,31 @@
+# cyrene-guard — bundle 补丁
+#
+# 只做一件事：把宿主半体挂进 loader，让 `dsh plugin add cyrene-guard` 之后
+# DSH 能加载到这个包。**刻意保持纯 insert(id/name) 形式**，这是可热挂载的。
+#
+# 不要在这里写任何机器相关的路径：patch 里的硬编码路径在别人机器上必然指向
+# 不存在的目录，插件会直接起不来。
+#
+# ## 为什么补这个文件（2026-10-10）
+#
+# 这个包**本来就是**一个正经的 Cordis 插件 —— `index.js` 里
+# `export const name` / `inject = ['fs', 'systemPrompt']` / `export function apply`
+# 一应俱全，而且本机的两个 profile 里都挂着它，一直在跑。
+#
+# 但它没有 `dsh.bundle` 声明，也没有这个 patch 文件，于是：
+#
+#   · `dsh plugin add cyrene-guard` 装不上 —— 那两样正是安装路径要找的东西
+#   · 插件市场收不了它（收录条件第一条就是 dsh.bundle）
+#
+# **能跑，和能被别人装上，是两件事。**原来只有前者。
+#
+# ## 它不是安全边界
+#
+# 挂在 `fs/observed` 上，是**写完之后**才扫 —— 见 `index.js` 顶部的说明。
+# 它让错误在同一轮被看见并改掉，但拦不住任何东西。真正的边界是权限范围和
+# 人工确认。这一点写在这里，是因为一个叫 guard 的插件最容易被误会成闸门。
+- insert:
+    - id: cyrene-guard
+      # ⚠️ `name` 是包的去处，必须和 registry 上的名字一致（2026-10-12 加了作用域）。
+      # 而上面那个 `id` 是 loader 里的标识，不动 —— 改它会牵动 profile 里已有的挂载记录。
+      name: '@<用户名>/cyrene-guard'

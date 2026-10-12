@@ -1,0 +1,73 @@
+{
+  "name": "@<用户名>/cyrene-guard",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "写完代码之后自动扫一遍——本地安全扫描，规则来自 DeepSec 的 Shield。",
+  "license": "MIT",
+  "author": {
+    "name": "<用户名>"
+  },
+  "homepage": "https://github.com/Lutisure/cyrene-dsh-plugin/tree/main/cyrene-guard",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lutisure/cyrene-dsh-plugin.git",
+    "directory": "cyrene-guard"
+  },
+  "bugs": {
+    "url": "https://github.com/Lutisure/cyrene-dsh-plugin/issues"
+  },
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./scanner": "./scanner.mjs",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "scanner.mjs",
+    "packages.mjs",
+    "packages-scan.mjs",
+    "cordis.patch.yml",
+    "NOTICE.md",
+    "dsh.plugin.json",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "security",
+    "scanner",
+    "sast"
+  ],
+  "engines": {
+    "node": "^22.19 || >=24",
+    "dsh": ">=0.1.0-rc.6"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "platform": "server"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=0.2.0-rc.1 <0.3.0-0",
+    "@deepseek-ai/dsh-fs": ">=0.2.0-rc.1 <0.3.0-0",
+    "@deepseek-ai/dsh-system-prompt": ">=0.2.0-rc.1 <0.3.0-0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-fs": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-system-prompt": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "cyrene-guard",
+  "version": "0.1.0",
+  "main": "index.js",
+  "description": "写完代码之后自动扫一遍——本地安全扫描，规则来自 DeepSec 的 Shield。",
+  "engines": {
+    "dsh": ">=0.1.0-rc.6"
+  },
+  "contributes": {
+    "hooks": [
+      "fs/observed"
+    ]
+  }
+}
