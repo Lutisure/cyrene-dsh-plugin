@@ -14,64 +14,26 @@
  */
 
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import test from 'node:test';
 
-import { apply, storyLogFile, STORY_SCORE_FLOOR } from '../story.mjs';
+import yaml from 'js-yaml';
 
-function fakeContext() {
-  const registrations = { hooks: [] };
-  const ctx = {
-    on(name, handler, options) {
-      registrations.hooks.push({ name, handler, options });
-    }
-  };
-  return { ctx, registrations };
-}
+import { apply, storyLogFile, STORY_SCORE_FLOOR } from '../story.mjs';
+import { fakeContext, run, userMessage, withAudit } from './story-harness.mjs';
 
 /**
- * 按真实调用方式把钩子取出来。
+ * 这一份把向量检索**钉在关**。
  *
- * `payload.messages` 是这一轮的输入，缺省续接解析成 `{ kind: 'enter', messages: claimed }`。
- * 钩子读的是 payload，所以把用户消息放到别处等于什么都没测。
+ * 2026-10-13 把 bge 模型放进 `<包>/cyrene_embedding/` 之后，默认的 `auto` 会真的走窗口召回，
+ * 同一个查询落到另一块上 —— 而下面那些断言（哪一块、分数多少、第几道闸放行）是**词法那一套**
+ * 排出来的。没装模型的机器上它们又回到词法。同一份代码两种结果，回归就没有意义了。
+ *
+ * 向量那条路单独测，见 `story-embedding.test.mjs` —— 它必须在**另一个进程**里跑，
+ * 因为 `story.mjs` 的 `load()` 是记忆化的（夹具文件头写了这件事）。
  */
-function hookOf(registrations, claimed) {
-  const hook = registrations.hooks.find((candidate) => candidate.name === 'agent/pre-step');
-  assert.notEqual(hook, undefined, 'story.mjs 必须挂 agent/pre-step');
-  const next = async () => ({ kind: 'enter', messages: claimed });
-  return { hook, next };
-}
-
-/** 一个普通用户消息，按 loop 给出的形状。 */
-function userMessage(text) {
-  return { id: 'user-1', role: 'user', content: [{ type: 'text', text }] };
-}
-
-/** 让这个用例的留痕写到临时文件里，别写进生产那份。 */
-const withAudit = (body) => async (t) => {
-  const dir = mkdtempSync(join(tmpdir(), 'story-audit-'));
-  const previous = process.env.DSH_STORY_AUDIT;
-  process.env.DSH_STORY_AUDIT = join(dir, 'story.jsonl');
-  try {
-    await body(t, dir);
-  } finally {
-    if (previous === undefined) delete process.env.DSH_STORY_AUDIT;
-    else process.env.DSH_STORY_AUDIT = previous;
-    rmSync(dir, { recursive: true, force: true });
-  }
-};
-
-/** 跑一轮，拿到决定。 */
-async function run(claimed, text) {
-  const { ctx, registrations } = fakeContext();
-  apply(ctx);
-  // ⚠️ `hookOf` 返回的是**注册对象** `{ name, handler, options }`，不是 handler 本身。
-  // 第一版写成 `hook(...)`，五个用例全报 `hook is not a function`。
-  const { hook, next } = hookOf(registrations, claimed);
-  return hook.handler({ messages: claimed }, next);
-}
+process.env.DSH_STORY_EMBED = 'off';
 
 test('挂在 agent/pre-step 上', () => {
   const { ctx, registrations } = fakeContext();
@@ -165,3 +127,76 @@ test('闸门常量是正数 —— 0 会让所有东西都过', () => {
   assert.ok(STORY_SCORE_FLOOR > 0);
   assert.ok(STORY_SCORE_FLOOR < 1);
 });
+
+// ── 建议 ① 的回归：名字闸两档分开判 ───────────────────────────────────
+//
+// 起因：40 句日常话里有 4 句被放过去，全是「触发词型 2 字词」干的
+// （明天见 → 明天 / 记得多穿点 → 记得 / 有点想你 → 想你 / 明天要早起 → 明天）。
+// 这些词来自世界书触发词，**不是专名**。
+
+test('2 字的触发词型专名，单独一个不放行（建议 ①）', withAudit(async () => {
+  for (const q of ['明天见', '有点想你', '记得多穿点', '明天要早起']) {
+    const claimed = [userMessage(q)];
+    const decision = await run(claimed, q);
+    assert.equal(decision.messages.length, 1, `「${q}」不该注入`);
+  }
+}));
+
+test('真专名仍然单独放行 —— 收严不能把该给的也挡住（建议 ①）', withAudit(async () => {
+  const q = '遐蝶的死亡之触是怎么回事';
+  const claimed = [userMessage(q)];
+  const decision = await run(claimed, q);
+  assert.equal(decision.messages.length, 2, '说话人型专名命中一个就该放行');
+}));
+
+// ── 建议 ④：注入消息的 id ────────────────────────────────────────────
+//
+// 世界书那边的教训：**缺 id 会让那个会话永久打不开**，而错误里只有一个 seq 号。
+// 这一层以前完全没有断言 —— 只有 story.test.mjs 管到 render/pick，管不到钩子造出来的消息。
+
+test('注入消息的 id 非空，且两次注入不撞车（建议 ④）', withAudit(async () => {
+  const ids = [];
+  for (const q of ['遐蝶的死亡之触是怎么回事', '海瑟音的歌声']) {
+    const claimed = [userMessage(q)];
+    const decision = await run(claimed, q);
+    assert.equal(decision.messages.length, 2, `「${q}」应当注入`);
+    const id = decision.messages[1].id;
+    assert.equal(typeof id, 'string', 'id 必须是字符串');
+    assert.ok(id.length > 0, 'id 不能是空串');
+    assert.match(String(decision.messages[1].source?.kind), /^plugin/, '来源标记仍要以 plugin 开头');
+    ids.push(id);
+  }
+  assert.notEqual(ids[0], ids[1], '两次注入的 id 不能相同');
+}));
+
+// ── 别名表 ────────────────────────────────────────────────────────────
+//
+// 起因：「缇宝的墓碑上写了什么」含答案的那一块写的是「缇里西庇俄丝」，两边没有共同专名。
+// 别名表**不进检索打分**（实测查询扩展会把排序弄差），只做两件事：
+//   一、让核实过的人名叫法按**强专名**放行（救了 2 字的「凯撒」「金织」）
+//   二、作为数据留给未来的向量检索
+
+test('别名问法按强专名放行（凯撒是 2 字，按「要两个」会被挡）', withAudit(async () => {
+  const q = '凯撒做过什么';
+  const claimed = [userMessage(q)];
+  const decision = await run(claimed, q);
+  assert.equal(decision.messages.length, 2, `「${q}」应当注入 —— 别名表里的人名按强专名放行`);
+}));
+
+test('别名表每一条都指向语料里真实存在的叫法', () => {
+  // ⚠️ 别名表写错的后果比不写更坏：检索会去找一个不存在的名字。
+  // 这条把「核实」这一步钉在回归里 —— 加新别名时它必须能在 986 块里被找到。
+  const groups = yaml.load(readFileSync(new URL('../worldbook/aliases.yaml', import.meta.url), 'utf8')).groups;
+  assert.ok(Array.isArray(groups) && groups.length > 0, '别名表不能是空的');
+  const chunks = readFileSync(new URL('../dist/story-chunks.jsonl', import.meta.url), 'utf8');
+  for (const group of groups) {
+    assert.ok(group.length >= 2, `${group.join('/')} 这一组少于两个叫法`);
+    for (const name of group) {
+      assert.ok(chunks.includes(name), `「${name}」在剧情语料里一次都没出现 —— 别名写错了`);
+    }
+  }
+});
+
+// 向量检索那一层在 `story-embedding.test.mjs` —— 它必须在另一个进程里跑，
+// 因为这里已经把 `load()` 的结果在 `off` 下记忆化了。
+

@@ -34,7 +34,8 @@ import { fileURLToPath } from 'node:url';
 
 import yaml from 'js-yaml';
 
-import { buildIndex, cleanName } from './retrieval.mjs';
+import { buildIndex, cleanName, grams } from './retrieval.mjs';
+import { createEmbedder } from './embedder.mjs';
 
 /** 注入块在消息里的来源标记。带 `plugin` 前缀，和世界书那条同族。 */
 const SOURCE = { kind: 'plugin:dsh-cyrene-agent/story', form: 'snapshot' };
@@ -62,6 +63,28 @@ const SOURCE = { kind: 'plugin:dsh-cyrene-agent/story', form: 'snapshot' };
  * **这个数是日志量出来的，不是拍的。** 以后再调，先去看 `data/logs/story.jsonl`。
  */
 export const STORY_SCORE_FLOOR = 0.15;
+
+/**
+ * 「有区分度」的二元组：文档频率落在 `(0, 这个值]` 之间，**且真的出现在候选块里**。
+ *
+ * ## 为什么分数闸需要它（2026-10-13 实测）
+ *
+ * 50 句日常话里，**「明天见」的余弦是 0.2045** —— 比 20 条剧情问题的中位数（0.0798）高一倍多，
+ * 也高于 0.15 这道闸。它和块的唯一重叠是「明天」（df=161，语料里到处都是）。
+ *
+ * 摊开看它的两个二元组：`明天` df=161（在块里）、`天见` df=11（在块里）。
+ * 而三条**真该注入**的剧情问题各自都有更稀有的：
+ *
+ *     凯撒的登神长阶…   登神(7) 长阶(3) 铸成(7)
+ *     净世金血…        净世(2) 世金(2)
+ *     谁让毁灭流下了一滴金血   一滴(5) 滴金(1) 流下(2)
+ *
+ * 所以判据是 **df ≤ 10 且出现在候选块里** —— 10 这个数是从这张表上读出来的：
+ * 「天见」的 11 刚好落在外面。
+ *
+ * ⚠️ 它挡的是**分数闸**，不是名字闸：名字闸有真专名，不需要这一层。
+ */
+export const STORY_DISTINCTIVE_DF = 10;
 
 /**
  * 取前几块。
@@ -106,9 +129,33 @@ function load() {
   }
   if (cache !== null && cache.stamp === stamp) return cache;
   try {
-    const docs = readFileSync(file, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+    const raw = readFileSync(file, 'utf8');
+    const docs = raw.split('\n').filter(Boolean).map((l) => JSON.parse(l));
     if (docs.length === 0) return null;
-    cache = { stamp, docs, index: buildIndex(docs), names: nameSet(docs), file };
+    const { speakers, triggers } = nameSet(docs);
+    // 文档频率：给「分数闸要不要认这条查询」用的（见 STORY_DISTINCTIVE_DF）。
+    // 与 buildIndex 用的是同一个 haystack，避免两处口径不一致。
+    const df = new Map();
+    for (const d of docs) {
+      for (const g of new Set(grams(`${d.chapter ?? ''} ${d.node ?? ''} ${d.text ?? ''}`))) {
+        df.set(g, (df.get(g) ?? 0) + 1);
+      }
+    }
+    cache = {
+      stamp,
+      docs,
+      index: buildIndex(docs),
+      // `names` 保留成并集：只传 names 的旧调用方（含仓库里那批测试）仍然成立。
+      names: new Set([...speakers, ...triggers]),
+      speakers,
+      triggers,
+      df,
+      aliases: aliasGroups(),
+      // 向量表：条数与源哈希对不上就是 null（等于没开）。窗口级优先。
+      windows: loadWindows(raw, docs.length),
+      vectors: loadVectors(raw, docs.length),
+      file
+    };
     return cache;
   } catch {
     // 读失败不能让这一轮对话失败。
@@ -119,18 +166,32 @@ function load() {
 /**
  * 专名表：剧情原文里的说话人 + 世界书触发词里剥出来的专名。
  *
+ * ## 两档不是一回事（2026-10-13 实测）
+ *
+ * 说话人那一份是真专名（帕姆、姬子、缇宝…），命中一个就足以判定「在问剧情」。
+ * 触发词那一份**混着普通词** —— 实测 486 个里 240 个是 2 字词：
+ *
+ *     涟漪 启程 旅途 妖精 魔法 伙伴 短信 玫瑰 星星 星空 银河 明天 记得 想你 …
+ *
+ * 而 40 句日常话里有 4 句会被这些 2 字词放过去：
+ *
+ *     「明天见」→明天   「记得多穿点」→记得   「有点想你」→想你   「明天要早起」→明天
+ *
+ * 所以这里**拆成两份返回**，闸门按两份分别判（见 `mentionsName`）。
+ *
  * @param {Array<object>} docs - 剧情块。
- * @returns {Set<string>} 专名。
+ * @returns {{speakers: Set<string>, triggers: Set<string>}} 两份专名。
  */
 function nameSet(docs) {
-  const names = new Set();
+  const speakers = new Set();
   for (const d of docs) {
     for (const m of String(d.text ?? '').matchAll(/\*\*【([^】]{1,12})】\*\*/g)) {
       // cleanName 返回片段数组 —— `「长老」阿蒙内特` 要拆成两段，
       // 不然里头的 `」` 会让整串匹配不上任何东西。见 retrieval.mjs 的说明。
-      for (const name of cleanName(m[1])) names.add(name);
+      for (const name of cleanName(m[1])) speakers.add(name);
     }
   }
+  const triggers = new Set();
   const book = dataPath('./worldbook/entries.yaml');
   if (book !== null && existsSync(book)) {
     try {
@@ -142,14 +203,14 @@ function nameSet(docs) {
             .replace(/(怎么样|如何|怎么看|觉得|对.*的看法|是什么|是谁)/g, '')
             .replace(/^对/, '')
             .trim();
-          if (base.length >= 2 && base.length <= 6) names.add(base);
+          if (base.length >= 2 && base.length <= 6) triggers.add(base);
         }
       }
     } catch {
       // 读不到世界书就只用说话人 —— 闸门变松，但不会失效。
     }
   }
-  return names;
+  return { speakers, triggers };
 }
 
 /**
@@ -184,6 +245,325 @@ const LOG_MAX_BYTES = 2 * 1024 * 1024;
 /** 最近给过的块：id → 时间戳。**每次 `apply` 各持一份** —— 见下面 apply 里的说明。 */
 
 /**
+ * 名字闸。**两档分开判。**
+ *
+ * - **说话人**（`**【X】**` 里出来的真专名）：命中一个就放行。
+ * - **触发词型**：≥3 字的命中一个放行；**2 字的要同时命中两个**才算 ——
+ *   单独一个「明天」「想你」「记得」不该把一段剧情塞进日常闲聊里。
+ *
+ * 返回值是**判定归属**，不是布尔 —— 日志与探针要能看出「是哪道闸放的行」。
+ *
+ * 旧形状（只有 `names`）走回退分支：只传 names 的调用方（含仓库里那批测试）行为不变。
+ *
+ * @param {object} state - `load()` 的结果。
+ * @param {string} query - 用户这一轮说的话。
+ * @returns {'speaker'|'trigger-long'|'trigger-two'|'trigger-one'|'none'} 判定归属。
+ */
+function nameVerdict(state, query) {
+  if (state.speakers instanceof Set && state.triggers instanceof Set) {
+    for (const n of state.speakers) if (query.includes(n)) return 'speaker';
+    // 别名表里的人名按**强专名**对待 —— 它们每一个都核实过是指向某个人的叫法。
+    // 这一条救了两种问法：
+    //   · 2 字的别名（凯撒、金织、伏龙）—— 按「2 字触发词要两个」会被挡掉
+    //   · 不在触发词表里的叫法（灰黯之手）—— 说话人表里只有「灰黯之手，遐蝶」整串
+    for (const group of state.aliases ?? []) {
+      for (const n of group) if (query.includes(n)) return 'speaker';
+    }
+    let short = 0;
+    for (const n of state.triggers) {
+      if (!query.includes(n)) continue;
+      if (n.length >= 3) return 'trigger-long';
+      short += 1;
+      if (short >= 2) return 'trigger-two';
+    }
+    return short === 1 ? 'trigger-one' : 'none';
+  }
+  return [...(state.names ?? [])].some((n) => query.includes(n)) ? 'speaker' : 'none';
+}
+
+/** 名字闸真正放行的两档。 */
+const NAMED = new Set(['speaker', 'trigger-long', 'trigger-two']);
+
+/** 探针用：把 `load()` 出来的状态交出去（测试与标定要能看闸门归属）。 */
+export function debugState() {
+  return load();
+}
+
+/**
+ * 别名表：同一角色的不同叫法。
+ *
+ * ## 为什么需要它
+ *
+ * 「缇宝的墓碑上写了什么」这条问题，含答案的那一块写的是「缇里西庇俄丝」——
+ * 两边一个共同专名都没有，余弦看不见，答案块因此排到第 38 名。
+ *
+ * ## 每一条都核实过
+ *
+ * 见 `worldbook/aliases.yaml` 的文件头：**两种叫法都要在 986 块里真的出现过**，
+ * 且指向同一个人。核实阶段否掉了 5 组（玻吕茜亚是姐妹不是本人、雅辛缇娅疑似先代…）。
+ *
+ * @returns {string[][]} 别名组；读不到时是空数组（不扩展 = 退回改动前的行为）。
+ */
+function aliasGroups() {
+  const file = dataPath('./worldbook/aliases.yaml');
+  if (file === null || !existsSync(file)) return [];
+  try {
+    const parsed = yaml.load(readFileSync(file, 'utf8'));
+    return (parsed?.groups ?? [])
+      .map((g) => (Array.isArray(g) ? g.map((n) => String(n).trim()).filter(Boolean) : []))
+      .filter((g) => g.length >= 2);
+  } catch {
+    // 别名表坏了就当没有 —— 不能让整轮对话失败。
+    return [];
+  }
+}
+
+/**
+ * 查询侧扩展试过，**结论：不要用**（2026-10-13 实测）
+ *
+ * 把用户用的叫法扩展成同组所有叫法之后再检索，排序会变差 —— 剧情锚点命中 5/10 → 4/10，
+ * 还弄坏了两条原本正确的（「海瑟音的歌声」被换成另一块、「白厄的老师教了他什么」
+ * 被换成卡厄斯兰那的长篇）。
+ *
+ * 原因是别名形式自带高 IDF 的二元组，扩展会把「那个叫法出现得多」的块抬起来，
+ * 而长度归一化的余弦分不出「被提到很多次」和「回答了这个问题」。
+ *
+ * 所以别名**不进检索打分**，只用两处：
+ *   一、让核实过的人名叫法按强专名放行（见 `nameVerdict`）—— 已实现
+ *   二、作为数据留给未来的向量检索（`worldbook/aliases.yaml`）
+ */
+
+/**
+ * 候选块里有「有区分度」的二元组吗 —— df 落在 `(0, STORY_DISTINCTIVE_DF]` 且出现在块正文里。
+ *
+ * 旧形状（state 里没有 `df`）不额外设限 —— 只传 index/names 的调用方行为不变。
+ *
+ * @param {object} state - `load()` 的结果。
+ * @param {string} query - 用户这一轮说的话。
+ * @param {object} doc - 候选块。
+ * @returns {boolean} 是否可以走分数闸。
+ */
+function hasDistinctiveOverlap(state, query, doc) {
+  if (!(state.df instanceof Map)) return true;
+  const text = String(doc?.text ?? '');
+  for (const g of new Set(grams(query))) {
+    const freq = state.df.get(g) ?? 0;
+    if (freq > 0 && freq <= STORY_DISTINCTIVE_DF && text.includes(g)) return true;
+  }
+  return false;
+}
+
+/**
+ * 向量检索 —— **默认 auto：装好了就启用，没装就当没有**
+ *
+ *   （不设）                     auto —— 模型或向量表缺任何一个，静默退回纯词法
+ *   DSH_STORY_EMBED=off|0|false  显式关掉（一键回退）
+ *   DSH_STORY_EMBED=fake         假向量（只验接线，不验效果；测试用）
+ *
+ * 其余可调项（一般不用动）：
+ *
+ *   DSH_STORY_EMBED_DIR              模型目录（默认 `<包>/cyrene_embedding/bge-small-zh-v1.5`）
+ *   DSH_STORY_EMBED_GRANULARITY      `window`（默认）或 `chunk`
+ *   DSH_STORY_EMBED_FUSION           `rrf`（**默认**）或 `linear`
+ *   DSH_STORY_EMBED_RRF_K            倒数排名融合的平滑常数，**默认 10**
+ *   DSH_STORY_EMBED_TOPK             向量召回补进候选池的条数，默认 8
+ *   DSH_STORY_EMBED_WEIGHT           线性融合权重（只在 FUSION=linear 时用），默认 0.5
+ *   DSH_STORY_EMBED_QUERY_PREFIX     查询前缀；默认不加（见 queryPrefix 的实测记录）
+ *
+ * ⚠️ **这几个默认值是量出来的，不是拍的**（100 条剧情题 + 100 句日常，锚点命中）：
+ *
+ *     纯词法 46% → 窗口级 + linear 48% → 窗口级 + RRF(K=60) 53% → **RRF(K=10) 54%**
+ *     块级向量 + linear 只有 42%（比纯词法还差）—— 所以默认用窗口级。
+ *
+ *   `linear` 会把两个**尺度不可比**的分数直接相加（词法 0.05–0.2，向量 0.5–0.7），
+ *   等于让向量独占；`rrf` 用排名，才对得上。
+ *
+ * ## 为什么敢默认开
+ *
+ * 这条路上**每一处失败都是「退回词法」而不是报错**：没装模型、没装 onnxruntime、
+ * 向量表哈希对不上、编码抛异常 —— 全都只是让这一轮少一点召回，对话不受影响。
+ *
+ * ## 设计：闸门不动，只动排序与召回
+ *
+ * 名字闸与分数闸**继续用原始余弦**（跨问题可比，阈值才立得住）；
+ * 向量只做两件事：把词法漏掉的块**补进候选池**，以及在够格候选之间**决定先后**。
+ */
+const embedOn = () => {
+  const value = String(process.env.DSH_STORY_EMBED ?? 'auto').toLowerCase();
+  if (value === 'off' || value === '0' || value === 'false') return false;
+  return true;
+};
+const embedWeight = () => {
+  const raw = Number(process.env.DSH_STORY_EMBED_WEIGHT ?? 0.5);
+  return Number.isFinite(raw) && raw >= 0 && raw <= 1 ? raw : 0.5;
+};
+const vectorTopK = () => {
+  const raw = Number(process.env.DSH_STORY_EMBED_TOPK ?? 8);
+  return Number.isInteger(raw) && raw > 0 ? raw : 8;
+};
+
+/**
+ * 查询前缀 —— **默认不加**。
+ *
+ * BAAI 的模型卡在检索场景下建议给查询加 `为这个句子生成表示以用于检索相关文章：`
+ * （bge-*-v1.5 三个尺寸都是这一句，文档不加）。
+ *
+ * ⚠️ **2026-10-13 实测：在这套语料上它是反效果** —— 100 条剧情题的锚点命中
+ * **54% → 48%**。那句指令是给「短查询检索长文章」调分布用的，而这里是
+ * 「十几字的问句 检索 220 字的游戏对白窗口」，语义场景对不上。
+ *
+ * 所以默认关。要试自定义前缀：`DSH_STORY_EMBED_QUERY_PREFIX=<文本>`。
+ */
+const queryPrefix = () => {
+  const raw = process.env.DSH_STORY_EMBED_QUERY_PREFIX;
+  if (raw === undefined || raw === 'off') return '';
+  return raw;
+};
+
+/** 编码器单例。加载失败返回 null —— 那一轮退回纯词法，对话不受影响。 */
+let embedderPromise = null;
+function getEmbedder() {
+  if (!embedOn()) return Promise.resolve(null);
+  embedderPromise ??= createEmbedder().catch(() => null);
+  return embedderPromise;
+}
+
+/**
+ * 读向量表。**条数与源文件 sha256 都对得上才用** ——
+ * 「chunks 重建了但向量忘了重建」不能静默出错。
+ *
+ * @param {string} sourceText - `dist/story-chunks.jsonl` 的原文。
+ * @param {number} count - 块数。
+ * @returns {{dim: number, data: Float32Array, model: string}|null} 向量表。
+ */
+function loadVectors(sourceText, count) {
+  if (!embedOn()) return null;
+  const metaFile = dataPath('./dist/story-vectors.json');
+  const binFile = dataPath('./dist/story-vectors.f32');
+  if (metaFile === null || binFile === null || !existsSync(metaFile) || !existsSync(binFile)) return null;
+  try {
+    const meta = JSON.parse(readFileSync(metaFile, 'utf8'));
+    if (meta.count !== count) return null;
+    if (meta.sourceSha256 !== createHash('sha256').update(sourceText).digest('hex')) return null;
+    const buf = readFileSync(binFile);
+    const data = new Float32Array(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+    if (data.length !== count * meta.dim) return null;
+    return { dim: meta.dim, data, model: meta.model };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * 读窗口级向量表（**优先于块级**）。同样的核对：条数 + 源哈希。
+ *
+ * 块级向量实测在 100 条剧情题上「含答案那一块排第 1」是 0/100 —— 块太大，
+ * 答案那一行被整块主题平均掉了。窗口级（块内 220 字符滑窗）就是为了解决这个。
+ *
+ * @param {string} sourceText - chunks 原文。
+ * @param {number} count - 块数。
+ * @returns {{dim: number, data: Float32Array, chunkOf: Int32Array, count: number}|null} 窗口表。
+ */
+function loadWindows(sourceText, count) {
+  if (!embedOn()) return null;
+  const mode = String(process.env.DSH_STORY_EMBED_GRANULARITY ?? 'window').toLowerCase();
+  if (mode === 'chunk') return null;
+  const metaFile = dataPath('./dist/story-windows.json');
+  const binFile = dataPath('./dist/story-windows.f32');
+  if (metaFile === null || binFile === null || !existsSync(metaFile) || !existsSync(binFile)) return null;
+  try {
+    const meta = JSON.parse(readFileSync(metaFile, 'utf8'));
+    if (meta.chunks !== count) return null;
+    if (meta.sourceSha256 !== createHash('sha256').update(sourceText).digest('hex')) return null;
+    const buf = readFileSync(binFile);
+    const data = new Float32Array(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
+    if (data.length !== meta.count * meta.dim) return null;
+    if (!Array.isArray(meta.chunkOf) || meta.chunkOf.length !== meta.count) return null;
+    return { dim: meta.dim, data, chunkOf: Int32Array.from(meta.chunkOf), count: meta.count };
+  } catch {
+    return null;
+  }
+}
+
+/** 一条查询 → 全体块的向量余弦（已归一化，点积即余弦）。 */
+function vectorScores(state, queryVector) {
+  const { dim } = state.windows ?? state.vectors;
+  const scores = new Float32Array(state.docs.length).fill(-1);
+  if (state.windows != null) {
+    // 窗口级：**块分 = 它所有窗口里的最大值**（max-pooling）
+    const { data, chunkOf, count } = state.windows;
+    for (let w = 0; w < count; w += 1) {
+      let sum = 0;
+      const base = w * dim;
+      for (let c = 0; c < dim; c += 1) sum += data[base + c] * queryVector[c];
+      const chunk = chunkOf[w];
+      if (sum > scores[chunk]) scores[chunk] = sum;
+    }
+    return scores;
+  }
+  const { data } = state.vectors;
+  for (let r = 0; r < state.docs.length; r += 1) {
+    let sum = 0;
+    const base = r * dim;
+    for (let c = 0; c < dim; c += 1) sum += data[base + c] * queryVector[c];
+    scores[r] = sum;
+  }
+  return scores;
+}
+
+/**
+ * 混合排序：把向量召回的块补进候选池，再按加权分排序。
+ *
+ * @param {object} state - `load()` 的结果。
+ * @param {string} query - 用户这一轮说的话。
+ * @param {Array<object>} eligible - 已过闸的候选（含词法分）。
+ * @param {Float32Array|null} queryVector - 查询向量；为空则原样返回。
+ * @returns {Array<object>} 排好序的候选（可能比 eligible 多）。
+ */
+function hybridOrder(state, query, eligible, queryVector) {
+  if (queryVector === null || (state.windows == null && state.vectors == null)) return eligible;
+  const weight = embedWeight();
+  const fusion = String(process.env.DSH_STORY_EMBED_FUSION ?? 'rrf').toLowerCase();
+  const all = state.index.search(query, state.docs.length);
+  const lexicalOf = new Map(all.map((c) => [c.doc.id, c.score]));
+  const vectors = vectorScores(state, queryVector);
+  const indexOf = new Map(state.docs.map((d, i) => [d.id, i]));
+  const vecOrder = [...vectors.keys()].sort((a, b) => vectors[b] - vectors[a]);
+
+  const pool = new Map(eligible.map((c) => [c.doc.id, c]));
+  for (const i of vecOrder.slice(0, vectorTopK())) {
+    const doc = state.docs[i];
+    if (!pool.has(doc.id)) pool.set(doc.id, { doc, score: lexicalOf.get(doc.id) ?? 0 });
+  }
+
+  if (fusion === 'rrf') {
+    // 倒数排名融合：**两个分数的尺度不可比**（词法 0.05–0.2，向量 0.5–0.7），
+    // 直接线性相加等于让向量独占 —— 所以用排名而不是分数。
+    const K = Number(process.env.DSH_STORY_EMBED_RRF_K ?? 10);
+    const lexRankOf = new Map(all.map((c, i) => [c.doc.id, i + 1]));
+    const vecRankOf = new Map(vecOrder.map((i, r) => [state.docs[i].id, r + 1]));
+    return [...pool.values()]
+      .map((c) => {
+        const at = indexOf.get(c.doc.id) ?? -1;
+        return {
+          ...c,
+          vector: at >= 0 ? vectors[at] : 0,
+          hybrid: 1 / (K + (lexRankOf.get(c.doc.id) ?? 9999)) + 1 / (K + (vecRankOf.get(c.doc.id) ?? 9999))
+        };
+      })
+      .sort((a, b) => b.hybrid - a.hybrid);
+  }
+
+  return [...pool.values()]
+    .map((c) => {
+      const at = indexOf.get(c.doc.id) ?? -1;
+      const vector = at >= 0 ? vectors[at] : 0;
+      return { ...c, vector, hybrid: (1 - weight) * c.score + weight * vector };
+    })
+    .sort((a, b) => b.hybrid - a.hybrid);
+}
+
+/**
  * 挑出这一轮该给哪一块。
  *
  * 取前三个候选（不是前一个）—— **因为第一个可能刚给过。** 世界书那边也是这个做法：
@@ -195,17 +575,30 @@ const LOG_MAX_BYTES = 2 * 1024 * 1024;
  * @param {number} [now] - 当前时间戳，测试用。
  * @returns {object|null} 要注入的块，不必注入时为 null。
  */
-export function pick(state, query, seen = new Map(), now = Date.now()) {
+export function pick(state, query, seen = new Map(), now = Date.now(), queryVector = null) {
   if (state === null || typeof query !== 'string' || query.trim() === '') return null;
-  const mentioned = [...state.names].some((n) => query.includes(n));
+  const verdict = nameVerdict(state, query);
+  const mentioned = NAMED.has(verdict);
+  const gate = mentioned ? verdict : 'score';
   const windowMs = storyWindowMs();
+  // 别名**不进检索打分** —— 实测查询扩展会把排序弄差（见 aliasGroups 上方那段记录）。
   const candidates = state.index.search(query, 3);
   if (candidates.length === 0) return null;
   /** 够格走闸门的候选，按分数降序。 */
-  const eligible = candidates.filter((top, rank) => mentioned || (rank === 0 && top.score >= STORY_SCORE_FLOOR));
+  const eligible = candidates.filter((top, rank) => {
+    if (mentioned) return true;
+    if (rank !== 0) return false;
+    if (top.score < STORY_SCORE_FLOOR) return false;
+    // 分数够，还要问一句「候选块里有没有稀有的二元组」——见 STORY_DISTINCTIVE_DF。
+    return hasDistinctiveOverlap(state, query, top.doc);
+  });
   if (eligible.length === 0) return null;
 
-  for (const top of eligible) {
+  // 混合排序（可选，默认关）：向量召回补进候选池 + 加权排序。
+  // **上面那两道闸用的仍是原始余弦** —— 换的只是「够格之后给哪一块」。
+  const ordered = hybridOrder(state, query, eligible, queryVector);
+
+  for (const top of ordered) {
     const stamp = seen.get(top.doc.id);
     if (stamp !== undefined && now - stamp < windowMs) continue;
     seen.set(top.doc.id, now);
@@ -213,7 +606,7 @@ export function pick(state, query, seen = new Map(), now = Date.now()) {
     if (seen.size > 512) {
       for (const [id, at] of seen) if (now - at >= windowMs) seen.delete(id);
     }
-    return { doc: top.doc, score: top.score, escalated: false };
+    return { doc: top.doc, score: top.score, escalated: false, gate, vector: top.vector ?? null };
   }
 
   // 全都在窗口里。
@@ -221,9 +614,9 @@ export function pick(state, query, seen = new Map(), now = Date.now()) {
   // ⚠️ **宁可重复也不空手** —— 这是世界书那边的 `escalated` 做法：
   // 「那几条是『窗口里什么都没有、只好重发一次』的」。**给一段她已经看过的，
   // 比这一轮什么都没有强。** 第一版是直接 return null，那不是同一个设计。
-  const top = eligible[0];
+  const top = ordered[0];
   seen.set(top.doc.id, now);
-  return { doc: top.doc, score: top.score, escalated: true };
+  return { doc: top.doc, score: top.score, escalated: true, gate, vector: top.vector ?? null };
 }
 
 /**
@@ -349,6 +742,12 @@ function writeLog(hit, query, session = '') {
       node: hit.doc.node,
       score: Number(hit.score.toFixed(4)),
       chars: String(hit.doc.text ?? '').length,
+      // 是哪道闸放的行：speaker / trigger-long / trigger-two / score。
+      // **真机上要判断「是谁放的行」，只能靠这个字段。**
+      gate: hit.gate ?? null,
+      // 向量余弦；没开向量检索、或它没参与排序时是 null。
+      // 这一格是「embedding 到底有没有生效」在真机上的唯一证据 —— 全是 null 就是没生效。
+      vector: typeof hit.vector === 'number' ? Number(hit.vector.toFixed(4)) : null,
       // 重发的也记 —— 对着日志看的那几轮里，「这一段其实是重复给的」是重要信息。
       escalated: hit.escalated === true
     })}\n`, 'utf8');
@@ -398,7 +797,21 @@ export function apply(ctx) {
       }
       if (query === '') return decision;
 
-      const hit = pick(load(), query, recent);
+      const state = load();
+      // 查询向量：只在开了向量检索、且向量表对得上时才编。**编不出来就退回纯词法。**
+      let queryVector = null;
+      if (state?.windows != null || state?.vectors != null) {
+        const model = await getEmbedder();
+        if (model !== null) {
+          try {
+            queryVector = (await model.embed([`${queryPrefix()}${query}`]))[0] ?? null;
+          } catch {
+            queryVector = null;
+          }
+        }
+      }
+
+      const hit = pick(state, query, recent, Date.now(), queryVector);
       if (hit === null) return decision;
 
       // 先记后发 —— 记不上也要发，所以写日志在拼消息之前，但不影响它。

@@ -1,6 +1,6 @@
 {
   "id": "cyrene-agent",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "main": "./index.js",
   "description": "角色 agent：人格正文、设定库（关键词命中 + 优先级 + 每轮预算）、长期记忆与说话方式修正。",
   "engines": {

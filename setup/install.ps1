@@ -234,6 +234,54 @@ if (Test-Path $indexAt) {
   }
 }
 
+# --- 2.7 build the story vector table --------------------------------------
+#
+# 2.6 建出来的是**词法**索引。这一步再建一份**向量**表，
+# 它管的是「按意思找」——同一个问法换个字也找得到。
+#
+# 三样东西都得在，缺一样就跳过，而且**不报错**：
+#   · dist/story-chunks.jsonl            2.6 刚建的，或者包里带着
+#   · cyrene_embedding/bge-small-zh-v1.5  模型随包发
+#   · node_modules/onnxruntime-node      在 optionalDependencies 里，装不上不影响别的
+#
+# 少任何一样，插件都会安静地退回纯词法 —— 能答，只是答得窄一点。
+# `--if-stale` 让脚本自己判断要不要重算：它比的是语料哈希，不是时间戳。
+Say ''
+Say 'building the story vector table' Cyan
+
+$vecAt = Join-Path $agentDir 'dist\story-windows.f32'
+$modelAt = Join-Path $agentDir 'cyrene_embedding\bge-small-zh-v1.5\tokenizer.json'
+$runtimeAt = Join-Path $agentDir 'node_modules\onnxruntime-node'
+
+if (-not (Test-Path $indexAt)) {
+  Say 'no story index - skipping (see above)' Yellow
+} elseif (-not (Test-Path $modelAt)) {
+  Say 'no embedding model - semantic retrieval stays off' Yellow
+  Say '  node tools/deploy-embedding.mjs --download' Yellow
+} elseif (-not (Test-Path $runtimeAt)) {
+  Say 'onnxruntime-node is not installed - semantic retrieval stays off' Yellow
+} else {
+  Push-Location $agentDir
+  try {
+    $fresh = -not (Test-Path $vecAt)
+    & node 'tools\build-story-windows.mjs' --if-stale 2>&1 | ForEach-Object { Say "  $_" DarkGray }
+    if ($LASTEXITCODE -eq 0 -and (Test-Path $vecAt)) {
+      if ($fresh) {
+        $mb = [math]::Round((Get-Item $vecAt).Length / 1MB, 1)
+        Say "story vector table built ($mb MB)" Green
+      } else {
+        Say 'story vector table is current' Green
+      }
+    } else {
+      Say "build-story-windows.mjs exited $LASTEXITCODE - lexical-only retrieval" Yellow
+    }
+  } catch {
+    Say "vector build failed: $($_.Exception.Message)" Yellow
+  } finally {
+    Pop-Location
+  }
+}
+
 # --- 3. the state that cannot be regenerated -----------------------------
 if (-not $SkipState) {
   Say ''

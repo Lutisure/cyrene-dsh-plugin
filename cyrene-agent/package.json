@@ -1,6 +1,6 @@
 {
   "name": "@lutisure/cyrene-agent",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": false,
   "type": "module",
   "description": "昔涟 · 对话 agent：132 条设定库加 1 条常驻锚点、长期记忆、一层说话方式修正，以及一套按需检索的剧情原文。作为 DSH 预设级插件挂载。",
@@ -30,6 +30,7 @@
     "./file-cache": "./file-cache.mjs",
     "./corrections": "./corrections.mjs",
     "./story": "./story.mjs",
+    "./embedder": "./embedder.mjs",
     "./retrieval": "./retrieval.mjs"
   },
   "files": [
@@ -48,7 +49,9 @@
     "LICENSES/",
     "corrections.mjs",
     "story.mjs",
+    "embedder.mjs",
     "retrieval.mjs",
+    "cyrene_embedding/",
     "dist/",
     "README.md",
     "dsh.plugin.json",
@@ -104,5 +107,8 @@
   },
   "dependencies": {
     "js-yaml": "^4.3.2"
+  },
+  "optionalDependencies": {
+    "onnxruntime-node": "^1.30.0"
   }
 }

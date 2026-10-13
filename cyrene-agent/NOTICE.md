@@ -34,6 +34,22 @@
 - **分享副本里有它们**（`tools/make-share.mjs` 会把它们带上）—— 拿到的人只做个人使用，
   不要再往外分发素材本身。详见根目录 `NOTICE.zh.md` 的一节之二、一节之三。
 
+## 4. embedding 模型（`cyrene_embedding/`）
+
+| | |
+|---|---|
+| 模型 | [`Xenova/bge-small-zh-v1.5`](https://huggingface.co/Xenova/bge-small-zh-v1.5) |
+| 原作 | [`BAAI/bge-small-zh-v1.5`](https://huggingface.co/BAAI/bge-small-zh-v1.5)（北京智源人工智能研究院） |
+| 授权 | **MIT** |
+| 形态 | int8 量化的 ONNX 转换，4 层、512 维，六个文件、23.4 MB |
+
+**这一份和素材不是一回事：它是 MIT，随包发、进 git、进 npm 都没有问题。**
+六个文件的 sha256 钉在 `tools/embedding-manifest.mjs`，用的时候逐个核对 ——
+量化模型拷坏了不会报错，只会让检索悄悄变差。
+
+**没有它也能跑。** `story.mjs` 会退回纯字符二元组（锚点命中 46%，有它是 54%），
+一个字都不用改。见 `README.md` 的「第二层：向量」。
+
 ---
 
 > 这份 NOTICE 是补齐一个疏忽：正文是上一轮采纳进来的，当时没有一并记录署名。

@@ -33,7 +33,7 @@ cyrene-agent/       对话 agent
   persona-soul.md   她的人格正文（51,178 字节 ≈ 50 KB）
   memory / corrections   长期记忆与说话方式修正，都在 DSH home 下，跨会话保留
   tools/eval.mjs    三层评测台 + 接地核查 + 行尾检查 + 预设结构检查
-  test/             342 个测试
+  test/             349 个测试
 
 dsh-theme-cyrene/   客户端主题（壁纸、粒子、桌宠、表情、音乐、打字音）
 cyrene-guard/       写文件后自动跑一遍的本地安全规则
@@ -117,7 +117,7 @@ tools/              仓库自己的工具：分享副本生成、会话导出、
 cd cyrene-agent
 npm install
 node build.mjs          # 生成 dist/：提示词、设定库、技能文件
-node --test             # 342 个测试
+node --test             # 349 个测试
 node tools/eval.mjs --sources    # 评测台：L0 材料 / L1 检索，共 59 条
 ```
 
