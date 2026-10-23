@@ -145,7 +145,20 @@ const TOP_FILES = [
   // 同一族的事今天已经撞过一次：`dsh-theme-cyrene/README.md` 引着 `docs/` 里
   // 一张图，而 `docs/` 不随包发 —— 那张图在源码里看得见、在别人那边是碎的。
   'package.json',
-  'cordis.patch.yml'
+  'cordis.patch.yml',
+  // ⚠️ 2026-10-24：**插件市场的预览图靠它。**
+  //
+  // 市场的 `scripts/probe-screenshots.mjs` 只认两个来源：作者自己仓库里
+  // **`package.json` 旁边**的 `screenshots.json`，以及市场自己仓库里那份
+  // `data/screenshots.json`（旧条目的遗留位，正在被清空）。**它不看 README** ——
+  // 所以「README 里有图」不等于「市场上有图」。
+  //
+  // 位置是被规定的：必须和根 `package.json` 同一层，里面写相对于仓库根的路径。
+  // 缺了它，市场那一页就只有文字、没有图，而本地什么都看不出来，
+  // 因为图在 `dsh-theme-cyrene/` 底下好好的。
+  //
+  // 照旧：`TOP_FILES` 是显式清单，不写这一行，导出物里就没有它。
+  'screenshots.json'
 ];
 const TOP_DIRS = ['setup', 'tools', 'docs'];
 
