@@ -189,6 +189,34 @@ test('the background stack is mounted behind everything', async () => {
   assert.notEqual(layers.querySelector('.cy-shade'), null);
 });
 
+test('a package without bundled artwork never asks for a wallpaper that is not there', async () => {
+  // npm ships `lib/` but not `assets/` — the bundled artwork is not ours to
+  // redistribute through a public registry. The build-time manifest still names
+  // it, so seeding from that list first aimed a `<video>` at a file the package
+  // does not contain: one wasted request on every load, and a wallpaper that had
+  // to be taken back down a round-trip later. The host scans the directory live
+  // and reports it empty, so the mount must wait for that answer instead of
+  // guessing from what the machine that ran `build.mjs` happened to have.
+  const { sandbox } = await mountPlugin({
+    responses: new Map([['/theme-cyrene-assets/manifest', {
+      plugin: PLUGIN_ID,
+      wallpapers: [],
+      music: [],
+      covers: [],
+      boot: [],
+      emotes: [],
+      state: {},
+      limits: {}
+    }]])
+  });
+  await new Promise((resolve) => setImmediate(resolve));
+
+  const wall = sandbox.document.querySelector('.cy-layer-root .cy-wall-video');
+  assert.notEqual(wall, null, 'the layer element still mounts');
+  assert.notEqual(wall.dataset.active, 'true', 'and stays down when there is nothing to show');
+  assert.equal(wall.querySelector('video').getAttribute('src'), null, 'no source is asked for');
+});
+
 test('the dock carries one button per subsystem, in a stable order', async () => {
   const { sandbox } = await mountPlugin();
   const { root, buttons } = dock(sandbox);

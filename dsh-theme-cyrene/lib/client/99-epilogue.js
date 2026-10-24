@@ -66,6 +66,31 @@ function apply(ctx) {
     primeCatalog();
 
     /**
+     * Mirror the settings document once, right here.
+     *
+     * `writeLocal` otherwise only runs from an `applySettings` call, and the
+     * first one used to be the wallpaper's seeding `select()`. That seeding now
+     * waits for the host's manifest (so a package without bundled artwork never
+     * points at a file it does not contain), which would leave the local mirror
+     * unwritten whenever the manifest is slow or never answers. Writing it at
+     * boot keeps the mirror a property of mounting, not of the wallpaper.
+     */
+    writeLocal(settings);
+
+    /**
+     * Derive the palette from the stored skin before any stylesheet is built.
+     *
+     * `applySkin` only mutates `THEME`; every sheet below bakes those colours
+     * into its text when it is mounted. Running it here — rather than just
+     * before `createSkinLayer` — is what makes the first mount already correct
+     * instead of waiting for the first `emitSettings` to rebuild the sheets. A
+     * restart with a non-default skin is exactly the case that caught this: the
+     * first sheet came out shipped-pink until something unrelated happened to
+     * touch the settings.
+     */
+    applySkin(settings.skin);
+
+    /**
      * The plugin's own stylesheet, remountable.
      *
      * Like the identity and glass sheets, it bakes the theme's colours into its
@@ -94,15 +119,15 @@ function apply(ctx) {
     track(identity.dispose);
 
     // The skin layer, and the one place both stylesheet sets are rebuilt from the
-    // re-derived theme. `applySkin` runs before this, so the sheets that exist at
-    // this point already carry the stored skin's values.
+    // re-derived theme. `applySkin` has already run by now (see the boot block
+    // above), so the sheets built so far carry the stored skin's values and a
+    // later switch only has to rebuild them.
     var skinLayer = createSkinLayer({
       refresh: function () {
         identity.refreshSheets();
         controlsSheet.refresh();
       }
     });
-    applySkin(settings.skin);
 
     var particles = createParticles(identity.layers.canvas);
     track(particles.dispose);
@@ -456,23 +481,32 @@ function apply(ctx) {
     // like a user action and defeat the auto-fold timer.
     dock.setCollapsed(settings.dockCollapsed === true, { persist: false });
 
-    wallpaper.restore();
-    music.restore();
-
+    /**
+     * Seed the wallpaper and the player from the host's manifest, not from the
+     * build-time lists.
+     *
+     * The build-time lists are computed from `assets/` on the machine that ran
+     * `build.mjs`. The published package ships `lib/` but not `assets/` — the
+     * bundled artwork is not ours to redistribute through npm — so those lists
+     * describe files the package does not contain. Seeding from them first
+     * therefore aimed a `<video>` at a missing file: one wasted request per
+     * load, and a wallpaper that had to be taken back down a round-trip later.
+     * The host scans the same directories live and reports an empty list when
+     * they are empty, so waiting for its answer is what lets a package without
+     * bundled artwork fall straight through to the theme's own gradient.
+     */
     refreshManifest().then(function () {
-      // Bundled assets are in the build-time manifests, but uploads from an
-      // earlier session only exist in the host's manifest, which lands after
-      // the first paint. Re-resolve now that the catalog is complete —
-      // otherwise a saved wallpaper that only the host knows about is lost on
-      // every reload.
-      if (wallpaper.current() === null) wallpaper.restore();
-      if (music.currentTrack() === null) music.restore();
+      wallpaper.restore();
+      music.restore();
       mountPet();
       mountCelebrate(ctx, track);
       bootOnce();
     }).catch(function (error) {
       console.warn(PLUGIN_ID + ": could not read the asset manifest", error);
-      // A failed manifest must not cost her the pet, nor the opening.
+      // No manifest: the build-time lists are all there is. A failed fetch must
+      // not cost her the wallpaper, the pet, nor the opening.
+      wallpaper.restore();
+      music.restore();
       mountPet();
       mountCelebrate(ctx, track);
       bootOnce();
