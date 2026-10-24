@@ -15,12 +15,24 @@
  *
  * 前两条说的是「会漂」。第三条说的是「往哪漂」—— 而那是可以验的：
  * **如果她在往对方那边漂，那对方的文风窗口就应该是她窗口的终点。**
- * 所以这个工具同时量两个人的。
+ * 所以这个工具同时量两个人的，各量各的，从不混在一张表里。
  *
  * ## 怎么切窗口
  *
- * 按**轮**等分，不按条数 —— 一轮可以有好几条发言，按条数切会把长的那些
- * 集中到某个窗口里，量出来的差可能只是「这几轮话多」。
+ * 按**累计字数**等分：走一遍，攒够一格的字数就封口。
+ *
+ * 不按条数，也不按轮的区间 —— 两边都不对。一轮可以是一句「嗯」，也可以是
+ * 几千字的粘贴；按条数切会把长的那些堆到某几个窗口里，按 seq 区间切会让
+ * 窗口的字数差出好几倍。两种情况量出来的都是「这几轮话多」，不是文风。
+ * 按字数切，每个窗口的文本量大致相同，剩下的差才更像文风本身。
+ *
+ * 顺序永远按 seq 升序。漂移问的是「往哪边走」，先后不能打乱。
+ *
+ * ## 长发言单独标出来
+ *
+ * 单条超过 400 字的发言，一格正文顶得上别人好几个窗口。它们仍然计入统计
+ * （拿掉它们句子分布就变了），但每个窗口下面单独报一条数字，让人一眼看到
+ * 这个窗口是不是被一两条长文撑起来的 —— 那种情况下总量指标不能读。
  *
  * ## 读的时候要小心什么
  *
@@ -39,6 +51,9 @@ const argv = process.argv.slice(2);
 const FILE = argv[0];
 const at = argv.indexOf('--windows');
 const WINDOWS = at === -1 ? 4 : Math.max(2, Number(argv[at + 1]) || 4);
+
+/** 超过这么多字的一条发言，在表里单独报一行。 */
+const LONG = 400;
 
 if (!FILE) {
   console.log('用法：node tools/style-drift.mjs <会话.jsonl> [--windows 4]');
@@ -83,18 +98,38 @@ function collect(rows, type) {
   return out;
 }
 
-/** 把发言按 seq 等分成窗口。 */
-function split(items, count) {
-  if (items.length === 0) return [];
-  const marks = items.map((item) => item.seq);
-  const low = Math.min(...marks);
-  const high = Math.max(...marks);
-  const span = Math.max(1, high - low + 1);
-  const buckets = Array.from({ length: count }, () => []);
-  for (const item of items) {
-    const slot = Math.min(count - 1, Math.floor(((item.seq - low) / span) * count));
-    buckets[slot].push(item);
+/**
+ * 把发言按累计字数等分成窗口，顺序按 seq 升序。
+ *
+ * 封口条件是「攒够了这一格的字数」且「后面还排得下」—— 后者防止前面几格把
+ * 短句子吃干净，让最后几格空着。
+ *
+ * @param {{text: string, seq: number}[]} items
+ * @param {number} count 想要的窗口数；条目太少时会少于这个数。
+ * @returns {{text: string, seq: number}[][]}
+ */
+function splitByChars(items, count) {
+  const ordered = [...items].sort((a, b) => a.seq - b.seq);
+  const total = ordered.length;
+  if (total === 0) return [];
+  const chars = ordered.reduce((sum, item) => sum + item.text.length, 0);
+  const target = Math.max(1, Math.ceil(chars / count));
+  const buckets = [];
+  let bucket = [];
+  let acc = 0;
+  for (let i = 0; i < total; i += 1) {
+    const item = ordered[i];
+    bucket.push(item);
+    acc += item.text.length;
+    const slotsLeft = count - buckets.length - 1;
+    const itemsLeft = total - i - 1;
+    if (acc >= target && slotsLeft > 0 && itemsLeft >= slotsLeft) {
+      buckets.push(bucket);
+      bucket = [];
+      acc = 0;
+    }
   }
+  if (bucket.length > 0) buckets.push(bucket);
   return buckets;
 }
 
@@ -157,22 +192,33 @@ const ROWS = [
   ['人家 占自称', 'ratio', (v) => v === null ? '—' : (v * 100).toFixed(0) + '%']
 ];
 
-/** 打印一个人的窗口表。 */
+/** 打印一个人的窗口表。两个人的表各自独立，不混算。 */
 function table(label, items) {
-  const buckets = split(items, WINDOWS);
+  const buckets = splitByChars(items, WINDOWS);
   const cells = buckets.map((b) => metrics(b));
-  console.log(`\n  ${label}（${items.length} 条）`);
+  const chars = items.reduce((sum, item) => sum + item.text.length, 0);
+  const per = buckets.length === 0 ? 0 : Math.round(chars / buckets.length);
+  console.log(`\n  ${label}（${items.length} 条 / ${chars} 字，每格约 ${per} 字）`);
   console.log('    ' + ''.padEnd(20) + cells.map((_, i) => ('窗口' + (i + 1)).padStart(9)).join(''));
   for (const [name, key, fmt] of ROWS) {
     const row = cells.map((cell) => cell === null ? '—' : fmt(cell[key]).padStart(9)).join('');
     console.log('    ' + name.padEnd(20) + row);
   }
+  const longs = buckets.map((b) => b.filter((item) => item.text.length > LONG).length);
+  const longTotal = longs.reduce((sum, v) => sum + v, 0);
+  if (longTotal > 0) {
+    console.log('    ' + `>${LONG} 字的条数`.padEnd(20) + longs.map((v) => String(v).padStart(9)).join(''));
+  }
   const thin = cells.filter((cell) => cell !== null && cell.lines < 15).length;
   if (thin > 0) console.log(`    ⚠️ ${thin} 个窗口的句子数少于 15，那几个窗口之间的差撑不住结论`);
+  if (longTotal > 0) {
+    console.log(`    （那 ${longTotal} 条长发言仍然计入统计，但一条就抵得上几个窗口的正文 —— 有它们的那几格少看总量）`);
+  }
 }
 
 console.log(`\n  文件：${FILE}`);
-console.log(`  窗口：${WINDOWS} 个，按轮等分`);
+console.log(`  窗口：${WINDOWS} 个，按累计字数等分（不按条数、不按轮的区间）`);
+console.log('  两个人分开量，各算各的');
 table('她', her);
 table('对方', him);
 
