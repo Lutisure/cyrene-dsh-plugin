@@ -1,0 +1,54 @@
+# README 里那句「前两层确定性、不需要模型、一秒跑完 —— 所以能进 CI」，
+# 得有地方兑现。这里就是那个地方。
+#
+# 跑的是公开仓库里那份源码：装依赖、装配 dist、切剧情索引、跑测试、跑评测台。
+# 与本地开发敲的是同一组命令，没有另一套「CI 专用」脚本。
+
+name: check
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: cyrene-agent/package-lock.json
+
+      - name: 装依赖
+        working-directory: cyrene-agent
+        run: npm ci
+
+      - name: 装配 dist（提示词、设定库、技能文件）
+        working-directory: cyrene-agent
+        run: node build.mjs
+
+      # 测试缺 `dist/story-chunks.jsonl` 时会自己建（`test/ensure-dist.mjs`），
+      # 所以这一步不是必需的。留着是因为几个测试文件是并行跑的 —— 先建好，
+      # 它们就不用同时去建，也就没有那段竞争。
+      - name: 切剧情索引
+        working-directory: cyrene-agent
+        run: node tools/build-story-index.mjs
+
+      - name: 测试
+        working-directory: cyrene-agent
+        run: node --test test/*.test.mjs
+
+      - name: 评测台（L0 材料 + L1 检索）
+        working-directory: cyrene-agent
+        run: node tools/eval.mjs --sources
+
+      # 引文接地核查。现在有几处论文里的引文还在等核对，属于「已知问题」，
+      # 不该拦住每一次提交 —— 所以只报不拦。
+      - name: 引文接地核查（只报不拦）
+        working-directory: cyrene-agent
+        run: node tools/check-grounding.mjs
+        continue-on-error: true
