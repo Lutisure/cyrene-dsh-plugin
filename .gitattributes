@@ -1,18 +1,20 @@
-# 这个仓库的规矩：**git 不许改动工作区里的任何一个字节。**
+# 哪些文件不许 git 碰。
 #
-# 它是一个备份仓库，工作区就是正在运行的那份插件。git 在 Windows 上默认会做
-# 行尾转换（checkout 时 LF → CRLF），那意味着一次 `git checkout` 就会重写
-# 所有源文件 —— 对一个「顺手备份」的仓库来说这是不能接受的：
+# 这里原来只有一行 `* -text`：对**所有文件**关掉行尾转换与文本猜测。那样写有
+# 它的道理 —— 这个仓库原先是本机备份，工作区就是正在运行的那份插件，一次
+# `git checkout` 不该重写任何一个字节（`lib/client.js` 是浏览器直接加载的，
+# `dist/system-prompt.md` 整体就是她的人设正文）。
 #
-#   · lib/client.js 会被重写，而它是浏览器直接加载的
-#   · dist/system-prompt.md 会被重写，而它整体就是她的人设正文
-#   · 大量媒体文件是二进制，本来就不该碰
+# 但它现在同时是 GitHub 上那个公开仓库的来源。通篇关掉转换就变成两个问题：
 #
-# `-text` 让 git 对所有文件**关闭行尾转换与文本猜测**，一个字节都不动。
-# 代价是 diff 不识别行尾差异 —— 对备份来说完全值得。
-* -text
+#   · Windows 上 clone 下来全是 LF，用记事本打开会连成一片；
+#   · 谁在 Windows 上改完再提交，CRLF 会直接进索引，再被别人的 checkout 带出去。
+#
+# 所以把它收窄到真正需要「一个字节都不许动」的那一类：二进制与媒体。文本类
+# 改回由 git 按平台默认处理 —— 索引里存 LF，检出时按各自的配置来。
+#
+# `dist/` 里的文件不在这里列，因为它整个被 .gitignore 排除了，git 根本碰不到。
 
-# 图片、音频、视频明确标为二进制，避免任何「看起来像文本」的误判。
 *.webp binary
 *.png binary
 *.jpg binary
@@ -21,5 +23,23 @@
 *.webm binary
 *.mp4 binary
 *.mp3 binary
+*.m4a binary
+*.flac binary
+*.ogg binary
+*.oga binary
+*.opus binary
+*.wav binary
 *.ico binary
 *.ttf binary
+*.woff binary
+*.woff2 binary
+*.onnx binary
+*.f32 binary
+*.zip binary
+
+# 这三份是历史遗留、以 CRLF 或 UTF-16 存下来的样例数据。它们是语料和报告本身，
+# 行尾被换掉就会和文件里的统计对不上，所以在这里钉住。
+# （`eval/samples/drift-report.txt` 是 UTF-16LE，对 git 来说本来就该当二进制；
+#  `probe-report.txt` 2026-10-25 用新工具重跑时已经转成 UTF-8 / LF，不再需要钉。）
+cyrene-agent/corpus-src/reading-notes.md -text
+cyrene-agent/eval/samples/drift-report.txt binary
