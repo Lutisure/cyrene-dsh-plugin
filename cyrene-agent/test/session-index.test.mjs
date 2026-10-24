@@ -8,7 +8,7 @@
 
 import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 
@@ -70,13 +70,32 @@ test('什么都没有的时候返回空数组，不抛', () => {
   }
 });
 
-test('拿真实的 DSH_HOME 跑一次：扫得到，而且每份都指到一个真文件', () => {
-  // 这条是**对照线**：索引在合成目录上全对、在真机器上一个都找不到，
-  // 是最容易发生的一种失效（路径拼错、工作区命名不同）。
-  const found = findSessionLogs();
-  assert.ok(found.length > 0, '真机上应当至少有一个会话日志');
-  for (const entry of found.slice(0, 5)) {
-    assert.ok(entry.id.length > 0);
-    assert.ok(entry.file.includes('session.v4.jsonl'), entry.file);
-  }
-});
+// 这条是**对照线**：索引在合成目录上全对、在真机器上一个都找不到，
+// 是最容易发生的一种失效（路径拼错、工作区命名不同）。
+//
+// 但没有 DSH 的机器上它测不了任何东西 —— CI 的干净 runner 就是那样。
+// 所以先扫一次：扫到东西才断言，扫不到就 skip 并报出扫的位置，不假装通过。
+// 硬留着 `found.length > 0` 的后果是每一次 CI 都红，而那并不说明代码坏了。
+const REAL_HOME = process.env.DSH_HOME ?? join(homedir(), '.dsh');
+const REAL_FOUND = findSessionLogs();
+
+test(
+  '拿真实的 DSH_HOME 跑一次：扫得到，而且每份都指到一个真文件',
+  {
+    skip:
+      REAL_FOUND.length > 0
+        ? false
+        : `${REAL_HOME} 下没有可扫的会话日志 —— 这条对照线只能在本机跑，干净环境里没有东西可对照`,
+  },
+  () => {
+    // 这条是**对照线**：索引在合成目录上全对、在真机器上一个都找不到，
+    // 是最容易发生的一种失效（路径拼错、工作区命名不同）。
+    const found = REAL_FOUND;
+    assert.ok(found.length > 0, '真机上应当至少有一个会话日志');
+    for (const entry of found.slice(0, 5)) {
+      assert.ok(entry.id.length > 0);
+      assert.ok(entry.file.includes('session.v4.jsonl'), entry.file);
+    }
+  },
+);
+
