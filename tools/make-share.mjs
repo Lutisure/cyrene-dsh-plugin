@@ -160,7 +160,9 @@ const TOP_FILES = [
   // 照旧：`TOP_FILES` 是显式清单，不写这一行，导出物里就没有它。
   'screenshots.json'
 ];
-const TOP_DIRS = ['setup', 'tools', 'docs'];
+// `.github` 是给公开仓库用的：`check.yml` 在那边跑测试与评测台。
+// 源码树里没有这个目录的话，导出物里自然也没有 —— 这一步不会凭空造出它。
+const TOP_DIRS = ['setup', 'tools', 'docs', '.github'];
 
 /**
  * ⚠️ 顶层目录下还要再跳过的名字（**前缀**匹配）。
