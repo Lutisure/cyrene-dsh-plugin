@@ -4,6 +4,9 @@
   "description": "昔涟 · DSH 插件整合包：角色 agent、客户端主题、本地安全扫描，装这一个就有全部。",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": "^22.19 || >=24"
+  },
   "homepage": "https://github.com/Lutisure/cyrene-dsh-plugin",
   "repository": {
     "type": "git",
