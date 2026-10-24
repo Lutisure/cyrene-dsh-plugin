@@ -195,7 +195,7 @@ dist/               产物（构建生成，不要手改）
   cordis.patch.yml      常驻人格补丁（有启动风险，见下）
   skills/cyrene/SKILL.md 按需调用
   AGENTS.md             贴进 AGENTS.md 用
-test/               349 项校验测试
+test/               339 项校验测试
 ```
 
 ## 从原始台词数据开始（可选，但强烈建议）
@@ -677,7 +677,7 @@ node tools/story-check.mjs --ask "遐蝶的死亡之触是怎么回事" --answer
 | `tools/build-story-windows.mjs` | 建窗口向量表（`--if-stale` 只补过时的，`--stats` 只看不写） |
 | `tools/check-embedding.mjs` | 24 项自检：模型哈希、向量表、编码器、真实 hook 端到端 |
 | `tools/deploy-embedding.mjs` | 补装模型（`--download` 从 hf-mirror，或 `--from` 拷本地一份） |
-| `cyrene_embedding/bge-small-zh-v1.5/` | 模型本体，六个文件、23.4 MB，哈希钉在 `tools/embedding-manifest.mjs` |
+| `cyrene_embedding/bge-small-zh-v1.5/` | 模型本体，六个文件、23.4 MB，哈希钉在 `tools/embedding-manifest.mjs`。**不入库**（2026-10-24 起），`deploy-embedding.mjs --download` 取 |
 | `dist/story-chunks.jsonl` | 切好的 986 块（2.24 MB） |
 | `dist/story-windows.f32` | 窗口向量表（5617 窗 × 512 维，11.5 MB） |
 | `tools/story-probe.mjs` | 离线标定：`--query` / `--gate` / `--names` / `--novelty` |
@@ -979,7 +979,7 @@ node build.mjs        # 改了 persona.yaml / 设定库 / 语料之后跑，重�
 | 补丁 YAML 结构 | 这个写坏会让 DSH **起不来**，所以单独做结构校验 |
 
 ```powershell
-node --test            # 349 项
+node --test            # 339 项
 ```
 
 ## Model Experience

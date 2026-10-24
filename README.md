@@ -33,7 +33,7 @@ cyrene-agent/       对话 agent
   persona-soul.md   她的人格正文（51,178 字节 ≈ 50 KB）
   memory / corrections   长期记忆与说话方式修正，都在 DSH home 下，跨会话保留
   tools/eval.mjs    三层评测台 + 接地核查 + 行尾检查 + 预设结构检查
-  test/             349 个测试
+  test/             339 个测试
 
 dsh-theme-cyrene/   客户端主题（壁纸、粒子、桌宠、表情、音乐、打字音）
 cyrene-guard/       写文件后自动跑一遍的本地安全规则
@@ -136,10 +136,13 @@ tools/              仓库自己的工具：分享副本生成、会话导出、
 ```bash
 cd cyrene-agent
 npm install
+node tools/deploy-embedding.mjs --download   # 向量模型，23 MB，不入库（可跳过）
 node build.mjs          # 生成 dist/：提示词、设定库、技能文件
-node --test             # 349 个测试
-node tools/eval.mjs --sources    # 评测台：L0 材料 / L1 检索，共 59 条
+node --test             # 339 个测试
+node tools/eval.mjs --sources    # 评测台：L0 材料 / L1 检索，共 57 条
 ```
+
+模型那一步**可以跳过**。它是 23 MB 的单个二进制，从 HuggingFace 拉，六个文件的 sha256 钉在 `tools/embedding-manifest.mjs` 里。npm 包和分享副本都带着它，所以只有拿源码的人才需要这一步。跳过的话检索退回纯字面（二元组 + 专名闸），那条向量测试会 skip 并打印原因 —— 不会假装通过。
 
 `build.mjs` 会读 **你自己的** `~/.dsh/cyrene-agent/memory.md` 和 `corrections.md`。新机器上那两个文件是空的，所以构建出来的技能不带任何记忆 —— **这个 agent 一开始不认识你。**
 
