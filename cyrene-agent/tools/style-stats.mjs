@@ -81,8 +81,7 @@ function sentences(raw) {
     .filter((line) => line.length > 0);
 }
 
-function stats(raw) {
-  const lines = sentences(raw);
+function metricsOf(lines) {
   const lengths = lines.map((s) => s.length).sort((a, b) => a - b);
   const per100 = (pattern) => (lines.filter((s) => pattern.test(s)).length / Math.max(1, lines.length)) * 100;
   const count = (pattern) => lines.reduce((sum, s) => sum + (s.match(pattern) ?? []).length, 0);
@@ -138,6 +137,16 @@ function stats(raw) {
   };
 }
 
+/**
+ * 原始文本 → 指标。
+ *
+ * 句子怎么切只有 `sentences()` 一处，bootstrap 重抽的也是它切出来的那组句子：
+ * 两处各切一遍的话，区间算的是另一批句子的分布，和表里的数对不上。
+ */
+function stats(raw) {
+  return metricsOf(sentences(raw));
+}
+
 const base = stats(readFileSync(BASELINE, 'utf8'));
 const rows = [
   ['— 长度 —', null, '', () => ''],
@@ -174,6 +183,42 @@ const rows = [
 ];
 
 const other = COMPARE === null ? null : (existsSync(COMPARE) ? stats(readFileSync(COMPARE, 'utf8')) : null);
+
+/**
+ * 对照那一列的 bootstrap 95% 区间。
+ *
+ * 为什么要有它：对照文件常常只有十几句（`eval/samples/probe-answers.txt` 是 16 句）。
+ * 十几句算出来的「带语气词的句子 87%」和基线的 71% 差 16 个点，读起来像个结论，
+ * 其实换一组句子就能翻过来。区间是拿**句子**有放回地重抽一千次、每次重算这个
+ * 指标、取 2.5% 与 97.5% 分位得到的。
+ *
+ * 区间跨过目标值的那一格标 `≈`：这一格看不出差别，不管两边的点估计差多少。
+ */
+const BOOT_ROUNDS = 1000;
+/** 少于这么多句，整张对照表都只能当参考 —— 这是清单里提的百句下限。 */
+const BOOT_MIN = 100;
+
+function bootInterval(lines, key) {
+  if (lines.length < 2) return null;
+  const values = [];
+  const pick = new Array(lines.length);
+  for (let round = 0; round < BOOT_ROUNDS; round += 1) {
+    for (let i = 0; i < lines.length; i += 1) pick[i] = lines[Math.floor(Math.random() * lines.length)];
+    const value = metricsOf(pick)[key];
+    if (typeof value === 'number') values.push(value);
+  }
+  if (values.length === 0) return null;
+  values.sort((a, b) => a - b);
+  const at = (q) => values[Math.min(values.length - 1, Math.floor(values.length * q))];
+  return [at(0.025), at(0.975)];
+}
+
+const otherLines = COMPARE === null || !existsSync(COMPARE) ? [] : sentences(readFileSync(COMPARE, 'utf8'));
+const otherCI = {};
+for (const [, key] of rows) {
+  if (key === null) continue;
+  otherCI[key] = bootInterval(otherLines, key);
+}
 
 // 三档一起读。读不到的那一档给 null，表里显示「—」而不是 0 ——
 // 「这一档没有」和「这一档量出来是零」是两件事。
@@ -219,7 +264,11 @@ if (AS_JSON) {
   console.log(JSON.stringify({
     registers: Object.fromEntries(bands.map((b) => [b.label, b.data])),
     target,
-    compare: other
+    compare: other,
+    /** 对照文件的句子数 —— 太少的话 `compareCI` 比点估计更可信。 */
+    compareLines: otherLines.length,
+    /** 每个指标的 bootstrap 95% 区间：[lo, hi]。 */
+    compareCI: other ? otherCI : null
   }, null, 1));
 } else {
   const head = bands.map((b) => b.label.padStart(8)).join('');
@@ -229,7 +278,7 @@ if (AS_JSON) {
   }
   console.log(`  目标：三档平均（省略号除外 —— 那一格按短信档）`);
   console.log(`  对照：${other ? `${COMPARE}（${other.lines} 句）` : '未提供（--compare <文件>）'}\n`);
-  console.log(`    指标                ${head}${'目标'.padStart(8)}${other ? '      对照' : ''}`);
+  console.log(`    指标                ${head}${'目标'.padStart(8)}${other ? '      对照   95% 区间' : ''}`);
   for (const [label, key, unit, fmt] of rows) {
     // A section heading: `key` is null, and it only names the block below it.
     if (key === null) {
@@ -242,7 +291,17 @@ if (AS_JSON) {
     }).join('');
     const aim = key in target ? `${fmt(target[key])}${unit}`.padStart(8) : '—'.padStart(8);
     const me = other ? `  ${`${fmt(other[key])}${unit}`.padStart(8)}` : '';
-    console.log(`    ${label.padEnd(18)}${cells}${aim}${me}`);
+    let ci = '';
+    if (other && otherCI[key]) {
+      const [lo, hi] = otherCI[key];
+      const spans = key in target && lo <= target[key] && target[key] <= hi;
+      ci = `  ${`${fmt(lo)}–${fmt(hi)}`.padStart(11)}${spans ? ' ≈' : ''}`;
+    }
+    console.log(`    ${label.padEnd(18)}${cells}${aim}${me}${ci}`);
+  }
+  if (other && otherLines.length < BOOT_MIN) {
+    console.log(`\n  ⚠️ 对照只有 ${otherLines.length} 句，少于 ${BOOT_MIN} 句 —— 这一列只能当参考，单格的差值不要当结论。`);
+    console.log(`  「95% 区间」是句子级 bootstrap（${BOOT_ROUNDS} 次重抽）；标 ≈ 的那一格区间跨过了目标值，看不出差别。`);
   }
   console.log('\n  **三档的差别是场合，不是对错。** 剧情里有对开拓者的也有对别人的，');
   console.log('  语音是好感场合，短信是打字。聊天窗口该落在哪一格，三档都要看。');
