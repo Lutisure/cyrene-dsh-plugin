@@ -1,6 +1,6 @@
 {
   "name": "@lutisure/cyrene-dsh-plugin",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "昔涟 · DSH 插件整合包：角色 agent、客户端主题、本地安全扫描，装这一个就有全部。",
   "license": "MIT",
   "type": "module",
@@ -28,9 +28,9 @@
     }
   },
   "dependencies": {
-    "@lutisure/cyrene-agent": "^0.12.0",
+    "@lutisure/cyrene-agent": "^0.12.1",
     "@lutisure/cyrene-guard": "^0.1.1",
-    "@lutisure/dsh-theme-cyrene": "^0.17.2"
+    "@lutisure/dsh-theme-cyrene": "^0.17.3"
   },
   "files": [
     "package.json",
