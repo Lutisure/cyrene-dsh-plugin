@@ -166,6 +166,7 @@ export const MAX_ENTRIES = 120;
  *
  * Ordered longest-first so a PEM block is eaten whole rather than having its
  * header replaced and its body left behind.
+ * @type {Array<[RegExp | string, string]>} 模式与替换文案成对出现。
  */
 const SECRET_PATTERNS = [
   [/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/gu, '[私钥已隐去]'],
@@ -270,10 +271,10 @@ function defuseBoundary(text) {
  */
 export function sanitise(value, { keepNewlines = false } = {}) {
   // Before anything else: characters that can hide what a string really says.
-  value = stripInvisible(value);
+  value = stripInvisible(String(value ?? ''));
   // And a credential that survives into the store is read into every later prompt
   // and never leaves.
-  value = redactSecrets(value);
+  value = redactSecrets(String(value ?? ''));
   let text = String(value ?? '');
   // Strip the delimiters and anything that renders like them.
   text = text.split(BLOCK_OPEN).join('').split(BLOCK_CLOSE).join('');
@@ -347,13 +348,13 @@ export function parseStructured(text) {
  * this memory is not the answer, and a model that cannot see them cannot apply
  * them.
  *
- * @param {{text: string, notWhen: string[]}} entry - a parsed entry.
+ * @param {{text: string, notWhen: string[], unsettled?: string}} entry - a parsed entry.
  * @returns {string} the line, without the leading dash.
  */
 export function renderEntry(entry) {
   const notes = [];
   if (entry.notWhen.length > 0) notes.push(`不适用于：${entry.notWhen.join('、')}`);
-  if (entry.unsettled !== '') notes.push(entry.unsettled);
+  if (entry.unsettled) notes.push(entry.unsettled);
   return notes.length === 0 ? entry.text : `${entry.text}（${notes.join('；')}）`;
 }
 

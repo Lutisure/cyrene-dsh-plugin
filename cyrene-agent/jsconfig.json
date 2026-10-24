@@ -1,0 +1,18 @@
+{
+  "//": "只给三个模块做类型体检：它们都在运行时和外部数据打交道（索引对象、会话日志、记忆条目），最容易在字段名和可选值上出错。其余模块不纳入 —— 覆盖全部反而会把注释写成注释工程。",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "es2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 0,
+    "types": ["node"]
+  },
+  "include": ["retrieval.mjs", "story.mjs", "memory-logic.mjs"],
+  "exclude": ["node_modules", "dist", "test"]
+}

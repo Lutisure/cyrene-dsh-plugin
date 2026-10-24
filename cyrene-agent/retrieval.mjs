@@ -87,7 +87,7 @@ function termCounts(text) {
  *
  * @param {Array<object>} docs - 每项要有 `text`，可选 `chapter` / `node`。
  * @param {(doc: object) => string} [haystack] - 参与匹配的文本，默认 章节+节点+正文。
- * @returns {{search: (query: string, topK?: number) => Array<{doc: object, score: number}>}} 索引。
+ * @returns {{size: number, vocabulary: number, search: (query: string, topK?: number) => Array<{doc: object, score: number}>}} 索引。
  */
 export function buildIndex(docs, haystack) {
   const pick = haystack ?? ((d) => `${d.chapter ?? ''} ${d.node ?? ''} ${d.text ?? ''}`);

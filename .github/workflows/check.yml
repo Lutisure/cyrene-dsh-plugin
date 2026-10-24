@@ -27,6 +27,12 @@ jobs:
         working-directory: cyrene-agent
         run: npm ci
 
+      # 只体检三个模块（见 `cyrene-agent/jsconfig.json`）—— 它们都在运行时
+      # 和外部数据打交道，最先炸的就是字段名和可选值。其余模块不纳入。
+      - name: 类型检查
+        working-directory: cyrene-agent
+        run: npm run typecheck
+
       - name: 装配 dist（提示词、设定库、技能文件）
         working-directory: cyrene-agent
         run: node build.mjs

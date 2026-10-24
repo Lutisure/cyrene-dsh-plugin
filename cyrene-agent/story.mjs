@@ -116,7 +116,12 @@ let cache = null;
 /**
  * 取索引，必要时重建。
  *
- * @returns {{index: object, docs: Array<object>}|null} 读不到时返回 null。
+ * @returns {{
+ *   index: object, docs: Array<object>, stamp: number, file: string | null,
+ *   names: Set<string>, speakers: Set<string>, triggers: Set<string>,
+ *   df: Map<string, number>, aliases: object,
+ *   windows: object | null, vectors: object | null
+ * } | null} 读不到时返回 null。
  */
 function load() {
   const file = dataPath('./dist/story-chunks.jsonl');
