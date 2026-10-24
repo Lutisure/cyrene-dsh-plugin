@@ -26,6 +26,7 @@
  * 用法：
  *   node tools/build-story-index.mjs            # 切块并落盘
  *   node tools/build-story-index.mjs --stats    # 只看统计，不写
+ *   node tools/build-story-index.mjs --out <路径>  # 写到别处（测试用）
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -273,7 +274,15 @@ console.log(`    最长的三块: ${lens.slice(-3).reverse().join('  ')}`);
 console.log(`    带节点 ID 的: ${all.filter((c) => c.nodeId !== '').length} / ${all.length}\n`);
 
 if (statsOnly) process.exit(0);
-mkdirSync(`${ROOT}/dist`, { recursive: true });
-const out = `${ROOT}/dist/story-chunks.jsonl`;
+// `--out <路径>` 把落盘位置引开。
+//
+// 用途只有一个：测试要在**不碰工作区**的前提下拿到同一份产物 —— 先写临时名，
+// 再 rename 到正式位置。`node --test` 是并行跑文件的，两个进程同时直接写
+// `story-chunks.jsonl` 时，先写的那个可能被另一个读到半截。rename 是原子的，
+// 读的人要么看见旧文件、要么看见完整的新文件。
+const outArgIndex = process.argv.indexOf('--out');
+const outOverride = outArgIndex >= 0 ? process.argv[outArgIndex + 1] : undefined;
+const out = outOverride ?? `${ROOT}/dist/story-chunks.jsonl`;
+mkdirSync(__d(out), { recursive: true });
 writeFileSync(out, all.map((c) => JSON.stringify(c)).join('\n') + '\n', 'utf8');
 console.log(`    写到 ${out}\n`);

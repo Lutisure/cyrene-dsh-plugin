@@ -21,6 +21,7 @@ import test from 'node:test';
 import yaml from 'js-yaml';
 
 import { apply, storyLogFile, STORY_SCORE_FLOOR } from '../story.mjs';
+import { ensureStoryIndex } from './ensure-dist.mjs';
 import { fakeContext, run, userMessage, withAudit } from './story-harness.mjs';
 
 /**
@@ -34,6 +35,10 @@ import { fakeContext, run, userMessage, withAudit } from './story-harness.mjs';
  * 因为 `story.mjs` 的 `load()` 是记忆化的（夹具文件头写了这件事）。
  */
 process.env.DSH_STORY_EMBED = 'off';
+
+// 剧情索引是 `dist/` 里的构建产物，不进 git —— 干净克隆上没有它，
+// 注入就无从谈起（读不到文件直接 ENOENT）。缺了现在建，一秒级，没有副作用。
+ensureStoryIndex();
 
 test('挂在 agent/pre-step 上', () => {
   const { ctx, registrations } = fakeContext();

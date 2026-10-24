@@ -14,7 +14,9 @@
  *      `story.mjs` 里它的注释就写着「全是 null 就是没生效」。
  *   二、要不到模型时安静退回词法 —— 不报错，也不空手。
  *
- * 第一条在没装模型的机器上 skip：它测的是「装了之后通不通」，不是「这台机器有没有」。
+ * 第一条在**这台机器跑不了向量**时 skip —— 有两种跑不了：模型没跟来
+ * （`cyrene_embedding/`），或者向量表没建（`dist/story-windows.*` 是构建产物，
+ * 不进 git；干净克隆上一定没有）。skip 的原因里写着重建命令。
  * 第二条**不 skip** —— 它测的是「拿不到模型时调用方拿到的确实是空」，任何机器上都该成立。
  */
 
@@ -26,12 +28,22 @@ import test from 'node:test';
 
 import { createEmbedder } from '../embedder.mjs';
 import { storyLogFile } from '../story.mjs';
+import { ensureStoryIndex, vectorTableState } from './ensure-dist.mjs';
 import { run, userMessage, withAudit } from './story-harness.mjs';
 
 process.env.DSH_STORY_EMBED = 'on';
 
 const MODEL_DIR = new URL('../cyrene_embedding/bge-small-zh-v1.5/', import.meta.url);
 const HAS_MODEL = existsSync(new URL('tokenizer.json', MODEL_DIR));
+
+// 向量层要跑起来得两样都在：模型，和由它算出来的那张表。少一样 `story.mjs`
+// 就安静退回词法（设计好的降级），留痕里的 `vector` 记成 null —— 于是这条用例
+// 红。但它测的是「装了之后通不通」，不是「这台机器有没有」，该 skip。
+ensureStoryIndex();
+const VECTOR = HAS_MODEL
+  ? vectorTableState()
+  : { ok: false, reason: '本机没装模型（cyrene_embedding/ 不在这份工作区）' };
+const SKIP_VECTOR = VECTOR.ok ? false : VECTOR.reason;
 
 /** 跑一句、把留痕读回来。 */
 async function auditRecordFor(q) {
@@ -43,7 +55,7 @@ async function auditRecordFor(q) {
 
 test(
   '开着向量：留痕里的 vector 是个数，不是 null',
-  { skip: HAS_MODEL ? false : '本机没装模型（cyrene_embedding/）' },
+  { skip: SKIP_VECTOR },
   withAudit(async () => {
     const record = await auditRecordFor('遐蝶的死亡之触是怎么回事');
     assert.equal(
