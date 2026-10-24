@@ -30,15 +30,29 @@
 ```
 cyrene-agent/       对话 agent
   worldbook/        132 条设定条目。关键词命中 + 优先级 + 每轮预算（3 条 / 1400 字）
-  persona-soul.md   她的人格正文（51,178 字节 ≈ 50 KB）
+  persona.yaml      人设数据 —— 你「投喂」她的地方，改完跑一次构建就生效
+  persona-soul.md   由 persona.yaml 生成的人格正文（51,178 字节 ≈ 50 KB）
   memory / corrections   长期记忆与说话方式修正，都在 DSH home 下，跨会话保留
+  dmae.mjs          设定条目的激活度：随对话涨落，久没人提的沉下去
+  receipts-logic.mjs 报账：这一轮注入了哪几条，用上了没有
   tools/eval.mjs    三层评测台 + 接地核查 + 行尾检查 + 预设结构检查
   test/             339 个测试
 
 dsh-theme-cyrene/   客户端主题（壁纸、粒子、桌宠、表情、音乐、打字音）
 cyrene-guard/       写文件后自动跑一遍的本地安全规则
+setup/              装机和打包脚本（PowerShell）
 tools/              仓库自己的工具：分享副本生成、会话导出、移植补丁
+UPREPORT.md         这个项目怎么做出来的 —— 写过程，不写用法
 ```
+
+几处名字容易看错的：
+
+| 看起来像 | 其实是 |
+|---|---|
+| `persona.yaml` 和 `persona-soul.md` 都叫人设 | 前者是你改的输入，后者是构建产物 —— **改 `persona-soul.md` 会被下一次构建覆盖** |
+| `dmae.mjs` 像离线评测 | 它是运行期的东西：给每条设定算激活度，久没人提的就沉下去 |
+| `receipts-logic.mjs` 像日志 | 它只回答一个问题 —— 注入的那几条，这一轮用上了没有。没有它，「白给」的条目只能靠感觉淘汰 |
+| `UPREPORT.md` 像更新日志 | 它是[过程记录](UPREPORT.md)：做了什么、哪里做错过、为什么那样选 |
 
 几条值得一提的做法：
 
@@ -145,6 +159,43 @@ node tools/eval.mjs --sources    # 评测台：L0 材料 / L1 检索，共 57 �
 模型那一步**可以跳过**。它是 23 MB 的单个二进制，从 HuggingFace 拉，六个文件的 sha256 钉在 `tools/embedding-manifest.mjs` 里。npm 包和分享副本都带着它，所以只有拿源码的人才需要这一步。跳过的话检索退回纯字面（二元组 + 专名闸），那条向量测试会 skip 并打印原因 —— 不会假装通过。
 
 `build.mjs` 会读 **你自己的** `~/.dsh/cyrene-agent/memory.md` 和 `corrections.md`。新机器上那两个文件是空的，所以构建出来的技能不带任何记忆 —— **这个 agent 一开始不认识你。**
+
+## 已知问题
+
+这几条是**量出来、还没修完**的。写在这里，而不是塞进某段注释。
+
+### 还有 6 处引文找不到出处
+
+[`check-grounding.mjs`](cyrene-agent/tools/check-grounding.mjs) 每次都列 377 处引文里剩下的 6 处：
+
+| 条目 | 那一句 |
+|---|---|
+| `no-fabrication` | 「这个我真的不知道……没有公开的部分我不该猜」 |
+| `memory-growth-chain` | 「幼芽绽放出『记忆的花』」 |
+| `how-she-judges` | 「不要乘人之危！而且人家能感觉到她没有说谎，还是让我们事情搞清楚再说吧」 |
+| `castorice-who` | 「现在，我是奥赫玛的『入殓师』……但在过去，我是哀地里亚的『督战圣女』。」 |
+| `hysilens-people` | 「你为何要让先锋军贸然出击，让他们白白牺牲？！」 |
+| `tribbie-bargain` | 「当然，泰坦。就让这预言将我打碎——好让我为这濒毁的世界，开辟出万千道路！」 |
+
+修法只有两种：是引用就补出处，是转述就把引号去掉。**没有第三条** —— 留着引号又指不到原文，读到的人分不清那是她说的，还是我们编的。
+
+### 风格对照的样本太小
+
+[`eval/samples/probe-answers.txt`](cyrene-agent/eval/samples/probe-answers.txt) 只有 **16 句**，基线是 2054 句。16 句去比中位数、比比例，噪声比信号大。
+
+所以 [`tools/style-stats.mjs`](cyrene-agent/tools/style-stats.mjs) 的 `--compare` 现在给每一行算 **95% bootstrap 区间**，样本不到 100 句时报告的头尾各警告一次。区间跨过目标的那些会标 `≈`：
+
+```
+带语气词的句子   88%  [69–100]        ← 下限 69%，上限 100%，说明不了什么
+```
+
+**这 16 句的比例现在只能看方向，不能当结论。**
+
+### 漂移报告的窗口是旧的
+
+[`eval/samples/drift-report.txt`](cyrene-agent/eval/samples/drift-report.txt) 是旧版按**轮次**等分跑出来的 —— 四个窗口分别装了 71 / 41 / 29 / 80 句。决定窗口边界的不是内容，是轮的区间。
+
+工具已经改成按**累计字数**等分，两个人分开量，超过 400 字的回复单独标出来。可那份报告生成时用的会话文件已经没了，**没法用新算法重跑**。要看漂移，得拿一份自己的会话重新跑一遍。
 
 ## 授权
 
