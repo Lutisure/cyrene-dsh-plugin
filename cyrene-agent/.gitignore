@@ -42,3 +42,23 @@ corpus-backup-*
 dist/
 
 node_modules/
+
+# ── 向量模型 ────────────────────────────────────────────────────────────
+#
+# ⚠️ **2026-10-24 起不再入库。** 它在仓库里是 23 MB 的单个 blob（`model_quantized.onnx`
+# 22.9 MB），而它是六件里唯一**大且能重新取回来**的东西 ——
+# `node tools/deploy-embedding.mjs` 从 HuggingFace 拉，
+# 六个文件的 sha256 钉死在 `tools/embedding-manifest.mjs`，对不上就不写。
+#
+# 少了它会怎样：`embedder.mjs` 返回 null，检索退回纯字面（二元组 + 专名闸）。
+# **不报错、不变慢、也不坏** —— 只是不如有向量时准。测试里那条向量用例会 skip
+# 并打印原因，不会假装通过。
+#
+# 少了它**不会**怎样：npm 那份照样带着模型。`tools/make-npm.mjs` 从磁盘打包，
+# 不看 git。而「磁盘上没有」这件事 `tools/check-npm-publish.mjs` 会拦下来
+# —— 因为 `files` 里写了目录、目录不存在的时候，npm **一声不响地少装几个文件**。
+#
+# 所以：本机要有，git 里没有。
+cyrene_embedding/
+
+# ─── 完 ─────────────────────────────────────────────────────────────────

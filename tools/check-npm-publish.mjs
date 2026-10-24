@@ -37,7 +37,7 @@
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { memoryContentPattern } from './memory-pattern.mjs';
 
@@ -242,5 +242,34 @@ for (const p of PACKAGES) {
   say('');
 }
 
-say(problems === 0 ? '  ✓ 五项全过 —— 可以发。\n' : `  ✗ 有 ${problems} 处要处理 —— **先别发**。\n`);
+// ── 模型文件必须在磁盘上，且和清单逐字节一致 ────────────────────────────
+//
+// 2026-10-24 起 `cyrene_embedding/` 不进 git：23 MB，而且它是**取得回来的东西**
+// ——`node tools/deploy-embedding.mjs` 从 HuggingFace 拉，六个文件的 sha256
+// 钉死在 `cyrene-agent/tools/embedding-manifest.mjs`。
+//
+// 但 npm 那份**仍然要带着它**。用户装下来就得不缺模型，否则向量检索悄悄退回纯字面
+// ——**而这件事在打包时一声不响**：`files` 里写的是目录，目录不存在就只是少几个文件，
+// npm 不报错，装的人也不报错，只是检索变差。所以必须在这里拦住。
+{
+  const manifest = await import(pathToFileURL(join(ROOT, 'cyrene-agent', 'tools', 'embedding-manifest.mjs')).href);
+  const modelDir = manifest.defaultModelDir();
+  const bad = [];
+  for (const entry of manifest.MANIFEST) {
+    const verdict = manifest.matches(join(modelDir, entry.path), entry);
+    if (!verdict.ok) bad.push(`${entry.path}（${verdict.why}）`);
+  }
+  say('  ── 向量模型');
+  if (bad.length === 0) {
+    say(`      ✓ ${manifest.MANIFEST.length} 个文件齐全，sha256 与清单一致`);
+  } else {
+    problems += 1;
+    say('      ✗ **模型不全 —— 发出去的包里就没有向量检索，而且打包不会报错**');
+    for (const b of bad) say(`         · ${b}`);
+    say('         取回来：node cyrene-agent/tools/deploy-embedding.mjs');
+  }
+  say('');
+}
+
+say(problems === 0 ? '  ✓ 六项全过 —— 可以发。\n' : `  ✗ 有 ${problems} 处要处理 —— **先别发**。\n`);
 process.exit(problems === 0 ? 0 : 1);
