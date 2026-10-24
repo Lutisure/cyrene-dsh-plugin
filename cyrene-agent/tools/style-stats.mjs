@@ -147,6 +147,16 @@ function stats(raw) {
   return metricsOf(sentences(raw));
 }
 
+// 基线是那 2,054 句游戏原文，放在 `corpus-raw/` —— 原始抓取的中间态，2.2 MB，
+// 按 `cyrene-agent/.gitignore` 第 16 行的理由不进仓库。所以这条工具只在有原始
+// 语料的机器上跑得起来。别处跑到这里应当得到一句解释，而不是一页 ENOENT。
+if (!existsSync(BASELINE)) {
+  console.error(`基线不在：${BASELINE}`);
+  console.error('');
+  console.error('  它是那 2,054 句游戏原文，属于原始抓取的中间态，不进仓库。');
+  console.error('  抓取流程见 cyrene-agent/corpus-src/STORY-EXTRACTION.md。');
+  process.exit(1);
+}
 const base = stats(readFileSync(BASELINE, 'utf8'));
 const rows = [
   ['— 长度 —', null, '', () => ''],
