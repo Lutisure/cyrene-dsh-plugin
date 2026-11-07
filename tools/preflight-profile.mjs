@@ -118,7 +118,14 @@ try {
 // ---- 3. 每个依赖都能解析到 ----------------------------------------------
 const deps = Object.keys(pkg?.dependencies ?? {});
 const nm = join(dir, 'node_modules');
+// 依赖名来自用户自己的 package.json —— 拼之前先确认它长得像包名，
+// 否则 `../../..` 这种键会把路径拼到 profile 外面去。
+const PACKAGE_NAME = /^(?:@[a-z0-9][\w.-]*\/)?[a-z0-9][\w.-]*$/iu;
 for (const dep of deps) {
+  if (!PACKAGE_NAME.test(dep)) {
+    bad(`依赖 ${dep}`, '名字不像包名，跳过 —— 拼进路径会走出 profile 目录');
+    continue;
+  }
   const at = join(nm, dep);
   if (!existsSync(at)) { bad(`依赖 ${dep}`, `node_modules/${dep} 不存在`); continue; }
   let entry;
