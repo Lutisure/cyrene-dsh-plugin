@@ -172,10 +172,28 @@ $node = "$env:USERPROFILE\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\nod
 | 脚本 | 干什么 |
 |---|---|
 | `check-sandbox-acl.mjs` | **开工前自检**：某个目录能不能当 `workspace-write` 工作区用。只读，判定 `READY` / `NEEDS-ACE` |
-| `preflight-profile.mjs` | 装补丁前干跑一遍，确认 DSH 能组合起来 |
+| `preflight-profile.mjs` | 装补丁前干跑一遍：包能不能解析、子路径在不在 `exports` 里、配置键这一版还认不认 |
 | `sync-desktop-patch.mjs` | 把补丁同步进桌面 profile |
 | `audit-shareable.mjs` | 检查哪些内容可以分享出去（版权、私钥、本机路径） |
 | `daily-digest.mjs` | 每天凌晨把前 24 小时的会话与提交整理成素材（有 `.cmd` 包装，走计划任务） |
+
+### preflight-profile.mjs —— 有一类错误是不报错的
+
+2026-11-04 应用升到内置运行时 `0.2.2-rc.1`，一次升级里同时坏了两样：
+
+- `@deepseek-ai/dsh-tool-subagent-control` 撤掉了 `./list-agents` 子路径。预设里那一行
+  import 就抛 `ERR_PACKAGE_PATH_NOT_EXPORTED`，**整行连 fiber 都没建出来**，设置页显示
+  「加载失败」。
+- 同一段配置里两个键改了名、或被撤掉（`modelSelectionSettings` → `modelSelection`，
+  `backgroundMode` 整个没了）。这两个**一声不响** —— 行照常启动，只是少了一个设置。
+
+第一种会报错，第二种不会。所以这个脚本三样一起查：包名解析、子路径是否在 `exports` 里
+（读 `app.asar` 里的 `package.json`，按 Node 自己的规则匹配）、以及**配置键在这一版的
+源码里还找不找得到**。
+
+键那条只警告、不判失败，理由是它是个启发式：键名可能由变量拼出来，找不到不等于一定失效。
+**一个会误报的检查会被关掉**，所以宁可让它显形，不让它拦启动。反过来，它对过期配置
+足够敏感 —— 2026-11-07 拿活 profile 跑，正好点出两处残留的 `backgroundMode`，别的一概没报。
 
 ### check-sandbox-acl.mjs —— 为什么值得先跑一下
 

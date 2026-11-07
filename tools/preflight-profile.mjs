@@ -12,7 +12,7 @@
  * 它跑在**真实的 profile 目录**上，读的是真实文件，不做任何修改。
  */
 
-import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync, readSync, realpathSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -76,8 +76,12 @@ const JS_TAG = new yaml.Type('tag:yaml.org,2002:js', {
 const SCHEMA = yaml.DEFAULT_SCHEMA.extend([JS_TAG]);
 
 let failures = 0;
+let warns = 0;
 const ok = (label, extra = '') => console.log(`  ✓  ${label}${extra ? '  ' + extra : ''}`);
 const bad = (label, why) => { failures += 1; console.log(`  ✗  ${label}\n       ${why}`); };
+// 警告不算失败：只在「这条把握不大」时用。一个会误报的检查会被关掉，
+// 所以宁可让不确定的东西显形，不让它拦住启动。
+const warn = (label, why) => { warns += 1; console.log(`  ⚠  ${label}\n       ${why}`); };
 
 /** 有没有 BOM。JSON.parse 会在第一个字符上炸，而错误信息不会告诉你是 BOM。 */
 function hasBom(path) {
@@ -137,12 +141,252 @@ for (const bundle of pkg?.dsh?.profile?.bundles ?? []) {
   else bad(`bundle ${bundle}`, 'bundles 里列了但装不上');
 }
 
-// ---- 5. 补丁 insert 的每一行都能解析到 ----------------------------------
-for (const row of patches.flatMap((r) => r?.insert ?? [])) {
-  const at = join(nm, row.name);
-  if (existsSync(at)) { ok(`补丁行 ${row.id}`, `→ ${row.name}`); continue; }
-  if (IN_BOX.test(row.name)) { ok(`补丁行 ${row.id}`, `→ ${row.name}（内置）`); continue; }
-  bad(`补丁行 ${row.id}`, `名字 "${row.name}" 在 node_modules 里找不到 —— 挂载会失败`);
+// ---- 5. 补丁里的每一行插件名都能真的被解析到 ----------------------------
+//
+// 这一节出过一次**静默漏检**，教训留着。
+//
+// 旧版的做法：拿 row.name 去 join(nm, ...) 看目录在不在；只要名字以
+// `@deepseek-ai/` 开头，就直接 ok('（内置）') 通过 —— 理由是内置包在 app.asar 里，
+// 查不了。于是它**从来没验过一个子路径**。
+//
+// 2026-11-04 应用升级到内置运行时 0.2.2-rc.1。这一版把
+// `@deepseek-ai/dsh-tool-subagent-control` 的 `./list-agents` 子路径撤了
+// （list_agents 并进了 index.js），而昔涟 dev 预设里还留着一行
+//     - name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+// 挂载时 import 直接抛 ERR_PACKAGE_PATH_NOT_EXPORTED。注意：**包在、名字也对**，
+// 错的是子路径 —— 这种错，按包名做的检查永远看不见。那一行连 fiber 都没建出来，
+// auditRows 报 "never started"，设置页那张卡从此写着「加载失败」，而这一节当时
+// 印的是「✓ 内置」。
+//
+// 所以改成：**不按名字猜，按解析结果判**。app.asar 不是真实目录（Node 的
+// createRequire 在里面找不到文件），所以得自己读 asar 里的 package.json，
+// 再按 exports 的规则匹配子路径。格式不复杂，抄一遍比「跳过内置包」划算。
+//
+// 另外：旧版只遍历**顶层** insert 行。预设里的人 (preset) 把插件写在
+// config.plugins 里，那是嵌套的 —— 出问题的那一行正好就在那一层，
+// 旧版连看都没看到它。所以这里递归。
+
+/** asar 头：`[4][pickleSize][json]`，数据区紧跟其后。读不出来就是 -1（不当成失败）。 */
+let ASAR_INDEX = undefined;
+function asarIndex() {
+  if (ASAR_INDEX !== undefined) return ASAR_INDEX;
+  ASAR_INDEX = null;
+  if (!ASAR) return ASAR_INDEX;
+  try {
+    const fd = openSync(ASAR, 'r');
+    try {
+      const head = Buffer.alloc(16);
+      readSync(fd, head, 0, 16, 0);
+      // 两种可能的布局都试一遍，哪种 JSON 解得开用哪种 —— 比记死偏移量可靠。
+      for (const [jsonAt, jsonLen] of [[12, head.readUInt32LE(4) - 4], [16, head.readUInt32LE(12)]]) {
+        try {
+          const buf = Buffer.alloc(jsonLen);
+          readSync(fd, buf, 0, jsonLen, jsonAt);
+          const header = JSON.parse(buf.toString('utf8'));
+          ASAR_INDEX = { header, base: jsonAt + jsonLen };
+          break;
+        } catch { /* 换下一种布局 */ }
+      }
+    } finally { closeSync(fd); }
+  } catch { ASAR_INDEX = null; }
+  return ASAR_INDEX;
+}
+
+/** 读 asar 里的一个文件（路径用 `/` 分隔）。读不到返回 null。 */
+function asarFile(relPath) {
+  const idx = asarIndex();
+  if (!idx) return null;
+  let node = idx.header;
+  for (const part of relPath.split('/')) {
+    node = node?.files?.[part];
+    if (!node) return null;
+  }
+  if (typeof node.offset !== 'string' || typeof node.size !== 'number') return null;
+  if (node.unpacked) {
+    // 这类文件在 app.asar.unpacked 里，是真目录。
+    try { return readFileSync(join(ASAR + '.unpacked', relPath)); } catch { return null; }
+  }
+  try {
+    const fd = openSync(ASAR, 'r');
+    try {
+      const buf = Buffer.alloc(node.size);
+      readSync(fd, buf, 0, node.size, idx.base + Number(node.offset));
+      return buf;
+    } finally { closeSync(fd); }
+  } catch { return null; }
+}
+
+/**
+ * asar 里的一个目录节点（不读内容，只拿到子树）。找不到返回 null。
+ *
+ * 和 `asarFile` 分开是因为这里要**遍历**：一个包有哪些文件，只有索引知道。
+ */
+function asarNode(relPath) {
+  const idx = asarIndex();
+  if (!idx) return null;
+  let node = idx.header;
+  for (const part of relPath.split('/')) {
+    node = node?.files?.[part];
+    if (!node) return null;
+  }
+  return node;
+}
+
+// 一个包的全部源码拼起来，按包名缓存 —— 同一个包常被好几行引用。
+const SOURCES = new Map();
+
+/**
+ * 把装在 app.asar 里的某个包，能读到的源码全拼成一段。
+ *
+ * 用途只有一个：核对**配置键还在不在这一版里**。
+ *
+ * 为什么不真读 schema：插件导出的 Config 是运行时构造的 zod 对象，躺在 asar 里，
+ * 普通 node 既 import 不了、也 eval 不了 —— 它不在真目录里，`require` 找不到文件。
+ * 而当一版撤掉一个键或把它改名，那个字符串在包里必然跟着消失。
+ *
+ * 2026-11-04 那次升级就是两件事一起发生：`@deepseek-ai/dsh-tool-subagent-control`
+ * 撤了 `./list-agents` 子路径（那一条现在会报失败），同时两个键改了名
+ * （`modelSelectionSettings` → `modelSelection`，`backgroundMode` 整个没了）。
+ * 前一件让行直接起不来，后一件**一声不响**地把配置丢掉 —— 后者才是更难发现的。
+ *
+ * 反过来不成立：键名可能是拼出来的、或藏在被压缩过的代码里，所以**只在找不到时
+ * 警告，不判失败**。
+ */
+function inBoxSources(pkg) {
+  if (SOURCES.has(pkg)) return SOURCES.get(pkg);
+  let text = '';
+  const root = asarNode(`dsh/node_modules/${pkg}`);
+  if (root) {
+    const walk = (node, prefix) => {
+      for (const [name, child] of Object.entries(node?.files ?? {})) {
+        const rel = prefix ? `${prefix}/${name}` : name;
+        if (child.files) { walk(child, rel); continue; }
+        if (!/\.(?:js|mjs|cjs|d\.ts|json)$/u.test(name)) continue;
+        const buf = asarFile(`dsh/node_modules/${pkg}/${rel}`);
+        if (buf) text += buf.toString('utf8');
+      }
+    };
+    walk(root, '');
+  }
+  SOURCES.set(pkg, text);
+  return text;
+}
+
+/**
+ * 行里写的 `config` 键，在这一版的包里还认不认。
+ *
+ * 只看**第一层**键：嵌套里的东西（比如预设的 `plugins` 数组）由各自的行自己负责，
+ * 在这一层往下钻只会把别的插件用到的键算到当前这个头上。
+ */
+function checkConfigKeys(row) {
+  const config = row.config;
+  if (!config || typeof config !== 'object' || Array.isArray(config)) return [];
+  const keys = Object.keys(config);
+  if (keys.length === 0) return [];
+  const { pkg } = splitSpecifier(row.name);
+  const text = inBoxSources(pkg);
+  if (!text) return []; // 读不到源码（没打包 / 没 unpacked）→ 不猜
+  return keys.filter((k) => !text.includes(k));
+}
+
+/**
+ * exports 里有没有这个子路径。
+ *
+ * `subpath` 形如 `''`（包本身）或 `'./list-agents'`。
+ * 没有 exports 字段的老式包一律放行 —— 那是 Node 自己的语义，不是我们放宽。
+ */
+function exportsAllows(exportsField, subpath) {
+  if (exportsField === undefined || exportsField === null) return true;
+  const isMap = exportsField && typeof exportsField === 'object' && !Array.isArray(exportsField)
+    && Object.keys(exportsField).length > 0
+    && Object.keys(exportsField).every((k) => k.startsWith('.'));
+  if (!isMap) return subpath === ''; // 整个 exports 描述的是 "."
+  const want = subpath === '' ? '.' : subpath;
+  const hit = (key) => {
+    if (key === want) return true;
+    const star = key.indexOf('*');
+    if (star < 0) return false;
+    const pre = key.slice(0, star);
+    const post = key.slice(star + 1);
+    return want.length >= pre.length + post.length && want.startsWith(pre) && want.endsWith(post);
+  };
+  return Object.keys(exportsField).some(hit);
+}
+
+/** `@scope/pkg/sub/path` → { pkg: '@scope/pkg', subpath: './sub/path' } */
+function splitSpecifier(name) {
+  const parts = name.split('/');
+  const take = name.startsWith('@') ? 2 : 1;
+  return { pkg: parts.slice(0, take).join('/'), subpath: parts.length > take ? './' + parts.slice(take).join('/') : '' };
+}
+
+/** 内置包（app.asar 里的）能不能解析到。 */
+function checkInBox(name) {
+  const { pkg, subpath } = splitSpecifier(name);
+  const manifest = asarFile(`dsh/node_modules/${pkg}/package.json`);
+  if (manifest === null && !asarIndex()) return { unknown: true };
+  if (manifest === null) return { ok: false, why: `app.asar 里没有这个包 —— 装着的应用是哪个版本？` };
+  let json;
+  try { json = JSON.parse(manifest.toString('utf8')); } catch { return { ok: false, why: '包里那份 package.json 读不动' }; }
+  if (!exportsAllows(json.exports, subpath)) {
+    const keys = json.exports && typeof json.exports === 'object' ? Object.keys(json.exports) : [];
+    return {
+      ok: false,
+      why: `子路径 "${subpath}" 不在 exports 里（这一版只有 ${keys.length ? keys.map((k) => `"${k}"`).join('、') : '无 exports'}）\n`
+        + `       应用 ${json.version ? json.version + ' ' : ''}挂载到这一行时会抛 ERR_PACKAGE_PATH_NOT_EXPORTED —— 整行不会启动。`
+    };
+  }
+  return { ok: true, note: `${pkg}${subpath.replace(/^\./u, '')}（内置 ${json.version ?? '?'}）` };
+}
+
+/**
+ * 递归收集所有插件行 —— 包括预设 config.plugins 里的那些。
+ *
+ * 只在**数组元素**上认行。预设那一行自己长这样：
+ *     - id: preset-cyrene
+ *       name: '@deepseek-ai/dsh-agent-preset'
+ *       config: { id: cyrene, name: 昔涟, plugins: [...] }
+ * 它 config 里的 `{ id, name }` 是**预设的名字**，不是插件；按「有 id 和 name
+ * 就是一行」去认，会把「昔涟」当成一个包名去解析，然后报一堆假失败。
+ * 一个会误报的检查会被关掉，所以宁可窄：插件行永远在数组里，预设的元信息永远不在。
+ */
+function collectRows(node, out = [], inArray = false) {
+  if (Array.isArray(node)) { for (const item of node) collectRows(item, out, true); return out; }
+  if (!node || typeof node !== 'object') return out;
+  if (inArray && typeof node.id === 'string' && typeof node.name === 'string') {
+    out.push({ id: node.id, name: node.name, config: node.config });
+  }
+  for (const value of Object.values(node)) if (value && typeof value === 'object') collectRows(value, out, false);
+  return out;
+}
+
+const PSEUDO = /^[a-z][a-z0-9-]*:/u; // cordis:group 这种是宿主自己认的名字，不是包
+for (const row of collectRows(patches)) {
+  if (PSEUDO.test(row.name)) { ok(`行 ${row.id}`, `${row.name}（宿主内置组名）`); continue; }
+  if (IN_BOX.test(row.name)) {
+    const res = checkInBox(row.name);
+    if (res.ok) ok(`行 ${row.id}`, res.note);
+    else if (res.unknown) ok(`行 ${row.id}`, `${row.name}（找不到 app.asar，跳过子路径校验）`);
+    else bad(`行 ${row.id}  →  ${row.name}`, res.why);
+    // 名字对得上 ≠ 配置还在。这一版把键改名或撤掉时，那一段会被**静默丢掉**：
+    // 行照常启动，只是少了一个设置。2026-11-04 就是这样丢了两个键。
+    const dead = checkConfigKeys(row);
+    if (dead.length > 0) {
+      warn(
+        `行 ${row.id} 的 config`,
+        `${dead.map((k) => `"${k}"`).join('、')} 在 ${splitSpecifier(row.name).pkg} 这一版的源码里找不到`
+        + ' —— 可能已改名或被撤掉，这里的设置会被静默忽略。',
+      );
+    }
+    continue;
+  }
+  try {
+    require.resolve(row.name);
+    ok(`行 ${row.id}`, `${row.name} → profile`);
+  } catch (e) {
+    if (existsSync(join(nm, row.name))) { ok(`行 ${row.id}`, `${row.name} → profile（目录）`); continue; }
+    bad(`行 ${row.id}  →  ${row.name}`, `profile 里解析不到（${e.code ?? e.message}）—— 挂载会失败`);
+  }
 }
 
 // ---- 6. 每个我们自己写的插件都能 import 且导出正确 ----------------------
@@ -203,6 +447,9 @@ for (const dep of ours) {
 
 // ---- 结论 --------------------------------------------------------------
 console.log('');
+if (warns > 0) {
+  console.log(`  另有 ${warns} 处警告 —— 不拦启动，但多半是过期的配置，值得看一眼。`);
+}
 if (failures === 0) {
   console.log('  全部通过 —— 这份 profile 可以启动。');
   process.exit(0);
